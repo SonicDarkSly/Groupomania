@@ -1,9 +1,10 @@
-@import "./settings";
+@import "./setting";
 
 // compononents
 @import "./components/header";
-@import "./components/login";
 
 // pages
 @import "./pages/notfound";
 @import "./pages/home";
+@import "./pages/login";
+@import "./pages/posts";

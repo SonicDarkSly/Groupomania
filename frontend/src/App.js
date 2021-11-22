@@ -1,19 +1,41 @@
+import { useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
-import NotFound from "./pages/NotFound"
+import Login from "./pages/Login";
+import Account from "./pages/Account";
+import Signup from "./pages/Signup";
+import Admin from "./pages/Admin";
+import Posts from "./pages/Posts";
+
+import { hasAuthenticated } from './services/AuthApi'
+import Auth from "./context/Auth";
+import AuthenticatedRoute from "./services/AuthenticatedRoute";
+
+
+require('dotenv').config();
 
 function App() {
+
+  const [isAuthenticated, setisAuthenticated] = useState(hasAuthenticated());
+
   return (
-    <div className="Home">
+    <Auth.Provider value={{isAuthenticated, setisAuthenticated}}>
+
       <BrowserRouter>
          <Switch>
 
-           <Route path="/" exact component= { Home } />
-           <Route component= { NotFound } />
+           <Route exact path="/" component= { Home } />
+           <AuthenticatedRoute exact path="/posts" component= { Posts } />
+           <Route exact path="/login" component= { Login } />
+           <Route exact path="/signup" component= { Signup } />
+           <AuthenticatedRoute exact path="/account" component= { Account } />
+           <AuthenticatedRoute exact path="/administration" component= { Admin } />
 
          </Switch>
       </BrowserRouter>
-    </div>
+  
+    </Auth.Provider>
   );
 }
 

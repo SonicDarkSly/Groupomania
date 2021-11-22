@@ -35,7 +35,8 @@ app.use(express.json())
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Appel routes
-app.use('/api/auth/', userRoutes)
+app.use('/api/user/', userRoutes)
+app.use('/api/posts/', userRoutes)
 
 //Exportation module
 module.exports = app

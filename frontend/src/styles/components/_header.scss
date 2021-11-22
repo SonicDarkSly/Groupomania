@@ -1,43 +1,27 @@
 .header {
-
-
-
+    width: 100%;
+    background-color: rgba(233, 127, 94, 0.541);
+    border-bottom: solid 4px rgba(172, 0, 0, 0.699);
     /* logo */
 
     .logo{
-        width: 100%;
-        background: linear-gradient(#ffeed4, rgb(255, 214, 139));
-        text-align: center;
-
+      text-align: center;
         img {
-            width: 150px;
+            max-width: 180px;
+            margin-top: 23px;
         }
-    }
-
-    /* Navigation */
-
-    .container-nav{
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        background: linear-gradient(rgb(255, 214, 139), #ffeed4);
-
-        padding: 10px 0 10px 0;
-    }
-    .container-nav-link{
-        min-width: 33%;
-        flex-wrap: wrap;
-        text-align: center;
     }
 
     .nav-link{
       color:rgb(112, 112, 112);
-      font-size:45px;
+      font-size:30px;
+      max-width: 100px;
       text-decoration:none;
     }
     .nav-link:hover{
-        color:rgb(0, 0, 0);
-        font-size:45px;
+        color:rgba(102, 0, 0, 0.527);
+        font-size:30px;
         text-decoration:none;
-      }
+    }
+
 }

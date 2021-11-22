@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
 
     // nouveau nom du fichier
     filename: (req, file, callback) => {
-
         // remplacement des points et espaces par des underscores
         const name = file.originalname.split('.')[0].split(' ').join('_');
         const extension = MIME_TYPES[file.mimetype];
@@ -27,6 +26,5 @@ const storage = multer.diskStorage({
         callback(null, name + '_' + Date.now() + '.' + extension);
     }
 })
-
-// exportation de MULTER
-module.exports = multer({ storage }).single('image');
+// exportation de MULTER pour avatar user
+module.exports = multer({ storage }).single('avatar');
