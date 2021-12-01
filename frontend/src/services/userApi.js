@@ -9,6 +9,7 @@ export function hasAuthenticated() {
     if(false === tokenIsValidn) {
         removeItem('storageToken');
         removeItem('storageUserInfo');
+        removeItem('storageUserAvatar');
     }
     return tokenIsValidn;
 }
@@ -180,6 +181,32 @@ export function axiosupdateUserEmail(credentials) {
     .then(response => {
         alert("Votre adresse mail à bien été modifier, vous allez être déconnecté");
         logout();
+    })
+    .catch(error => console.log({ error }))
+}
+
+// UPDATE DESCRIPTION
+
+export function axiosupdateUserDescription(credentials) {
+
+    const token = getItem('storageToken');
+
+    let config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer '+token
+        }
+    }
+
+    axios.post('http://localhost:8080/api/user/update/description', 
+        {
+            userId: credentials[0],
+            newDescription: credentials[1]
+        }, 
+        config
+    )
+    .then(response => {
+        window.location.reload(); 
     })
     .catch(error => console.log({ error }))
 }

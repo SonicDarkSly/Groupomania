@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState} from 'react';
 import { NavLink } from 'react-router-dom';
 import Auth from "../context/Auth";
 import Header from '../components/Header';
-import { signup } from '../services/AuthApi';
+import { signup } from '../services/userApi';
 import { checksignup } from '../services/checkform'
 
 const Signup = ({ history }) => {
@@ -17,7 +17,7 @@ const Signup = ({ history }) => {
         "email": "",
         "password": "",
         "avatar": "",
-        "description" :""
+        "description": ""
       })
 
 

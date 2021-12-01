@@ -1,21 +1,52 @@
 .posts {
     .addEnteteNewPost {
-        background-color: rgba(172, 0, 0, 0.596);
-        color:#ffffff;
+        background-color: rgba(233, 127, 94, 0.541);
+        color:#5c5c5c;
         font-weight: 600;
         padding: 10px;
         margin-top: 10px;
+        border: solid rgba(172, 0, 0, 0.596) 2px;
         border-radius: 0 30px 0 0; //hg hd bd bg
+
+        a {
+            font-size: 18px;
+            padding: 8px;
+            .fa-thumbs-up{
+                color: rgb(1, 136, 1);
+            }
+            .fa-thumbs-down{
+                color: rgb(192, 0, 0);
+            }
+            .fa-trash-alt{
+                color: gray;
+            }
+        }
     }
 
     .addContainerCorpsNewPost {
         width: 100%;
         background-color: rgb(255, 255, 255);
-        color:#ffffff;
+        color:#000000;
         font-weight: 600;
         padding: 10px;
         border: solid rgba(172, 0, 0, 0.596) 2px;
         border-radius: 0 0 0 30px; //hg hd bd bg
+
+        .image-posts {
+            text-align: center;
+            max-width: 180px;
+        }
+
+        .content-img {
+            display: block;
+            text-align: center;
+        }
+
+        .content {
+            display: block;
+            font-size: 16px;
+            font-weight: normal;
+        }
 
         .addCorpsNewPost{
             width: 100%;

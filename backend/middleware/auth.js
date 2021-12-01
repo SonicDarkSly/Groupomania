@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
         const userId = decodedToken.userId; 
         
         // Si l'ID de l'utilisateur qui effectue la requête ne correspond pas à l'ID utilisateur du token
-        
         if (req.body.userId && req.body.userId !== userId) {
 
             // Générer une erreur

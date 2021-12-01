@@ -3,8 +3,12 @@
 // compononents
 @import "./components/header";
 
+// services
+@import "./services/navigation";
+
 // pages
 @import "./pages/notfound";
 @import "./pages/home";
 @import "./pages/login";
 @import "./pages/posts";
+@import "./pages/_account";

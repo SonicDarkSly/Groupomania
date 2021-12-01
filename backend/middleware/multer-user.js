@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
     // destination dans le dossier /images
     destination: (req, file, callback) => {
-        callback(null, 'images')
+        callback(null, `images/avatars/${req.body.userId}`)
     },
 
     // nouveau nom du fichier
@@ -26,5 +26,6 @@ const storage = multer.diskStorage({
         callback(null, name + '_' + Date.now() + '.' + extension);
     }
 })
+
 // exportation de MULTER pour avatar user
 module.exports = multer({ storage }).single('avatar');

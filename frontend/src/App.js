@@ -8,7 +8,7 @@ import Signup from "./pages/Signup";
 import Admin from "./pages/Admin";
 import Posts from "./pages/Posts";
 
-import { hasAuthenticated } from './services/AuthApi'
+import { hasAuthenticated } from './services/userApi'
 import Auth from "./context/Auth";
 import AuthenticatedRoute from "./services/AuthenticatedRoute";
 

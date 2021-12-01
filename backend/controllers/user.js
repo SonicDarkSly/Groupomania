@@ -10,12 +10,14 @@ const db = require("../middleware/dbConfig");
 
 // Appel de FS pour la gestion des avatar user
 const fs = require('fs');
+const path = require('path');
 
 
 // ---------- SIGN UP ----------
 
 
 exports.signup = (req, res, next) => {
+
 
     // Cherche si un user existe dans la BDD
     db.query(`SELECT COUNT (*) AS usrCount FROM users`, (err, resultsc, rows) => {
@@ -28,17 +30,36 @@ exports.signup = (req, res, next) => {
             .then(cryptedPassword => {
 
                 // Ajout à la BDD
-                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatar_user_default.jpeg', '${req.body.description}')`, (err, results, fields) => {
+                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', '${req.body.description}')`, (err, results, fields) => {
 
                 // Si erreur, retourne 400
                 if (err) {
                         console.log(err);
                         return res.status(400).json("erreur");
                     }else{
+                    
+                        // Recherche les info du user une fois creer pour la creation des dossiers de stockage images
+                        db.query(`SELECT * FROM users WHERE email='${req.body.email}'`, (err, results, rows) => {
 
-                        // Si valide, retourne 201
-                        return res.status(201).json({
-                            message: 'Votre compte a bien été créer !'
+                            // Creation du dossier pour les images des posts
+                            fs.mkdir(path.join(__dirname, `../images/posts/${results[0].id}`), (err) => {
+                                if (err) {
+                                    return console.error(err);
+                                }
+                            });
+                                    
+                            // Creation du dossier pour les images avatar
+                            fs.mkdir(path.join(__dirname, `../images/avatars/${results[0].id}`), (err) => {
+                                if (err) {
+                                    return console.error(err);
+                                }
+                            });
+
+                            // Si valide, retourne 201
+                            console.log('Votre compte a bien été créer !');
+                            return res.status(201).json({
+                                message: 'Votre compte a bien été créer !'
+                            });
                         });
                     }
                 });
@@ -64,12 +85,10 @@ exports.signup = (req, res, next) => {
                     // hashage du mdp
                     bcrypt.hash(req.body.password, 10)
                     .then(cryptedPassword => {
-                        
-                        // Ajout à la BDD - id, lastname, firstname, password, email, accesslevel, url avatar, description
-                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatar_user_default.jpeg', '${req.body.description}')`,
 
-                        // fonction de mysql : erreur, resulat, retourne objet
-                        (err, results, fields) => {
+
+                        // Ajout à la BDD - id, lastname, firstname, password, email, accesslevel, url avatar, description
+                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', '${req.body.description}')`, (err, results, fields) => {
 
                             // Si erreur, retourne 400
                             if (err) {
@@ -77,9 +96,28 @@ exports.signup = (req, res, next) => {
                                 return res.status(400).json("erreur");
                             }else{
 
-                                // Si valide, retourne 201
-                                return res.status(201).json({
-                                    message: 'Votre compte a bien été créer !'
+                                // Recherche les info du user une fois creer pour la creation des dossiers de stockage images
+                                db.query(`SELECT * FROM users WHERE email='${req.body.email}'`, (err, results, rows) => {
+
+                                    // Creation du dossier pour les images des posts
+                                    fs.mkdir(path.join(__dirname, `../images/posts/${results[0].id}`), (err) => {
+                                        if (err) {
+                                            return console.error(err);
+                                        }
+                                    });
+                                    
+                                    // Creation du dossier pour les images avatar
+                                    fs.mkdir(path.join(__dirname, `../images/avatars/${results[0].id}`), (err) => {
+                                        if (err) {
+                                            return console.error(err);
+                                        }
+                                    });
+
+                                    // Si valide, retourne 201
+                                    console.log('Votre compte a bien été créer !');
+                                    return res.status(201).json({
+                                        message: 'Votre compte a bien été créer !'
+                                    });
                                 });
                             }
                         });
@@ -154,6 +192,26 @@ exports.login = (req, res, next) => {
 
 // ---------- DELETE PROFILE ----------
 
+const deleteFolderRecursive = function(folder) {
+
+    if (!fs.existsSync(folder)) {
+        console.log('1-'+folder);
+
+        fs.readdirSync(folder).forEach((file, index) => {
+        const curPath = path.join(folder, file);
+        console.log('2-'+curPath);
+
+        if (fs.lstatSync(curPath).isDirectory()) { // recurse
+            console.log('3-'+curPath);
+
+          deleteFolderRecursive(curPath);
+        } else { // delete file
+          fs.unlink(curPath);
+        }
+      });
+      fs.rmdirSync(folder);
+    }
+};
 
 exports.deleteUser = (req, res, next) => {
 
@@ -173,6 +231,23 @@ exports.deleteUser = (req, res, next) => {
                 });
             } else {
 
+                // Suppression des posts de l'user
+                db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (err, results, rows)  => {
+
+                    // Si erreur retourne 400
+                    if (err) {
+                      console.log(err)
+                      return res.status(400).json(err)
+                    } else {
+
+
+                        // Si valide retourne 200
+                        console.log('Les posts ont bien été supprimés')
+                        return res.status(200).json({ message: 'Les posts ont bien été supprimés' })
+                    }
+                })
+
+
                 // Si bon mot de passe
                 db.query(`DELETE FROM users WHERE id='${req.body.userId}'`, (err, results, rows)  => {
 
@@ -181,6 +256,7 @@ exports.deleteUser = (req, res, next) => {
                       console.log(err)
                       return res.status(400).json(err)
                     } else {
+
 
                         // Si valide retourne 200
                         console.log('Le compte a bien été supprimé !')
@@ -201,18 +277,18 @@ exports.deleteUser = (req, res, next) => {
 
     // Récupère l'userid et le nom du fichier image de la requete
     const userid = req.body.userId
-    const urlnewavatar = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    const urlnewavatar = `${req.protocol}://${req.get('host')}/images/avatars/${userid}/${req.file.filename}`;
 
     // Recherche dans la BDD selon userid
     db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
 
         // Ancien fichier de l'ancien avatar
         const oldavatar = result[0].avatarurl
-        const oldfilename = oldavatar.split('/images/')[1];
+        const oldfilename = oldavatar.split(`/${userid}/`)[1];
 
         // suppression de l'ancien fichier image
         if (oldfilename !== 'avatar_user_default.jpeg') {
-            fs.unlink(`images/${oldfilename}`, (err => {
+            fs.unlink(`images/avatars/${userid}/${oldfilename}`, (err => {
                 if (err) {
                     console.log(err);
                     return false
@@ -250,6 +326,19 @@ exports.deleteUser = (req, res, next) => {
                 })
             }
         })
+
+        // Modification de l'avatar dans les posts de l'user
+        db.query(`UPDATE posts SET useravatar='${urlnewavatar}' WHERE userid=${userid}`, (err, results, rows)  => {
+
+            // Si erreur retourne 400
+            if (err) {
+                console.log(err)
+                return res.status(400).json(err)
+            }
+        })
+
+
+
     })
 
     console.log('Avatar modifier avec succes')
@@ -354,3 +443,37 @@ exports.updateUserEmail = (req, res, next) => {
     })
 }
 
+// ---------- UPDATE DESCRIPTION PROFILE ----------
+
+exports.updateUserDescription = (req, res, next) => {
+
+    // Récupère l'userid et le nouveau email de la requete
+    const userid = req.body.userId;
+    const newDescription = req.body.newDescription;
+
+    // Recherche dans la BDD selon userid
+    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
+
+        // Mise à jour dans la BDD 
+        db.query(`UPDATE users SET description='${newDescription}' WHERE id=${userid}`, (err, results, rows)  => {
+                        
+            // Si erreur retourne 400
+            if (err) {
+                console.log(err)
+                return res.status(400).json(err)
+            } else {
+                
+                // Si erreur retourne 400
+                    if (err) {
+                        console.log(err)
+                        return res.status(400).json(err)
+                    }
+                    
+                    // Si valide, retourne 201 vers le frontend
+                    console.log('Description modifié avec succes')
+                    return res.status(201).json({ message: 'Description modifié avec succes' })
+                
+            }
+        })
+    })
+}

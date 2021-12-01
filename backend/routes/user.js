@@ -11,7 +11,7 @@ const router = express.Router();
 const controller = require('../controllers/user');
 
 // Appel de MULTER pour la gestion de l'upload du fichier image de la sauce (nom, extention)
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-user');
 
 // Appel aux fonctions du CONTROLLER selon route
 router.post('/signup', controller.signup);
@@ -19,6 +19,7 @@ router.post('/login', controller.login);
 router.post('/update/profile-picture', auth, multer, controller.updateUserAvatar);
 router.post('/update/password', auth, controller.updateUserPassword);
 router.post('/update/email', auth, controller.updateUserEmail);
+router.post('/update/description', auth, controller.updateUserDescription);
 router.post('/delete', auth, controller.deleteUser);
 
 // Exportation du ROUTER

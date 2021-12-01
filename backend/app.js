@@ -14,6 +14,7 @@ const path = require('path');
 
 // Appel des routes
 const userRoutes = require('./routes/user')
+const postRoutes = require('./routes/post')
 
 // constante pour les appels de express
 const app = express()
@@ -36,7 +37,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Appel routes
 app.use('/api/user/', userRoutes)
-app.use('/api/posts/', userRoutes)
+app.use('/api/posts/', postRoutes)
 
 //Exportation module
 module.exports = app

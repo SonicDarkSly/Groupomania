@@ -1,18 +1,26 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import { NavLink } from 'react-router-dom';
 import Header from '../components/Header';
 import Auth from '../context/Auth';
-import { deleteAccout, axiosupdateUserAvatar, axiosupdateUserPassword, logout, axiosupdateUserEmail } from '../services/AuthApi';
+import { 
+    deleteAccout, 
+    axiosupdateUserAvatar, 
+    axiosupdateUserPassword,
+    logout, 
+    axiosupdateUserEmail, 
+    axiosupdateUserDescription
+} from '../services/userApi';
 import { checkChangePassword, checkChangeEmail } from '../services/checkform';
 
 const Account = () => {
 
-    // State
+    // State data
     const { isAuthenticated, setisAuthenticated } = useContext(Auth);
     const [profilImage, setProfilImage] = useState();
     const [oldPassword, setoldPassword] = useState();
     const [newPassword, setNewPassword] = useState();
     const [newEmail, setNewEmail] = useState();
+    const [newDescription, setnewDescription] = useState();
 
     // Récupération info user dans storage
     const getinfouser = JSON.parse(localStorage.getItem("storageUserInfo"));
@@ -21,7 +29,7 @@ const Account = () => {
         const lastName = getinfouser[2];
         const firstname = getinfouser[3];
         const levelaccess = getinfouser[4];
-        const description = getinfouser[6];
+        const description = getinfouser[5];
 
     // Récupération url avatar dans storage
     const getinfouseravatar = localStorage.getItem("storageUserAvatar");
@@ -29,12 +37,12 @@ const Account = () => {
 
     // Fonction delete
     const handleDelete = () => {
-        const reqPassDelete = prompt("Veuillez tapez votre mot de passe (en cas d'échec vous serez déconnecté !)", "");
-        if (reqPassDelete !== '') {
+        const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
+        if (reqPassDelete) {
             deleteAccout(userId, reqPassDelete);
             logout();
             setisAuthenticated(false);
-        } 
+        }
     }
 
     // Fonction update avatar
@@ -70,78 +78,144 @@ const Account = () => {
       }
 
 
+      // Fonction update description
+      const handleSubmitChangeDescription = event => {
+        event.preventDefault();
+        try {
+            const credentialsDescription = [userId, newDescription];
+            axiosupdateUserDescription(credentialsDescription)   
+          
+        } catch ({ response }) {
+          console.log(response);
+        }
+      }
+
+    // Fonction affichage
+    const showHidden = (champ) => {
+       let champModif = document.getElementById(champ)
+
+       if (champModif.style.display == 'block')  {
+           champModif.style.display = 'none';
+       } else {
+           champModif.style.display = 'block';
+       }
+    }
+
+
+
     return (
         <div className="account">
             <Header />
 
-            { (levelaccess >= 3 && (
-              <>
-              <div>
-                  <p>
-                      <NavLink exact to="/administration" className="nav-link"><i className="fas fa-users-cog"></i></NavLink>
-                  </p>
-              </div>
-              </>
-            ))}
+            <div className="div-container">
+                <div className="div-avatar">
+                    <img src={ avatar } alt="mon avatar" />
+                    <span className="icon-edit-avatar"><a href="#edit" onClick={() => showHidden("updateAvatar")}><i className="far fa-edit"></i></a></span>
+                </div>
+                <div className="div-infouser">
+                    <p className="name">
+                        <span>#{ userId } { firstname } { lastName }</span>
+                        <span><a href="#edit" onClick={() => showHidden("deleteAccount")}><i className="fas fa-user-times"></i></a></span>
+                        <span><a href="#edit" onClick={() => showHidden("updatePassword")}><i className="fas fa-key"></i></a></span>
+                    </p>
+                    <p><span className="title-p">Mon email : </span><span>{ email }</span><span><a href="#edit" onClick={() => showHidden("updateEmail")}><i className="far fa-edit"></i></a></span></p>
+                    { (levelaccess >= 3 &&(<p><span className="title-p">Mon niveau :</span><span> Administrateur</span><span><a href="/administration"><i className="fas fa-tools"></i></a></span></p>)) }
+                    { (levelaccess <= 1 &&(<p><span className="title-p">Mon niveau :</span><span> Utilisateur</span></p>)) }
+                    <p><span className="title-p">Ma description :</span><span>{ description }</span><span><a href="#edit" onClick={() => showHidden("updateDescription")}><i className="far fa-edit"></i></a></span></p>
+                </div>
+            </div>
 
-            <div className="container-fluid row">
-                <div className="col-4 text-center">
-                    <img src={ avatar } width="100" alt="mon avatar" />
+
+            <div className="updateAvatar" id="updateAvatar">
+                <div className="title-section">
+                    <p>
+                        <span>Modification de l'avatar</span>
+                    </p>
                 </div>
-                <div className="col-8">
-                    <h1>{ firstname } { lastName } </h1>
-                    <h2>ici c'est mon espace user</h2>
-                    <h3>mon email : { email }</h3>
-                    <h3>mon ID : { userId }</h3>
-                    <h3>ma description : { description }</h3>
+                <div className="content-section">
+                    <p className="p-content-update-avatar"><input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setProfilImage(e.target.files[0]) }/></p>
+                    <p className="p-content-update-avatar"><button onClick={ handleUpdateAvatar }>Modifier mon avatar</button></p>
                 </div>
             </div>
-            <div className="container-fluid text-center border">
-                <h2>Modifier mon avatar</h2>
-            </div>
-            <div className="container text-center">
-                <input type="file" id="avatar" name="avatar" onChange={(e) => setProfilImage(e.target.files[0])}/>
-                <button onClick={handleUpdateAvatar} className="btn btn-primary">Modifier avatar</button>
-            </div>
-            <div className="container-fluid text-center border">
-                <h2>Modifier mon mot de passe</h2>
-            </div>
-            <div className="container text-center">
+         
+
+            <div className="updatePassword" id="updatePassword">
+            <div className="title-section">
+                    <p>
+                        <span>Modification du mot de passe</span>
+                    </p>
+                </div>
+                <div className="content-section">
                 <form onSubmit={ handleSubmitChangePassword }>
-                    <p><span>Mot de passe actuel : </span><input type="password" id="oldPassword" name="oldPassword"  placeholder="Mot de passe actuel"  onChange={ (e) => setoldPassword(e.target.value) } required /></p>
-                    <p><span>Nouveau mot de passe : </span><input type="password" id="newPassword" name="newPassword"  minLength="8" placeholder="Nouveau mot de passe" onChange={ (e) => setNewPassword(e.target.value) } required /></p>
-                    
-                    <div>
-                        <p>Le mot de passe doit respecter les conditions suivantes :</p>
-                        <ul>
-                            <li>Au moins 1 caractère majuscule.</li>
-                            <li>Au moins 1 caractère minuscule.</li>
-                            <li>Au moins 1 chiffre.</li>
-                            <li>Au moins 1 caractère spécial.</li>
-                            <li>Minimum 8 caractères.</li>
-                        </ul>
+                    <div className="p-content-update-avatar">
+                        <p><span>Mot de passe actuel : </span><input type="password" id="oldPassword" name="oldPassword"  placeholder="Mot de passe actuel"  onChange={ (e) => setoldPassword(e.target.value) } required /></p>
+                        <p><span>Nouveau mot de passe : </span><input type="password" id="newPassword" name="newPassword"  minLength="8" placeholder="Nouveau mot de passe" onChange={ (e) => setNewPassword(e.target.value) } required /></p>
+                        <button type="submit">Modifier le mot de passe</button>
                     </div>
-
-                    <button type="submit" className="btn btn-primary">Modifier le mot de passe</button>
+                    <p className="info">Le mot de passe doit respecter les conditions suivantes :
+                        
+                            <span>Au moins 1 caractère majuscule.</span><br/>
+                            <span>Au moins 1 caractère minuscule.</span><br/>
+                            <span>Au moins 1 chiffre.</span><br/>
+                            <span>Au moins 1 caractère spécial.</span><br/>
+                            <span>Minimum 8 caractères.</span>
+                        
+                    </p>
                 </form>
-            </div>
-            <div className="container-fluid text-center border">
-                <h2>Supprimer mon compte</h2>
-            </div>
-            <div className="container text-center">
-                <button onClick={ handleDelete }>Supprimer compte</button>
-            </div>
-            <div className="container-fluid text-center border">
-                <h2>Modifier mon adresse mail</h2>
-            </div>
-            <div className="container text-center">
-                <form onSubmit={ handleSubmitChangeEmail }>
-                    <p>ATTENTION : L'adresse mail vous sert pour vous connecter, vous devrez vous re-connecter une fois modifier.</p>
-                    <p><span>Nouvelle adresse mail : </span><input type="text" id="newEmail" name="newEmail"  placeholder="Nouvelle adresse mail"  onChange={ (e) => setNewEmail(e.target.value) } required /></p>
-                    <button type="submit">Modifier email</button>
-                </form>
+                </div>
             </div>
 
+            <div className="deleteAccount" id="deleteAccount">
+                <div className="title-section">
+                    <p>
+                        <span>Suppression du compte</span>
+                    </p>
+                </div>
+                <div className="content-section">
+                    <p className="warning">ATTENTION : La suppression du compte est définitive, toutes les données relative au compte seront supprimées. Aucun retour en arrière ne sera possible.</p>
+                    <p className="p-content-delete-account"><button onClick={ handleDelete }>Supprimer mon compte</button></p>
+                </div>
+            </div>
+
+            <div className="updateEmail" id="updateEmail">
+                <div className="title-section">
+                    <p>
+                        <span>Modification de l'adresse mail</span>
+                    </p>
+                </div>
+                <div className="content-section">
+                    <form onSubmit={ handleSubmitChangeEmail }>
+                        <p className="warning">ATTENTION : L'adresse mail vous sert pour vous connecter, vous devrez vous re-connecter une fois modifier.</p>
+                        <p className="p-content-update-email">
+                            <span>Nouvelle adresse mail : </span>
+                            <span><input type="text" id="newEmail" name="newEmail"  placeholder="Nouvelle adresse mail"  onChange={ (e) => setNewEmail(e.target.value) } required /></span>
+                        </p>
+                        <p className="p-content-update-email">
+                            <button type="submit">Modifier email</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <div className="updateDescription" id="updateDescription">
+                <div className="title-section">
+                    <p>
+                        <span>Modification de la description</span>
+                    </p>
+                </div>
+                <div className="content-section">
+                    <form onSubmit={ handleSubmitChangeDescription }>
+                        <p className="p-content-update-description">
+                            <span>Nouvelle description : </span>
+                            <span><textarea className="form-control description" id="newDescription" name="newDescription" rows="3" onChange={ (e) => setnewDescription(e.target.value) } required ></textarea></span>
+                        </p>
+                        <p className="info">La modification sera visible lors de votre prochaine connexion.</p>
+                        <p className="p-content-update-description">
+                            <button type="submit">Modifier ma description</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
 
         </div>
     );

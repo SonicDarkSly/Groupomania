@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext} from 'react';
 import { NavLink } from 'react-router-dom';
 import Header from '../components/Header';
 import Auth from "../context/Auth";
-import { login } from '../services/AuthApi';
+import { login } from '../services/userApi';
 
 const Login = ({ history }) => {
 

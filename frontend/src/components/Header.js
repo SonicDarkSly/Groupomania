@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import Auth from '../context/Auth';
-import { logout } from '../services/AuthApi';
+import { logout } from '../services/userApi';
 
 const Header = () => {
 
