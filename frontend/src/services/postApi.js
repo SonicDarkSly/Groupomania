@@ -11,10 +11,14 @@ export function axiosCreatePost(credentials) {
 
     let date = new Date();
     let jour = date.getDate();
+        if (jour < 10){jour = '0'+jour;}
     let mois = date.getMonth()+1;
+        if (mois < 10){mois = '0'+mois;}
     let annee = date.getFullYear();
     let heures = date.getHours();
+        if (heures < 10){heures = '0'+heures;}
     let minutes = date.getMinutes();
+        if (minutes < 10){minutes = '0'+minutes;}
     let formatDate = jour+"/"+mois+"/"+annee+" - "+heures+"h"+minutes;
 
     const formData = new FormData();
@@ -53,7 +57,8 @@ export function axiosDeletePost(credentials) {
     axios.post('http://localhost:8080/api/posts/deleteonepost', 
         {
             userId: credentials[0],
-            postId: credentials[1]
+            postId: credentials[1],
+            postUserId: credentials[2]
         }, 
         config
     )
@@ -64,4 +69,28 @@ export function axiosDeletePost(credentials) {
       .catch(function (error) {
         console.log(error);
       });
+}
+
+// UPDATE POST
+
+export function axiosUpdatePost(credentials) {
+
+    const token = getItem('storageToken');
+
+    const formData = new FormData();
+    formData.append('userId', credentials[0]);
+    formData.append('postId', credentials[1]);
+    formData.append('postUserId', credentials[2]);
+    formData.append('contentPost', credentials[3]);
+    formData.append('imgPost', credentials[4]);
+    
+    axios({
+        headers: { Authorization: `Bearer ${token}` },
+        'Content-Type': 'application/json',
+        url: 'http://localhost:8080/api/posts/updatepost',
+        method: 'POST',
+        data: formData
+    })
+    .catch(error => console.log({ error }))
+    window.location.reload(); 
 }

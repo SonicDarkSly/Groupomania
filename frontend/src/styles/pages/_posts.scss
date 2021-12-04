@@ -4,9 +4,10 @@
         color:#5c5c5c;
         font-weight: 600;
         padding: 10px;
-        margin-top: 10px;
-        border: solid rgba(172, 0, 0, 0.596) 2px;
+        margin-top: 15px;
         border-radius: 0 30px 0 0; //hg hd bd bg
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
+        font-style: italic;
 
         a {
             font-size: 18px;
@@ -29,8 +30,8 @@
         color:#000000;
         font-weight: 600;
         padding: 10px;
-        border: solid rgba(172, 0, 0, 0.596) 2px;
         border-radius: 0 0 0 30px; //hg hd bd bg
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
 
         .image-posts {
             text-align: center;
@@ -46,6 +47,46 @@
             display: block;
             font-size: 16px;
             font-weight: normal;
+        }
+
+        .updatePost {
+            display: none;
+
+            .sectionUpdate {
+                display: block;
+                align-items: center;
+                border-radius: 15px;
+                background-color: rgba(207, 207, 207, 0.63);
+                padding: 10px;
+
+                #updateImgPost {
+                    width: 100%;
+                    border: 1px solid #ccc;
+                    background-color: rgb(255, 255, 255);
+                }
+
+                textarea {
+                    width: 100%;
+                    height: 100px;
+                    box-sizing: border-box;
+                    border: 2px solid #ccc;
+                    border-radius: 4px;
+                    background-color: #f8f8f8;
+                    font-size: 16px;
+                    resize: none;
+                    white-space: pre-wrap;
+                  }
+
+                  .btn-deletepost {
+                      margin-left: 10px;
+                  }
+
+                  .update-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    border-bottom: 1px solid black;
+                  }
+            }
         }
 
         .addCorpsNewPost{
@@ -73,7 +114,6 @@
                 padding: 0px;
                 border-radius: 4px;
                 background-color: #ffffff;
-                color: rgba(172, 0, 0, 0.596);
                 font-size: 16px;
                 margin: 5px;
               }

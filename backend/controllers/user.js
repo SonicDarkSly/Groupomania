@@ -229,6 +229,8 @@ exports.deleteUser = (req, res, next) => {
                 return res.status(401).json({
                     message: 'Mot de passe incorrect.'
                 });
+            
+            // Si bon mot de passe
             } else {
 
                 // Suppression des posts de l'user
@@ -247,8 +249,22 @@ exports.deleteUser = (req, res, next) => {
                     }
                 })
 
+                // Suppression des likes / dislikes de l'user
+                db.query(`DELETE FROM opinions WHERE userid='${req.body.userId}'`, (errPost)  => {
 
-                // Si bon mot de passe
+                    // Si erreur retourne 400
+                    if (errPost) {
+                      console.log(errPost)
+                      return res.status(400).json(errPost)
+                    } else {
+
+                        // Si valide retourne 200
+                        console.log('Les likes / dislikes ont bien été supprimés')
+                        return res.status(200).json({ message: 'Les likes / dislikes ont bien été supprimés' })
+                    }
+                })
+
+                // Suppression du user
                 db.query(`DELETE FROM users WHERE id='${req.body.userId}'`, (err, results, rows)  => {
 
                     // Si erreur retourne 400

@@ -24,7 +24,7 @@ exports.creatPost = (req, res, next) => {
       };
 
     // Ajout à la BDD
-    db.query(`INSERT INTO posts VALUES (NULL, '${newPost.userId}', '${newPost.contentPost}', '${newPost.imgPost}', '${newPost.date}', '0', '0', '${newPost.userName}', '${newPost.userAvatar}')`, (err, results, fields) => {
+    db.query(`INSERT INTO posts VALUES (NULL, '${newPost.userId}', "${newPost.contentPost.replace(/\"/g, "\"\"")}", '${newPost.imgPost}', '${newPost.date}', '0', '0', '${newPost.userName}', '${newPost.userAvatar}')`, (err, results, fields) => {
 
         // Si erreur, retourne 400
         if (err) {
@@ -53,9 +53,9 @@ exports.deleteonePost = (req, res, next) => {
     // Si une image existe, on la supprimer du dossier
     if (result[0].imageurl != '') {
       const imagePost = result[0].imageurl
-      const imagePostFilename = imagePost.split(`/${req.body.userId}/`)[1];
+      const imagePostFilename = imagePost.split(`/${req.body.postUserId}/`)[1];
 
-      fs.unlink(`images/posts/${req.body.userId}/${imagePostFilename}`, (err => {
+      fs.unlink(`images/posts/${req.body.postUserId}/${imagePostFilename}`, (err => {
         if (err) {
             console.log(err);
             return false
@@ -67,7 +67,7 @@ exports.deleteonePost = (req, res, next) => {
     }
 
     // Suppression du posts selectionné et correspandant à l'user
-    db.query(`DELETE FROM posts WHERE id='${req.body.postId}' AND userid='${req.body.userId}'`, (errPost, resultsPost, rowsPost)  => {
+    db.query(`DELETE FROM posts WHERE id='${req.body.postId}' AND userid='${req.body.postUserId}'`, (errPost)  => {
 
       // Si erreur retourne 400
       if (errPost) {
@@ -80,6 +80,21 @@ exports.deleteonePost = (req, res, next) => {
         return res.status(201).json({
           message: 'Post supprimé avec succes'
         });
+      }
+    })
+
+    // Suppression des likes / dislikes dans la table opinions
+    db.query(`DELETE FROM opinions WHERE postid='${req.body.postId}'`, (errPost)  => {
+
+      // Si erreur retourne 400
+      if (errPost) {
+        console.log(errPost)
+        return res.status(400).json(errPost)
+      } else {
+    
+        // Si valide, retourne 201
+        console.log('Likes/Dislikes supprimés avec succes');
+        return res.status(201);
       }
     })
   })
@@ -97,12 +112,56 @@ exports.getMessages = (req, res, next) => {
     })
 }
 
-//Affichage des messages posté pour un userid
-exports.getMessagesByUser = (req, res, next) => {
-  db.query(`SELECT * FROM posts  WHERE userid='${req.params.userid}' ORDER BY date DESC`, (error, result, field) => {
-    if (error) {
-      return res.status(400).json({ error })
-    }
-      res.status(200).json(result)
+ // ---------- UPDATE POST ----------
+
+
+ exports.updatePost = (req, res, next) => {
+
+  // Recherche dans la BDD selon postId
+  db.query(`SELECT * FROM posts WHERE id=${req.body.postId}`, (err, result, rows) => {
+
+      // Ancien fichier image du post
+      const oldimg = result[0].imageurl
+      const oldfilename = oldimg.split(`/${req.body.postUserId}/`)[1];
+
+      // Controle si un fichier un present dans la requete
+      const updatePost = req.file
+      ? {
+        ...req.body,
+        imgPost: `${req.protocol}://${req.get('host')}/images/posts/${req.body.postUserId}/${req.file.filename}`
+      }
+      : {
+        ...req.body,
+        imgPost: `${oldimg}`
+      };
+
+      // suppression de l'ancien fichier image
+      if (req.file) {
+        if ((req.file.filename !== oldfilename) || (oldfilename !== '')) {
+          fs.unlink(`images/posts/${req.body.postUserId}/${oldfilename}`, (err => {
+              if (err) {
+                  console.log(err);
+                  return false
+              } else {
+                console.log("Ancienne image supprimer avec succes");
+                return true
+              }
+          }));
+        }
+      }
+
+      // Mise à jour dans la BDD 
+      db.query(`UPDATE posts SET content="${updatePost.contentPost.replace(/\"/g, "\"\"")}", imageurl='${updatePost.imgPost}' WHERE id=${updatePost.postId}`, (err, results, rows)  => {
+
+          // Si erreur retourne 400
+          if (err) {
+              console.log(err)
+              return res.status(400).json(err)
+          }else{
+            return res.status(200).json(result)
+          }
+      })
+
+      console.log('Post #'+updatePost.postId+' modifier avec succes')
   })
 }

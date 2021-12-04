@@ -20,7 +20,8 @@ function tokenIsValid(token) {
     if (exp * 1000 > new Date().getTime()) {
         return true;
     }
-    return false
+    removeItem(token);
+    
 }
 
 // LOGIN

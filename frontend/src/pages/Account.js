@@ -90,18 +90,30 @@ const Account = () => {
         }
       }
 
-    // Fonction affichage
-    const showHidden = (champ) => {
-       let champModif = document.getElementById(champ)
+    // Fonctions affichage sections
 
-       if (champModif.style.display == 'block')  {
-           champModif.style.display = 'none';
-       } else {
-           champModif.style.display = 'block';
+       let divs = ["updateAvatar", "updatePassword", "deleteAccount", "updateEmail", "updateDescription"];
+       let visibleId = null;
+
+       function showHidden(id) {
+         if(visibleId !== id) {
+           visibleId = id;
+         } 
+         hide();
        }
-    }
 
-
+       function hide() {
+         let div, i, id;
+         for(i = 0; i < divs.length; i++) {
+           id = divs[i];
+           div = document.getElementById(id);
+           if(visibleId === id) {
+             div.style.display = "block";
+           } else {
+             div.style.display = "none";
+           }
+         }
+       }  
 
     return (
         <div className="account">
@@ -126,7 +138,7 @@ const Account = () => {
             </div>
 
 
-            <div className="updateAvatar" id="updateAvatar">
+            <div className="updateAvatar show" id="updateAvatar">
                 <div className="title-section">
                     <p>
                         <span>Modification de l'avatar</span>
@@ -139,7 +151,7 @@ const Account = () => {
             </div>
          
 
-            <div className="updatePassword" id="updatePassword">
+            <div className="updatePassword  show" id="updatePassword">
             <div className="title-section">
                     <p>
                         <span>Modification du mot de passe</span>
@@ -165,7 +177,7 @@ const Account = () => {
                 </div>
             </div>
 
-            <div className="deleteAccount" id="deleteAccount">
+            <div className="deleteAccount show" id="deleteAccount">
                 <div className="title-section">
                     <p>
                         <span>Suppression du compte</span>
@@ -177,7 +189,7 @@ const Account = () => {
                 </div>
             </div>
 
-            <div className="updateEmail" id="updateEmail">
+            <div className="updateEmail show" id="updateEmail">
                 <div className="title-section">
                     <p>
                         <span>Modification de l'adresse mail</span>
@@ -197,7 +209,7 @@ const Account = () => {
                 </div>
             </div>
 
-            <div className="updateDescription" id="updateDescription">
+            <div className="updateDescription show" id="updateDescription">
                 <div className="title-section">
                     <p>
                         <span>Modification de la description</span>
