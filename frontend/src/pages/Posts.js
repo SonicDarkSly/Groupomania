@@ -4,7 +4,7 @@ import Header from '../components/Header';
 
 import { axiosCreatePost, axiosDeletePost, axiosUpdatePost } from '../services/postApi';
 import { axiosOpinionPost } from '../services/opinionApi';
-import { getItem, addItem, removeItem } from "../services/Localestorage";
+import { getItem } from "../services/Localestorage";
 
 const Posts = () => {
 
@@ -13,14 +13,6 @@ const Posts = () => {
         const userId = getinfouser[0];
         const userLevel = getinfouser[4];
         const userName = getinfouser[2]+' '+getinfouser[3];
-
-    let msgAdmin = '';
-    if (userLevel >= 2) {
-        msgAdmin = ' \n\nPost modifié par administrateur';
-    }
-    if (userLevel == 1) {
-        msgAdmin = '';
-    }
 
     // Récupère l'avatar du user dans le localstorage
     const getavataruser = localStorage.getItem("storageUserAvatar"); 
@@ -53,7 +45,7 @@ const Posts = () => {
 
     // Submit du formulaire pour modifications post
     const handleSubmitUpdatePost = (postId, postUserId) => {
-        if (document.getElementById('updateContentPost_'+postId).value == '') {
+        if (document.getElementById('updateContentPost_'+postId).value === '') {
             alert('Veuillez indiquer un texte');
         }else{
             let msgModifPost = '';
@@ -117,7 +109,7 @@ const Posts = () => {
                     <form onSubmit={ handleSubmit }>
                         <div className="addCorpsNewPost">
                             <textarea id="contentPost" onChange={ (e) => setcontentPost(e.target.value) } required></textarea>
-                            <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg, .gif" onChange={(e) => setimagePost(e.target.files[0])} />
+                            <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg" onChange={(e) => setimagePost(e.target.files[0])} />
                         </div>
                         <div className="text-center">
                             <button type="submit" className="btn btn-primary">Envoyer</button>
@@ -130,49 +122,62 @@ const Posts = () => {
 
             {      
             <> 
-                {/* Boucle map du state posts */}  
-                {posts.map(data => 
-                    <div className="container" key={data.id}>
-                        <div className="addEnteteNewPost">
-                            <span>#{data.id} - <img src={data.useravatar} width="30"/><i>{data.username}</i> - {data.date}</span>
-                            <span>({data.countlike})<a href="#like" onClick={ () => handleOpinionPost('like', userId, data.id) }><i className="fas fa-thumbs-up"></i></a></span>
-                            <span>({data.countdislike})<a href="#dislike" onClick={ () => handleOpinionPost('dislike', userId, data.id) }><i className="fas fa-thumbs-down"></i></a></span>
-                            <span>
-                                {/* Affiche le boutton delete si le userid du post correspont à l'userid de l'user connecter */}  
-                                { ((userId === data.userid) || (userLevel >= 2)) && (
-                                    <a href={'#updatePost_'+data.id} onClick={ () => showUpdatePost(data.id) }><i className="fas fa-cog"></i></a>
-                                ) }   
-                            </span>
+            {/* Boucle map du state posts */}  
+            {posts.map(data => 
+            <div className="container" key={data.id}>
+                <div className="addEnteteNewPost">
+                    <div className="container-entete-post">
+                        <div className="g">
+                            <span><img className="avatar-post" src={data.useravatar} alt="avatar" /></span>
+                            <span className="username">{data.username}</span>
                         </div>
-                        <div id="allpost" className="addContainerCorpsNewPost">
-
-                            {/* Controle si une image existe et affiche */}  
-                            {(data.imageurl && (
-                                <span className="content-img"><img className="image-posts" src={data.imageurl} alt="image posté" /></span>
-                            ))}
-                            <span className="content">{data.content}</span>
-
-                            {/* Section modification post */} 
-                            <div className="updatePost" id={'updatePost_'+data.id}>
-                                <hr/>
-                                <div className="sectionUpdate">
-                                <p className="update-title">Modification du post #{data.id}</p>
-                                    <p>
-                                        <span>Post : <textarea id={ 'updateContentPost_'+data.id } onChange={ (e) => setcontentPost(e.target.value) } defaultValue={ data.content } required></textarea></span>
-                                    </p>
-                                    <p>
-                                        <span>Image : <input type="file" id="updateImgPost" name="updateImgPost" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setimagePost(e.target.files[0]) } /></span>
-                                    </p>
-                                    <p>
-                                        <span><button onClick={ () => handleSubmitUpdatePost(data.id, data.userid) }>Modifier</button></span>
-                                        { ((userId === data.userid) || (userLevel >= 2)) && (<span className="btn-deletepost"><button onClick={ () => handleDeletePost(data.id, data.userid) }>Supprimer</button></span>)}
-                                    </p>
-                                
-                                </div>
-                            </div>
+                        <div className="c">
+                            <span>#{data.id}</span>
+                        </div>
+                        <div className="d">
+                            <span>{data.date}</span>
                         </div>
                     </div>
-                )}
+                </div>
+                <div id="allpost" className="addContainerCorpsNewPost">
+
+                    {/* Controle si une image existe et affiche */}  
+                    {(data.imageurl && (
+                        <span className="content-img"><img className="image-posts" src={data.imageurl} alt="poste" /></span>
+                    ))}
+                    <span className="content">{data.content}</span>
+
+                    {/* Section modification post */} 
+                    <div className="updatePost" id={'updatePost_'+data.id}>
+                        <hr/>
+                        <div className="sectionUpdate">
+                            <p className="update-title">Modification du post #{data.id}</p>
+                            <p>
+                                <span>Post : <textarea id={ 'updateContentPost_'+data.id } onChange={ (e) => setcontentPost(e.target.value) } defaultValue={ data.content } required></textarea></span>
+                            </p>
+                            <p>
+                                <span>Image : <input type="file" id="updateImgPost" name="updateImgPost" accept=".png, .jpg, .jpeg" onChange={ (e) => setimagePost(e.target.files[0]) } /></span>
+                            </p>
+                            <p>
+                                <span><button onClick={ () => handleSubmitUpdatePost(data.id, data.userid) }>Modifier</button></span>
+                                { ((userId === data.userid) || (userLevel >= 2)) && (<span className="btn-deletepost"><button onClick={ () => handleDeletePost(data.id, data.userid) }>Supprimer</button></span>)}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className="footer-post">
+                    <div className="footer-post-d">
+                        <span>({data.countlike})<a href="#like" onClick={ () => handleOpinionPost('like', userId, data.id) }><i className="fas fa-thumbs-up"></i></a> ({data.countdislike})<a href="#dislike" onClick={ () => handleOpinionPost('dislike', userId, data.id) }><i className="fas fa-thumbs-down"></i></a></span>
+                        <span>
+                            {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
+                            { ((userId === data.userid) || (userLevel >= 2)) && (
+                                <a href={'#updatePost_'+data.id} onClick={ () => showUpdatePost(data.id) }><i className="fas fa-cog"></i></a>
+                            ) }   
+                        </span>
+                    </div>
+                </div>
+            </div>
+            )}
             </>
             }
         </div>

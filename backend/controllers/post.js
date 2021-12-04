@@ -137,15 +137,15 @@ exports.getMessages = (req, res, next) => {
 
       // suppression de l'ancien fichier image
       if (req.file) {
-        if ((req.file.filename !== oldfilename) || (oldfilename !== '')) {
+        if (req.file.filename !== oldfilename) {
           fs.unlink(`images/posts/${req.body.postUserId}/${oldfilename}`, (err => {
-              if (err) {
-                  console.log(err);
-                  return false
-              } else {
-                console.log("Ancienne image supprimer avec succes");
-                return true
-              }
+            if (err) {
+              console.log(err);
+              return false
+            } else {
+              console.log("Ancienne image supprimer avec succes");
+              return true
+            }
           }));
         }
       }

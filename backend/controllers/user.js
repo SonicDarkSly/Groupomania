@@ -493,3 +493,34 @@ exports.updateUserDescription = (req, res, next) => {
         })
     })
 }
+
+// ---------- GET PROFILE ONE USER ----------
+
+exports.getOneUser = (req, res, next) => {
+
+    // Récupère l'userid
+    const userid = req.params.userid;
+
+    // Recherche dans la BDD selon userid
+    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, results, rows) => {
+                        
+            // Si erreur retourne 400
+            if (err) {
+                console.log(err)
+                return res.status(400).json(err)
+            } else {
+
+                // Envoi vers le frontend des info user
+                res.status(201).json({
+                    email: results[0].email,
+                    lastname: results[0].lastname,
+                    firstname: results[0].firstname,
+                    accesslevel: results[0].accesslevel,
+                    avatarurl: results[0].avatarurl,
+                    description: results[0].description
+                });
+                
+            }
+        
+    })
+}

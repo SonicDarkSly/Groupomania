@@ -4,24 +4,42 @@
         color:#5c5c5c;
         font-weight: 600;
         padding: 10px;
-        margin-top: 15px;
+        margin-top: 30px;
         border-radius: 0 30px 0 0; //hg hd bd bg
         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
         font-style: italic;
 
-        a {
-            font-size: 18px;
-            padding: 8px;
-            .fa-thumbs-up{
-                color: rgb(1, 136, 1);
+
+        .container-entete-post {
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+
+            .g {
+                float: left;
+                .username {
+                    margin-left: 5px;
+                    text-transform: uppercase;
+                }
             }
-            .fa-thumbs-down{
-                color: rgb(192, 0, 0);
+            .c {
+                text-align: center;
             }
-            .fa-trash-alt{
-                color: gray;
+            .d {
+                float: right;
+                margin-right: 10px;
             }
         }
+
+
+
+        .avatar-post {
+            width: 30px;
+        }
+        
+
     }
 
     .addContainerCorpsNewPost {
@@ -30,8 +48,8 @@
         color:#000000;
         font-weight: 600;
         padding: 10px;
-        border-radius: 0 0 0 30px; //hg hd bd bg
         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
+
 
         .image-posts {
             text-align: center;
@@ -119,4 +137,37 @@
               }
         }
     }
+
+    .footer-post {
+        border-radius: 0 0 0 30px; //hg hd bd bg
+        background-color: #ffffff;
+        box-shadow: 0px 7px 10px rgba(54, 54, 54, 0.534);
+        border-top: solid 1px black;
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: right;
+
+        .footer-post-d {
+           text-align: right;
+           font-size: 16px;
+           justify-content: baseline;
+            a {
+                font-size: 18px;
+                padding: 8px;
+                .fa-thumbs-up{
+                    color: rgb(1, 136, 1);
+                }
+                .fa-thumbs-down{
+                    color: rgb(192, 0, 0);
+                }
+                .fa-cog{
+                    color: gray;
+                }
+            }
+        }
+
+    }
+
 }

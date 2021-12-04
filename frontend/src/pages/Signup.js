@@ -6,10 +6,8 @@ import { signup } from '../services/userApi';
 import { checksignup } from '../services/checkform'
 
 const Signup = ({ history }) => {
-    const { isAuthenticated, setisAuthenticated } = useContext(Auth);
 
-    
-
+    const { isAuthenticated } = useContext(Auth);
 
     const [usersignup, setusersignup] = useState({
         "lastname": "",
@@ -19,8 +17,6 @@ const Signup = ({ history }) => {
         "avatar": "",
         "description": ""
       })
-
-
 
       const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;

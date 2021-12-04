@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getItem, addItem, removeItem } from "./Localestorage";
+import { getItem } from "./Localestorage";
 
 export function axiosOpinionPost(credentials) {
 

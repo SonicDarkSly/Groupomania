@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect} from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import Header from '../components/Header';
 import Auth from '../context/Auth';
 import { 
@@ -15,7 +14,7 @@ import { checkChangePassword, checkChangeEmail } from '../services/checkform';
 const Account = () => {
 
     // State data
-    const { isAuthenticated, setisAuthenticated } = useContext(Auth);
+    const { setisAuthenticated } = useContext(Auth);
     const [profilImage, setProfilImage] = useState();
     const [oldPassword, setoldPassword] = useState();
     const [newPassword, setNewPassword] = useState();
@@ -145,7 +144,7 @@ const Account = () => {
                     </p>
                 </div>
                 <div className="content-section">
-                    <p className="p-content-update-avatar"><input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setProfilImage(e.target.files[0]) }/></p>
+                    <p className="p-content-update-avatar"><input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" onChange={ (e) => setProfilImage(e.target.files[0]) }/></p>
                     <p className="p-content-update-avatar"><button onClick={ handleUpdateAvatar }>Modifier mon avatar</button></p>
                 </div>
             </div>

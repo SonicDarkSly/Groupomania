@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { getItem, addItem, removeItem } from "./Localestorage";
-
-
+import { getItem } from "./Localestorage";
 
 // ADD POST
 
@@ -37,7 +35,9 @@ export function axiosCreatePost(credentials) {
         data: formData
     })
     .catch(error => console.log({ error }))
-    window.location.reload(); 
+    setTimeout(function(){ 
+        window.location.reload() 
+    }, 400);
 }
 
 
@@ -62,8 +62,7 @@ export function axiosDeletePost(credentials) {
         }, 
         config
     )
-      .then(function (response) {
-        console.log(response);
+      .then(function () {
         window.location.reload(); 
       })
       .catch(function (error) {
@@ -92,5 +91,8 @@ export function axiosUpdatePost(credentials) {
         data: formData
     })
     .catch(error => console.log({ error }))
-    window.location.reload(); 
+    ; 
+    setTimeout(function(){ 
+        window.location.reload() 
+    }, 400);
 }
