@@ -129,7 +129,7 @@ const Posts = () => {
                     <div className="container-entete-post">
                         <div className="g">
                             <span><img className="avatar-post" src={data.useravatar} alt="avatar" /></span>
-                            <span className="username">{data.username}</span>
+                            <span className="username"><a href={'/users?userId='+data.userid}>{data.username}</a></span>
                         </div>
                         <div className="c">
                             <span>#{data.id}</span>

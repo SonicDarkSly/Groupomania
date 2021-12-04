@@ -511,14 +511,7 @@ exports.getOneUser = (req, res, next) => {
             } else {
 
                 // Envoi vers le frontend des info user
-                res.status(201).json({
-                    email: results[0].email,
-                    lastname: results[0].lastname,
-                    firstname: results[0].firstname,
-                    accesslevel: results[0].accesslevel,
-                    avatarurl: results[0].avatarurl,
-                    description: results[0].description
-                });
+                res.status(200).json(results)
                 
             }
         
