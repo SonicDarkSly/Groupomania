@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext} from 'react';
-import { NavLink } from 'react-router-dom';
 import Header from '../components/Header';
 import Auth from "../context/Auth";
 import { login } from '../services/userApi';
@@ -44,22 +43,20 @@ const Login = ({ history }) => {
   return (
     <div className="login">
       <Header />
+      <h1>Se connecter</h1>
       <div className="container">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input type="email" className="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email" onChange={ handleChange } required />
+          <input type="email" className="form-control" id="email" name="email" placeholder="Email" onChange={ handleChange } required />
         </div>
         <div className="form-group">
           <label htmlFor="password">Mot de passe</label>
           <input type="password" className="form-control" id="password" name="password" placeholder="Mot de passe" onChange={ handleChange } required />
         </div>
         <div className="text-center form-group pt-4">
-          <button type="submit" className="btn btn-primary">Se connecter</button> ou <NavLink exact to="/signup" className="btn btn-primary">S'enregistrer</NavLink>
-        </div>
-        <div>
-          
-        </div>
+          <button aria-label="Se connecter" type="submit">Se connecter</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/signup'}>S'enregistrer</button>
+       </div>
       </form>
       </div>
     </div>

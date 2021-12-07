@@ -536,3 +536,22 @@ exports.getLevelUser = (req, res, next) => {
             }
     })
 }
+
+// ---------- GET USER ADMIN ----------
+
+exports.getUserAdmin = (req, res, next) => {
+
+    // Recherche dans la BDD selon userid
+    db.query(`SELECT * FROM users`, (err, results, rows) => {
+                        
+            // Si erreur retourne 400
+            if (err) {
+                console.log(err)
+                return res.status(400).json(err)
+            } else {
+
+                // Envoi vers le frontend
+               return res.status(200).json(results)
+            }
+    })
+}

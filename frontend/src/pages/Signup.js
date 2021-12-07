@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState} from 'react';
-import { NavLink } from 'react-router-dom';
 import Auth from "../context/Auth";
 import Header from '../components/Header';
 import { signup } from '../services/userApi';
@@ -46,6 +45,7 @@ const Signup = ({ history }) => {
     return (
         <div className="signup">
             <Header />
+            <h1>Enregistrement</h1>
             <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -57,8 +57,8 @@ const Signup = ({ history }) => {
                         <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Prénom" onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="exampleInputEmail1">Email</label>
-                        <input type="email" className="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email"  onChange={ handleChange } required/>
+                        <label htmlFor="email">Email</label>
+                        <input type="email" className="form-control" id="email" name="email" placeholder="Email"  onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Mot de passe</label><span id="msg_mdp_signup"></span>
@@ -66,10 +66,10 @@ const Signup = ({ history }) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="description">Description</label>
-                        <textarea className="form-control" id="description" name="description" rows="3"  onChange={ handleChange }></textarea>
+                        <textarea className="form-control" id="description" name="description" rows="3" onChange={ handleChange }></textarea>
                     </div>
                     <div className="text-center form-group pt-4"> 
-                        <button type="submit" className="btn btn-primary">S'enregistrer</button> ou <NavLink exact to="/login" className="btn btn-primary">Se connecter</NavLink>
+                        <button type="submit" aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>
                     </div>
                 </form>
             </div>

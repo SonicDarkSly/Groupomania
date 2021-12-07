@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import Admin from "./pages/Admin";
 import Posts from "./pages/Posts";
 import Users from "./pages/Users";
+import Notfound from "./pages/Notfound";
 
 import { hasAuthenticated } from './services/userApi'
 import Auth from "./context/Auth";
@@ -24,7 +25,6 @@ function App() {
 
       <BrowserRouter>
          <Switch>
-
            <Route exact path="/" component= { Home } />
            <AuthenticatedRoute exact path="/posts" component= { Posts } />
            <Route exact path="/login" component= { Login } />
@@ -32,7 +32,7 @@ function App() {
            <AuthenticatedRoute exact path="/account" component= { Account } />
            <AuthenticatedRoute exact path="/administration" component= { Admin } />
            <AuthenticatedRoute exact path="/users" component= { Users } />
-
+           <Route component= { Notfound } />
          </Switch>
       </BrowserRouter>
   

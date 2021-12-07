@@ -146,7 +146,7 @@ const Posts = () => {
                     <div className="container-entete-post">
                         <div className="g">
                             <span><img className="avatar-post" src={data.useravatar} alt={ 'avatar de '+data.username+' pour le post '+data.id } /></span>
-                            <span className="username"><a href={'/users?userId='+data.userid}>{data.username}</a></span>
+                            <span className="username"><a aria-label={data.username} href={'/users?userId='+data.userid}>{data.username}</a></span>
                         </div>
                         <div className="c">
                             <span>#{data.id}</span>
@@ -156,7 +156,7 @@ const Posts = () => {
                         </div>
                     </div>
                 </div>
-                <div id="allpost" className="addContainerCorpsNewPost">
+                <div id={'post_'+data.id} className="addContainerCorpsNewPost">
 
                     {/* Controle si une image existe et affiche */}  
                     {(data.imageurl && (
