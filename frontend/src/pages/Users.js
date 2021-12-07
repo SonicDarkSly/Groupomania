@@ -49,7 +49,7 @@ const Users = () => {
                     </div>
                     <div className="div-infouser">
                         <p className="name">
-                            <span>#{ data.id } { data.firstname } { data.lastname }</span>
+                            <h1>#{ data.id } { data.firstname } { data.lastname }</h1>
                         </p>
                         { (data.accesslevel >= 3 &&(<p><span className="title-p">Niveau :</span><span> Administrateur</span></p>)) }
                         { (data.accesslevel <= 1 &&(<p><span className="title-p">Niveau :</span><span> Utilisateur</span></p>)) }

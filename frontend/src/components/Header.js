@@ -16,7 +16,7 @@ const Header = () => {
         <div className="header">
             <div className="container-fluid row">
                 <div className="logo col-4">
-                    <img src="./images/logo.png" alt=""/>
+                    <img src="./images/logo.png" alt="logo du groupe groupomania"/>
                 </div>
                 <div className="col-8">
                     <nav className="navbar navbar-light container">

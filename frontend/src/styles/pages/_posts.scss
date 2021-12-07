@@ -1,4 +1,5 @@
 .posts {
+    
     .addEnteteNewPost {
         background-color: rgba(233, 127, 94, 0.541);
         color:#5c5c5c;
@@ -150,12 +151,15 @@
         justify-content: right;
 
         .footer-post-d {
+
            text-align: right;
            font-size: 16px;
            justify-content: baseline;
-            a {
-                font-size: 18px;
-                padding: 8px;
+
+            .btn-link {
+                background-color: transparent;
+                border: none;
+
                 .fa-thumbs-up{
                     color: rgb(1, 136, 1);
                 }

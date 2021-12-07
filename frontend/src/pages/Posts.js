@@ -116,16 +116,16 @@ const Posts = () => {
     return (
         <div className="posts">
             <Header />
-
+            <h1>Fil des posts</h1>
             {/* Section pour publier un post */}  
             <div className="container">
                 <div className="addEnteteNewPost">Publier un nouveau post</div>
                 <div className="addContainerCorpsNewPost">
                     <form onSubmit={ handleSubmit }>
                         <div className="addCorpsNewPost">
-                            <label htmlFor="contentPost">Post(*)</label>
+                            <label htmlFor="contentPost">Post(*) : </label>
                             <textarea id="contentPost" onChange={ (e) => setcontentPost(e.target.value) } required></textarea>
-                            <label htmlFor="imgPost">Image</label>
+                            <label htmlFor="imgPost">Image : </label>
                             <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg" onChange={(e) => setimagePost(e.target.files[0])} />
                         </div>
                         <div className="text-center">
@@ -171,13 +171,13 @@ const Posts = () => {
                             <p className="update-title">Modification du post #{data.id}</p>
                             <p>
                                 <span>
-                                    <label htmlFor={ 'updateContentPost_'+data.id }>Post(*)</label>
+                                    <label htmlFor={ 'updateContentPost_'+data.id }>Post(*) : </label>
                                     <textarea id={ 'updateContentPost_'+data.id } onChange={ (e) => setcontentPost(e.target.value) } defaultValue={ data.content } required></textarea>
                                 </span>
                             </p>
                             <p>
                                 <span>
-                                    <label htmlFor={ 'updateImgPost'+data.id }>Image</label>
+                                    <label htmlFor={ 'updateImgPost'+data.id }>Image : </label>
                                     <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg" onChange={ (e) => setimagePost(e.target.files[0]) } />
                                 </span>
                             </p>
@@ -190,11 +190,17 @@ const Posts = () => {
                 </div>
                 <div className="footer-post">
                     <div className="footer-post-d">
-                        <span>({data.countlike})<a aria-label="Like" onClick={ () => handleOpinionPost('like', userId, data.id) }><i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></a> ({data.countdislike})<a aria-label="Dislike" onClick={ () => handleOpinionPost('dislike', userId, data.id) }><i className="fas fa-thumbs-down" aria-hidden="true" title="Dislike"></i></a></span>
+                        <span>
+                            ({data.countlike})
+                            <button className="btn-link" aria-label="Like" onClick={ () => handleOpinionPost('like', userId, data.id) }><i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></button>
+                            
+                            ({data.countdislike})
+                            <button className="btn-link" aria-label="Dislike" onClick={ () => handleOpinionPost('dislike', userId, data.id) }><i className="fas fa-thumbs-down" aria-hidden="true" title="Dislike"></i></button>
+                        </span>
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <a aria-label="Modification" href={'#updatePost_'+data.id} onClick={ () => showUpdatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></a>
+                                <button className="btn-link" aria-label="Modification" onClick={ () => showUpdatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button>
                             ) }   
                         </span>
                     </div>
