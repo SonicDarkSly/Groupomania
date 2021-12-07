@@ -9,11 +9,9 @@ import Admin from "./pages/Admin";
 import Posts from "./pages/Posts";
 import Users from "./pages/Users";
 
-
 import { hasAuthenticated } from './services/userApi'
 import Auth from "./context/Auth";
 import AuthenticatedRoute from "./services/AuthenticatedRoute";
-
 
 require('dotenv').config();
 

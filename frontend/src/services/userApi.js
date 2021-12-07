@@ -20,9 +20,33 @@ function tokenIsValid(token) {
     if (exp * 1000 > new Date().getTime()) {
         return true;
     }
-    removeItem(token);
-    
+    removeItem(token);   
 }
+
+// GET USERID
+
+export function getAccess(credentials) {
+
+    const token = getItem('storageToken');
+
+    let config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer '+token
+        }
+    }
+    return axios.post('http://localhost:8080/api/user/getlevel', 
+        {
+            userId: credentials[0]
+        }, 
+        config
+    )
+    .then(response => {
+        return response.data
+    })
+    .catch(error => console.log({ error }))
+}
+
 
 // LOGIN
 
@@ -36,7 +60,6 @@ export function login(credentials) {
                 response.data.email,
                 response.data.lastname,
                 response.data.firstname,
-                response.data.accesslevel,
                 response.data.description
             ];
             addItem('storageToken', response.data.token);

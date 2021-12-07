@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Auth from '../context/Auth';
 import { 
@@ -7,7 +7,8 @@ import {
     axiosupdateUserPassword,
     logout, 
     axiosupdateUserEmail, 
-    axiosupdateUserDescription
+    axiosupdateUserDescription,
+    getAccess
 } from '../services/userApi';
 import { checkChangePassword, checkChangeEmail } from '../services/checkform';
 
@@ -20,15 +21,16 @@ const Account = () => {
     const [newPassword, setNewPassword] = useState();
     const [newEmail, setNewEmail] = useState();
     const [newDescription, setnewDescription] = useState();
+    const [datalevel, setdatalevel] = useState();
 
     // Récupération info user dans storage
     const getinfouser = JSON.parse(localStorage.getItem("storageUserInfo"));
+        const getUserId = [getinfouser[0]];
         const userId = getinfouser[0];
         const email = getinfouser[1];
         const lastName = getinfouser[2];
         const firstname = getinfouser[3];
-        const levelaccess = getinfouser[4];
-        const description = getinfouser[5];
+        const description = getinfouser[4];
 
     // Récupération url avatar dans storage
     const getinfouseravatar = localStorage.getItem("storageUserAvatar");
@@ -114,10 +116,23 @@ const Account = () => {
          }
        }  
 
+       // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
+       const level = async () => {
+        try {
+          const response = await getAccess(getUserId);
+          setdatalevel(response);
+        } catch ({ response }) {
+            console.log(response);
+        }
+      }
+      useEffect(() => {
+        level();
+      });
+
     return (
         <div className="account">
             <Header />
-
+            <h1 style="visibility: hidden">title</h1>
             <div className="div-container">
                 <div className="div-avatar">
                     <img src={ avatar } alt="mon avatar" />
@@ -125,13 +140,13 @@ const Account = () => {
                 </div>
                 <div className="div-infouser">
                     <p className="name">
-                        <span>#{ userId } { firstname } { lastName }</span>
+                        <span>#{ userId } { firstname } { lastName } </span>
                         <span><a href="#edit" onClick={() => showHidden("deleteAccount")}><i className="fas fa-user-times"></i></a></span>
                         <span><a href="#edit" onClick={() => showHidden("updatePassword")}><i className="fas fa-key"></i></a></span>
                     </p>
                     <p><span className="title-p">Mon email : </span><span>{ email }</span><span><a href="#edit" onClick={() => showHidden("updateEmail")}><i className="far fa-edit"></i></a></span></p>
-                    { (levelaccess >= 3 &&(<p><span className="title-p">Mon niveau :</span><span> Administrateur</span><span><a href="/administration"><i className="fas fa-tools"></i></a></span></p>)) }
-                    { (levelaccess <= 1 &&(<p><span className="title-p">Mon niveau :</span><span> Utilisateur</span></p>)) }
+                    { (datalevel >= 3 &&(<p><span className="title-p">Mon niveau :</span><span> Administrateur</span><span><a href="/administration"><i className="fas fa-tools"></i></a></span></p>)) }
+                    { (datalevel <= 1 &&(<p><span className="title-p">Mon niveau :</span><span> Utilisateur</span></p>)) }
                     <p><span className="title-p">Ma description :</span><span>{ description }</span><span><a href="#edit" onClick={() => showHidden("updateDescription")}><i className="far fa-edit"></i></a></span></p>
                 </div>
             </div>

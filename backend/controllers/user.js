@@ -171,7 +171,6 @@ exports.login = (req, res, next) => {
                                 email: results[0].email,
                                 lastname: results[0].lastname,
                                 firstname: results[0].firstname,
-                                accesslevel: results[0].accesslevel,
                                 avatarurl: results[0].avatarurl,
                                 description: results[0].description,
                                 token: newToken
@@ -512,8 +511,28 @@ exports.getOneUser = (req, res, next) => {
 
                 // Envoi vers le frontend des info user
                 res.status(200).json(results)
-                
             }
-        
+    })
+}
+
+// ---------- GET LEVEL USER ----------
+
+exports.getLevelUser = (req, res, next) => {
+
+    // Récupère l'userid
+    const userid = req.body.userId;
+
+    // Recherche dans la BDD selon userid
+    db.query(`SELECT accesslevel FROM users WHERE id=${userid}`, (err, results, rows) => {
+                        
+            // Si erreur retourne 400
+            if (err) {
+                console.log(err)
+                return res.status(400).json(err)
+            } else {
+
+                // Envoi vers le frontend
+               return res.status(200).json(results[0].accesslevel)
+            }
     })
 }

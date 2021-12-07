@@ -66,9 +66,9 @@ const Signup = ({ history }) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="description">Description</label>
-                        <textarea className="form-control" id="description" name="description" rows="3"></textarea>
+                        <textarea className="form-control" id="description" name="description" rows="3"  onChange={ handleChange }></textarea>
                     </div>
-                    <div className="text-center form-group pt-4">
+                    <div className="text-center form-group pt-4"> 
                         <button type="submit" className="btn btn-primary">S'enregistrer</button> ou <NavLink exact to="/login" className="btn btn-primary">Se connecter</NavLink>
                     </div>
                 </form>
