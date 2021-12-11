@@ -49,7 +49,12 @@ const Account = () => {
     // Fonction update avatar
     const handleUpdateAvatar = () => {
         const credentialsAvatar = [userId, profilImage];
-        axiosupdateUserAvatar(credentialsAvatar)
+        if (!profilImage) {
+            alert('Veuillez sélectionnez un fichier image');
+        } else {
+            axiosupdateUserAvatar(credentialsAvatar) 
+        }
+        
     }
 
     // Fonction update password
@@ -132,7 +137,7 @@ const Account = () => {
     return (
         <div className="account">
             <Header />
-            <h1>Bienvenue sur votre espace client</h1>
+            <h1>Bienvenue sur votre espace utilisateur</h1>
             <div className="div-container">
                 <div className="div-avatar">
                     <img src={ avatar } alt="mon avatar" />

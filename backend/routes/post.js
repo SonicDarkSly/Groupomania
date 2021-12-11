@@ -18,6 +18,7 @@ const updatemulter = require('../middleware/multer-updateposts');
 // Appel aux fonctions du CONTROLLER selon route
 router.post('/addpost', auth, multer, controller.creatPost);
 router.get('/viewallpost', auth, controller.getMessages);
+router.get('/viewlastpost', controller.getLastPosts);
 router.post('/deleteonepost', auth, controller.deleteonePost);
 router.post('/updatepost', auth, updatemulter, controller.updatePost);
 

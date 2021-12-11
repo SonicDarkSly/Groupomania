@@ -102,7 +102,7 @@ exports.deleteonePost = (req, res, next) => {
 
 // ---------- READ POST ----------
 
-//Affichage des messages posté 
+//Affichage des messages postés 
 exports.getMessages = (req, res, next) => {
     db.query('SELECT * FROM posts  ORDER BY date DESC', (error, result, field) => {
       if (error) {
@@ -110,6 +110,16 @@ exports.getMessages = (req, res, next) => {
       }
         res.status(200).json(result)
     })
+}
+
+//Affichage des derniers messages postés
+exports.getLastPosts= (req, res, next) => {
+  db.query('SELECT * FROM posts ORDER BY date DESC LIMIT 3', (error, result, field) => {
+    if (error) {
+      return res.status(400).json({ error })
+    }
+      res.status(200).json(result)
+  })
 }
 
  // ---------- UPDATE POST ----------

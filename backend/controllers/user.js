@@ -272,7 +272,6 @@ exports.deleteUser = (req, res, next) => {
                       return res.status(400).json(err)
                     } else {
 
-
                         // Si valide retourne 200
                         console.log('Le compte a bien été supprimé !')
                         return res.status(200).json({ message: 'Le compte a bien été supprimé !' })
@@ -325,8 +324,7 @@ exports.deleteUser = (req, res, next) => {
             }else{
 
                 // Si valide, recherche dans la BDD l'url du nouvel avatar
-                db.query(`SELECT avatarurl FROM users WHERE id=${userid}`,
-                (err, results, rows) => {
+                db.query(`SELECT avatarurl FROM users WHERE id=${userid}`, (err, results, rows) => {
 
                     // Si erreur retourne 400
                     if (err) {
@@ -351,9 +349,6 @@ exports.deleteUser = (req, res, next) => {
                 return res.status(400).json(err)
             }
         })
-
-
-
     })
 
     console.log('Avatar modifier avec succes')
@@ -399,19 +394,15 @@ exports.deleteUser = (req, res, next) => {
                             return res.status(400).json(err)
                         } else {
                             
-                            // Si valide, recherche dans la BDD le nouveau password
-                            db.query(`SELECT password FROM users WHERE id=${userid}`, (err, results, rows) => {
+                            // Si erreur retourne 400
+                            if (err) {
+                                console.log(err)
+                                return res.status(400).json(err)
+                            }
                                 
-                                // Si erreur retourne 400
-                                if (err) {
-                                    console.log(err)
-                                    return res.status(400).json(err)
-                                }
-                                
-                                // Si valide, retourne 201 vers le frontend
-                                console.log('Mot de passe modifier avec succes')
-                                return res.status(201).json({ message: 'Mot de passe modifier avec succes' })
-                            })
+                            // Si valide, retourne 201 vers le frontend
+                            console.log('Mot de passe modifier avec succes')
+                            return res.status(201).json({ message: 'Mot de passe modifier avec succes' })
                         }
                     })
                 })
@@ -444,15 +435,14 @@ exports.updateUserEmail = (req, res, next) => {
             } else {
                 
                 // Si erreur retourne 400
-                    if (err) {
-                        console.log(err)
-                        return res.status(400).json(err)
-                    }
+                if (err) {
+                    console.log(err)
+                    return res.status(400).json(err)
+                }
                     
-                    // Si valide, retourne 201 vers le frontend
-                    console.log('Adresse email modifier avec succes')
-                    return res.status(201).json({ message: 'Adresse email modifier avec succes' })
-                
+                // Si valide, retourne 201 vers le frontend
+                console.log('Adresse email modifier avec succes')
+                return res.status(201).json({ message: 'Adresse email modifier avec succes' })  
             }
         })
     })
@@ -479,15 +469,14 @@ exports.updateUserDescription = (req, res, next) => {
             } else {
                 
                 // Si erreur retourne 400
-                    if (err) {
-                        console.log(err)
-                        return res.status(400).json(err)
-                    }
+                if (err) {
+                    console.log(err)
+                    return res.status(400).json(err)
+                }
                     
-                    // Si valide, retourne 201 vers le frontend
-                    console.log('Description modifié avec succes')
-                    return res.status(201).json({ message: 'Description modifié avec succes' })
-                
+                // Si valide, retourne 201 vers le frontend
+                console.log('Description modifié avec succes')
+                return res.status(201).json({ message: 'Description modifié avec succes' })
             }
         })
     })
@@ -525,33 +514,25 @@ exports.getLevelUser = (req, res, next) => {
     // Recherche dans la BDD selon userid
     db.query(`SELECT accesslevel FROM users WHERE id=${userid}`, (err, results, rows) => {
                         
-            // Si erreur retourne 400
-            if (err) {
-                console.log(err)
-                return res.status(400).json(err)
-            } else {
+        // Si erreur retourne 400
+        if (err) {
+            console.log(err)
+            return res.status(400).json(err)
+        } else {
 
-                // Envoi vers le frontend
-               return res.status(200).json(results[0].accesslevel)
-            }
+            // Envoi vers le frontend
+            return res.status(200).json(results[0].accesslevel)
+        }
     })
 }
 
-// ---------- GET USER ADMIN ----------
+// ---------- GET LAST USER ----------
 
-exports.getUserAdmin = (req, res, next) => {
-
-    // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users`, (err, results, rows) => {
-                        
-            // Si erreur retourne 400
-            if (err) {
-                console.log(err)
-                return res.status(400).json(err)
-            } else {
-
-                // Envoi vers le frontend
-               return res.status(200).json(results)
-            }
+exports.getLastUser= (req, res, next) => {
+    db.query('SELECT * FROM users ORDER BY id DESC LIMIT 1', (error, result, field) => {
+      if (error) {
+        return res.status(400).json({ error })
+      }
+        res.status(200).json(result)
     })
-}
+  }

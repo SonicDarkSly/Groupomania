@@ -73,7 +73,6 @@ const Posts = () => {
     // Like/Dislike d'un post
     const handleOpinionPost = (opinion, userId, postId) => {
         const credentialsOpinion = [opinion, userId, postId];
-        console.log('Posts.js : '+credentialsOpinion);
         axiosOpinionPost(credentialsOpinion);
     }
 
@@ -100,18 +99,18 @@ const Posts = () => {
         getPosts();
     }, []);
 
-           // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
-           const level = async () => {
-            try {
-              const response = await getAccess(getUserId);
-              setdatalevel(response);
-            } catch ({ response }) {
-                console.log(response);
-            }
-          }
-          useEffect(() => {
-            level();
-          });
+    // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
+    const level = async () => {
+        try {
+            const response = await getAccess(getUserId);
+            setdatalevel(response);
+        } catch ({ response }) {
+            console.log(response);
+        }
+    }
+    useEffect(() => {
+        level();
+    });
           
     return (
         <div className="posts">
@@ -129,7 +128,7 @@ const Posts = () => {
                             <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg" onChange={(e) => setimagePost(e.target.files[0])} />
                         </div>
                         <div className="text-center">
-                            <button type="submit" className="btn btn-primary">Envoyer</button>
+                            <button type="submit">Envoyer</button>
                         </div>
                     </form>
                 </div>

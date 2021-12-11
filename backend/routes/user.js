@@ -23,7 +23,7 @@ router.post('/update/description', auth, controller.updateUserDescription);
 router.post('/delete', auth, controller.deleteUser);
 router.post('/getlevel', auth, controller.getLevelUser);
 router.get('/profile/:userid', auth, controller.getOneUser);
-router.get('/admin', auth, controller.getUserAdmin);
+router.get('/viewlastuser/', controller.getLastUser);
 
 // Exportation du ROUTER
 module.exports = router;

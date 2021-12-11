@@ -49,19 +49,19 @@ const Signup = ({ history }) => {
             <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="lastname">Nom</label>
+                        <label htmlFor="lastname">Nom(*)</label>
                         <input type="text" className="form-control" id="lastname" name="lastname" placeholder="Nom" onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="firstname">Prénom</label>
+                        <label htmlFor="firstname">Prénom(*)</label>
                         <input type="text" className="form-control" id="firstname" name="firstname" placeholder="Prénom" onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">Email(*)</label>
                         <input type="email" className="form-control" id="email" name="email" placeholder="Email"  onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Mot de passe</label><span id="msg_mdp_signup"></span>
+                        <label htmlFor="password">Mot de passe(*)</label><span id="msg_mdp_signup"></span>
                         <input type="password" className="form-control" id="password" name="password" minLength="8" placeholder="Mot de passe" onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">

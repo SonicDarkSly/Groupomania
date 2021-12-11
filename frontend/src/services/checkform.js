@@ -124,3 +124,19 @@ export function checkChangeEmail() {
         return true
       }
 }
+
+export function checkChangePasswordAdmin() {
+    let inputPassword = document.getElementById("updatePassword");
+    let inputPasswordMatch = document.getElementById("updatePassword").value;
+
+    if (inputPasswordMatch.match( /[0-9]/g) && 
+        inputPasswordMatch.match( /[A-Z]/g) && 
+        inputPasswordMatch.match(/[a-z]/g) && 
+        inputPasswordMatch.match( /[^a-zA-Z\d]/g) &&
+        inputPassword.value !== "") {
+            return true;
+    } else {
+            alert("Veuillez respecter les conditions d'éligibilité du mot de passe");
+            return false;
+    }
+}

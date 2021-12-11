@@ -47,11 +47,11 @@ const Login = ({ history }) => {
       <div className="container">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email(*)</label>
           <input type="email" className="form-control" id="email" name="email" placeholder="Email" onChange={ handleChange } required />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Mot de passe</label>
+          <label htmlFor="password">Mot de passe(*)</label>
           <input type="password" className="form-control" id="password" name="password" placeholder="Mot de passe" onChange={ handleChange } required />
         </div>
         <div className="text-center form-group pt-4">

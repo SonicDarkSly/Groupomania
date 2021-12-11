@@ -1,12 +1,88 @@
 .admin {
+
+    h1 {
+        text-align: center;
+        border-bottom: 1px solid black;
+        padding-bottom: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
     .div-container {
-        display: flex;
-        align-items: flex-start;
-        flex-wrap: wrap;
         margin: 10px;
-        padding: 0px;
+        padding: 10px;
         background-color: rgba(187, 187, 187, 0.527);
         border-radius: 20px;
         box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.534);
+
+        h2 {
+            text-align: center;
+        }
+
+        .info {
+            background-color: rgb(255, 157, 157);
+            border-radius: 10px;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .select-user {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px;
+        }
+
+        .container-update {
+            display: block;
+        }
+
+        .btn-valid {
+            background-color: transparent;
+            border: 1px solid rgb(107, 107, 107);
+            border-radius: 10px;
+            color: rgba(2, 117, 2, 0.781);
+            padding: 2 2 2 2;
+            margin: 0 0 0 5px;
+        }
+
     }
+
+    .adminFalse {
+        display: block;
+        width: 100%;
+
+        .adminAccess-entete {
+            padding: 10px;
+            border: 1px solid black;
+            border-bottom: 0px;
+            border-radius: 20px 20px 0 0; //hg hd bd bg
+            background-color: rgba(189, 1, 1, 0.877);
+            color: rgb(223, 223, 223);
+            width: 260px;
+            text-align: center;
+            margin: 0 auto;
+            font-weight: 700;
+        }
+
+        .adminAccess-corps {
+            padding: 10px;
+            margin: 0 auto;
+            border: 1px solid black;
+            border-radius: 0 0 20px 20px; //hg hd bd bg
+            background-color: rgb(223, 223, 223);
+            color: black;
+            width: 260px;
+            text-align: center;
+
+            .btn-admin-access {
+                color: rgb(39, 39, 39);
+                background-color: rgb(255, 255, 255);
+                border-radius: 10px;
+                padding: 10px;
+                margin-top: 10px;
+            }
+        }
+    }
+
 }

@@ -48,9 +48,9 @@ const Users = () => {
                         <span className="icon-edit-avatar"></span>
                     </div>
                     <div className="div-infouser">
-                        <p className="name">
+                        <div className="name">
                             <h1>#{ data.id } { data.firstname } { data.lastname }</h1>
-                        </p>
+                        </div>
                         { (data.accesslevel >= 3 &&(<p><span className="title-p">Niveau : </span><span>Administrateur</span></p>)) }
                         { (data.accesslevel <= 1 &&(<p><span className="title-p">Niveau : </span><span>Utilisateur</span></p>)) }
                         <p><span className="title-p">Description : </span><span>{ data.description }</span></p>
