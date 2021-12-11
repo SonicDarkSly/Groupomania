@@ -15,6 +15,7 @@ const path = require('path');
 // Appel des routes
 const userRoutes = require('./routes/user')
 const postRoutes = require('./routes/post')
+const commentRoutes = require('./routes/comment')
 const opinionRoutes = require('./routes/opinion')
 const adminRoutes = require('./routes/admin')
 
@@ -40,6 +41,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Appel routes
 app.use('/api/user/', userRoutes)
 app.use('/api/posts/', postRoutes)
+app.use('/api/comments/', commentRoutes)
 app.use('/api/opinions/', opinionRoutes)
 app.use('/api/admin/', adminRoutes)
 

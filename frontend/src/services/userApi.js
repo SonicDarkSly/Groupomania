@@ -25,7 +25,33 @@ function tokenIsValid(token) {
 
 // GET USERID
 
-export function getAccess(credentials) {
+export function getUserId(credentials) {
+
+    const getinfouser = JSON.parse(localStorage.getItem("storageUserInfo"));
+
+    const token = getItem('storageToken');
+
+    let config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer '+token
+        }
+    }
+    return axios.post('http://localhost:8080/api/user/getuserid', 
+        {
+            userPassCrypted: credentials[0]
+        }, 
+        config
+    )
+    .then(response => {
+        return response.data
+    })
+    .catch(error => console.log({ error }))
+}
+
+// GET LEVEL FOR ACCOUNT
+
+export function getLevel(credentials) {
 
     const token = getItem('storageToken');
 

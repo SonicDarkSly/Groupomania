@@ -504,6 +504,28 @@ exports.getOneUser = (req, res, next) => {
     })
 }
 
+// ---------- GET USERID ----------
+
+exports.getUserId = (req, res, next) => {
+
+    // Récupère l'userid
+    const userPassCrypted = req.body.userPassCrypted;
+
+    // Recherche dans la BDD selon userid
+    db.query(`SELECT * FROM users WHERE password=${userPassCrypted}`, (err, results, rows) => {
+                        
+        // Si erreur retourne 400
+        if (err) {
+            console.log(err)
+            return res.status(400).json(err)
+        } else {
+
+            // Envoi vers le frontend
+            return res.status(200).json(results[0])
+        }
+    })
+}
+
 // ---------- GET LEVEL USER ----------
 
 exports.getLevelUser = (req, res, next) => {

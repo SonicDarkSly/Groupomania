@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 
-import { axiosCreatePost, axiosDeletePost, axiosUpdatePost } from '../services/postApi';
-import { getAccess } from '../services/userApi';
+import { axiosCreatePost, axiosDeletePost, axiosUpdatePost, axiosCreateComment } from '../services/postApi';
+import { getLevel } from '../services/userApi';
 import { axiosOpinionPost } from '../services/opinionApi';
 import { getItem } from "../services/Localestorage";
 
@@ -19,11 +19,15 @@ const Posts = () => {
     const getavataruser = localStorage.getItem("storageUserAvatar"); 
         const userAvatar = getavataruser;
     
-    // State pré-post
+    // State post
     const [imagePost, setimagePost] = useState('');
     const [contentPost, setcontentPost] = useState('');
     const [posts, setPosts] = useState([]);
     const [datalevel, setdatalevel] = useState();
+
+    // State commentaires
+    const [commentairePost, setCommentairePost] = useState('');
+    const [comments, setComments] = useState([]);
 
     // Submit du formulaire pour envois du post
     const handleSubmit = event => {
@@ -36,12 +40,12 @@ const Posts = () => {
         }
     }
 
-    // Affichage  de section pour modification de post
+    // Affichage de sections de post
     const showUpdatePost = (postId) => {
-        if (document.getElementById('updatePost_'+postId).style.display === 'block') {
-            document.getElementById('updatePost_'+postId).style.display = 'none';
+        if (document.getElementById(postId).style.display === 'block') {
+            document.getElementById(postId).style.display = 'none';
         } else {
-            document.getElementById('updatePost_'+postId).style.display = 'block';
+            document.getElementById(postId).style.display = 'block';
         }
     }
 
@@ -95,14 +99,32 @@ const Posts = () => {
         });
     };
 
+    const getComments = () => {
+        const token = getItem('storageToken');
+        axios
+        .get('http://localhost:8080/api/comments/viewcomment', {
+            headers: { 
+                Authorization: `Bearer ${token}`, 
+                'Content-Type': 'application/json' 
+            },
+        })
+        .then((res) => {
+            setComments(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    };
+
     useEffect(() => {
         getPosts();
+        getComments();
     }, []);
 
     // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
     const level = async () => {
         try {
-            const response = await getAccess(getUserId);
+            const response = await getLevel(getUserId);
             setdatalevel(response);
         } catch ({ response }) {
             console.log(response);
@@ -111,7 +133,18 @@ const Posts = () => {
     useEffect(() => {
         level();
     });
-          
+    
+    // ------ Commentaires ------
+
+    // Submit du formulaire pour envois du commentaire
+    const handleSubmitCommentaires = (postId) => {
+            const credentialsCommentaire = [userId, postId, userName, commentairePost];
+            axiosCreateComment(credentialsCommentaire);
+            setTimeout(function(){ 
+                window.location.reload() 
+            }, 300);
+    }
+
     return (
         <div className="posts">
             <Header />
@@ -186,9 +219,61 @@ const Posts = () => {
                             </p>
                         </div>
                     </div>
+
+                    {/* Section add commentaires post */} 
+                    <div className="commentairePost" id={'commentairePost_'+data.id}>
+                        <hr/>
+                        <div className="sectionCommentaires">
+                            
+                                <input type="hidden" id={ 'postidComment_'+data.id } value={ data.id } />
+                                <p className="Commentaire-title">
+                                    Ajouter un commentaire pour le post #{data.id}
+                                </p>
+                                <p>
+                                    <label htmlFor={ 'addCommentairePost_'+data.id }>Commentaire(*) : </label>
+                                    <textarea id={ 'addCommentairePost_'+data.id } onChange={ (e) => setCommentairePost(e.target.value) } required></textarea>
+                                </p>
+                                <p>
+                                    <button className="btnSubmit" onClick={ () => handleSubmitCommentaires(data.id) }>Envoyer</button>
+                                </p>
+                            
+                        </div>
+                    </div>
+
+                    {/* Section liste commentaires post */} 
+                    <div className="commentaireList">
+                        <hr/>
+                        <div className="sectionCommentaires">
+                                <p className="Commentaire-title">
+                                    Commentaires pour le post #{data.id}
+                                </p>
+
+                                {/* afficher les commentaires si >0 */} 
+
+                                {comments.map(dataComment => 
+                                (dataComment.postid === data.id) && (
+                                
+                                <div className="container-commentaire" key={dataComment.id}>
+                                    <div className="entete-commentaire">
+                                        Par {dataComment.username} le {dataComment.date}
+                                    </div>
+                                    <div className="corps-commentaire">
+                                        {dataComment.content}
+                                    </div>
+                                </div>
+                                )
+                                )}
+
+
+                        </div>
+                    </div>
+
                 </div>
                 <div className="footer-post">
                     <div className="footer-post-d">
+                        <span>
+                            <button className="btn-link" aria-label="Commentaire" onClick={ () => showUpdatePost('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button>
+                        </span>
                         <span>
                             ({data.countlike})
                             <button className="btn-link" aria-label="Like" onClick={ () => handleOpinionPost('like', userId, data.id) }><i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></button>
@@ -199,7 +284,7 @@ const Posts = () => {
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <button className="btn-link" aria-label="Modification" onClick={ () => showUpdatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button>
+                                <button className="btn-link" aria-label="Modification" onClick={ () => showUpdatePost('updatePost_'+data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button>
                             ) }   
                         </span>
                     </div>

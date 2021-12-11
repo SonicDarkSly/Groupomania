@@ -8,7 +8,7 @@ import {
     logout, 
     axiosupdateUserEmail, 
     axiosupdateUserDescription,
-    getAccess
+    getLevel
 } from '../services/userApi';
 import { checkChangePassword, checkChangeEmail } from '../services/checkform';
 
@@ -124,7 +124,7 @@ const Account = () => {
        // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
        const level = async () => {
         try {
-          const response = await getAccess(getUserId);
+          const response = await getLevel(getUserId);
           setdatalevel(response);
         } catch ({ response }) {
             console.log(response);

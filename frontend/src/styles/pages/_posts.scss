@@ -116,6 +116,82 @@
             }
         }
 
+        // commentaires
+        .commentairePost {
+            display: none;
+
+            .sectionCommentaires {
+                display: block;
+                align-items: center;
+                border-radius: 15px;
+                background-color: rgba(207, 207, 207, 0.63);
+                padding: 10px;
+
+                  .Commentaire-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    border-bottom: 1px solid black;
+                  }
+
+                  textarea {
+                    width: 100%;
+                    height: 100px;
+                    box-sizing: border-box;
+                    border: 2px solid #ccc;
+                    border-radius: 4px;
+                    background-color: #f8f8f8;
+                    font-size: 16px;
+                    resize: none;
+                    white-space: pre-wrap;
+                  }
+
+                  .btnSubmit {
+                    color: rgb(39, 39, 39);
+                    background-color: rgb(255, 255, 255);
+                    border-radius: 10px;
+                    padding: 10px;
+                }
+            }
+        }
+
+        .commentaireList {
+
+            .sectionCommentaires {
+                display: block;
+                align-items: center;
+                border-radius: 15px;
+                background-color: rgba(207, 207, 207, 0.63);
+                padding: 10px;
+
+                  .Commentaire-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    border-bottom: 1px solid black;
+                  }
+
+                  .container-commentaire {
+                      border: dotted 1px black;
+                      border-radius: 10px;
+                      background-color: rgb(245, 245, 245);
+                      padding: 5px;
+                      margin: 0 0 10px 0;
+
+                      .entete-commentaire {
+                          border-bottom: rgb(92, 91, 91) 1px dotted;
+                          font-weight: 500;
+                          font-style: italic;
+                      }
+
+                      .corps-commentaire {
+                        font-weight: 400;
+                    }
+                  }
+
+            }
+        }
+
+
+
         .addCorpsNewPost{
             width: 100%;
             padding: 10px;

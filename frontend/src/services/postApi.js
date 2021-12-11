@@ -94,5 +94,50 @@ export function axiosUpdatePost(credentials) {
     ; 
     setTimeout(function(){ 
         window.location.reload() 
-    }, 400);
+    }, 300);
+}
+
+//------ COMMENTAIRES ------
+
+// ADD COMMENTAIRE
+
+export function axiosCreateComment(credentials) {
+
+    const token = getItem('storageToken');
+
+    let date = new Date();
+    let jour = date.getDate();
+        if (jour < 10){jour = '0'+jour;}
+    let mois = date.getMonth()+1;
+        if (mois < 10){mois = '0'+mois;}
+    let annee = date.getFullYear();
+    let heures = date.getHours();
+        if (heures < 10){heures = '0'+heures;}
+    let minutes = date.getMinutes();
+        if (minutes < 10){minutes = '0'+minutes;}
+    let formatDate = jour+"/"+mois+"/"+annee+" - "+heures+"h"+minutes;
+    
+    let config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer '+token
+        }
+    }
+
+    axios.post('http://localhost:8080/api/comments/addcomment', 
+        {
+            userId: credentials[0],
+            postId: credentials[1],
+            userName: credentials[2],
+            dateComment: formatDate,
+            contentComment: credentials[3]
+        }, 
+        config
+    )
+
+      .catch(function (error) {
+        console.log(error);
+      });
+
+console.log(credentials[1]);
 }

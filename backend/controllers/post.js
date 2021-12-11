@@ -50,7 +50,7 @@ exports.deleteonePost = (req, res, next) => {
   // Recherche l'url de l'image du post
   db.query(`SELECT * FROM posts WHERE id='${req.body.postId}'`, (err, result, rows) => {
 
-    // Si une image existe, on la supprimer du dossier
+    // Si une image existe, on la supprime du dossier
     if (result[0].imageurl != '') {
       const imagePost = result[0].imageurl
       const imagePostFilename = imagePost.split(`/${req.body.postUserId}/`)[1];
