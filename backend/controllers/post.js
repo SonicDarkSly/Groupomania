@@ -24,7 +24,7 @@ exports.creatPost = (req, res, next) => {
       };
 
     // Ajout à la BDD
-    db.query(`INSERT INTO posts VALUES (NULL, '${newPost.userId}', "${newPost.contentPost.replace(/\"/g, "\"\"")}", '${newPost.imgPost}', '${newPost.date}', '0', '0', '${newPost.userName}', '${newPost.userAvatar}')`, (err, results, fields) => {
+    db.query(`INSERT INTO posts VALUES (NULL, '${newPost.userId}', "${newPost.contentPost.replace(/\"/g, "\"\"")}", '${newPost.imgPost}', '${newPost.date}', '0', '0', '${newPost.userName}', '${newPost.userAvatar}','0')`, (err, results, fields) => {
 
         // Si erreur, retourne 400
         if (err) {
@@ -97,7 +97,24 @@ exports.deleteonePost = (req, res, next) => {
         return res.status(201);
       }
     })
+
+    // Suppression des commentaires dans la table comments
+    db.query(`DELETE FROM comments WHERE postid='${req.body.postId}'`, (errPost)  => {
+
+      // Si erreur retourne 400
+      if (errPost) {
+        console.log(errPost)
+        return res.status(400).json(errPost)
+      } else {
+        
+        // Si valide, retourne 201
+        console.log('Commentaires supprimés avec succes');
+        return res.status(201);
+      }
+    })
   })
+
+  
 }
 
 // ---------- READ POST ----------

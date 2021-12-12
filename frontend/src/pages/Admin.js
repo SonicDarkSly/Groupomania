@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import { getItem } from "../services/Localestorage";
 import { checkChangePasswordAdmin } from '../services/checkform';
 import axios from 'axios';
+import { getUserId } from '../services/userApi'; 
 
 const Admin = () => {
     
@@ -12,9 +13,17 @@ const Admin = () => {
     // Récupère le niveau de l'admin
     const [adminLevel, setAdminLevel] = useState();
 
-    // Recherche l'userId de l'utilisateur connecter, dans le localstorage
-    const localUser = JSON.parse(localStorage.getItem("storageUserInfo"));
-        const adminId = localUser[0];
+    // Recherche l'userId de l'utilisateur connecter / fonction getUserInfo
+    const [adminId, setAdminId] = useState();
+
+    const getUserInfo = async () => {
+        try {
+            const response = await getUserId();
+            setAdminId(response.id); 
+        } catch ({ error }) {
+            console.log(error);
+        }
+    }
 
     // Itinialisation du state de recupération du mot de passe du form access
     const [adminPass, setAdminPass] = useState();
@@ -314,7 +323,9 @@ const Admin = () => {
         getUser();
     }, [userAdmin],[adminLevel]);
 
-
+    useEffect(() => {
+        getUserInfo();
+     }, []);
 
     return (
         <div className="admin">

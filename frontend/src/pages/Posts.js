@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 
+import { getUserId } from '../services/userApi';
 import { axiosCreatePost, axiosDeletePost, axiosUpdatePost, axiosCreateComment } from '../services/postApi';
-import { getLevel } from '../services/userApi';
 import { axiosOpinionPost } from '../services/opinionApi';
 import { getItem } from "../services/Localestorage";
+import { axiosDeleteComment } from '../services/commentApi';
 
 const Posts = () => {
 
-    // Récupère les infos du user dans le localstorage
-    const getinfouser = JSON.parse(localStorage.getItem("storageUserInfo"));
-        const getUserId = [getinfouser[0]];
-        const userId = getinfouser[0];
-        const userName = getinfouser[2]+' '+getinfouser[3];
+    // State contenant les infos du user connecté / function getUserInfo
+    const [userId, setUserId] = useState();
+    const [userName, setUserName] = useState();
+    const [datalevel, setdatalevel] = useState();
 
     // Récupère l'avatar du user dans le localstorage
     const getavataruser = localStorage.getItem("storageUserAvatar"); 
@@ -23,7 +23,6 @@ const Posts = () => {
     const [imagePost, setimagePost] = useState('');
     const [contentPost, setcontentPost] = useState('');
     const [posts, setPosts] = useState([]);
-    const [datalevel, setdatalevel] = useState();
 
     // State commentaires
     const [commentairePost, setCommentairePost] = useState('');
@@ -60,12 +59,10 @@ const Posts = () => {
             }else{
                 msgModifPost = contentPost; 
             }
-
             const credentialsUpdatePost = [userId, postId, postUserId, msgModifPost, imagePost];
             console.log(credentialsUpdatePost);
             axiosUpdatePost(credentialsUpdatePost);
         }
-
     }
 
     // Delete d'un post du user connecté
@@ -115,26 +112,19 @@ const Posts = () => {
             console.log(err);
         });
     };
-
-    useEffect(() => {
-        getPosts();
-        getComments();
-    }, []);
-
-    // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
-    const level = async () => {
+    
+    const getUserInfo = async () => {
         try {
-            const response = await getLevel(getUserId);
-            setdatalevel(response);
-        } catch ({ response }) {
-            console.log(response);
+            const response = await getUserId();
+            setUserId(response.id); // user Id
+            setdatalevel(response.accesslevel); // user level
+            setUserName(response.lastname+' '+response.firstname); // user name
+        } catch ({ error }) {
+            console.log(error);
         }
     }
-    useEffect(() => {
-        level();
-    });
-    
-    // ------ Commentaires ------
+
+    // -------------- Commentaires --------------
 
     // Submit du formulaire pour envois du commentaire
     const handleSubmitCommentaires = (postId) => {
@@ -144,6 +134,32 @@ const Posts = () => {
                 window.location.reload() 
             }, 300);
     }
+
+    // Delete du commentaire par le user connecté
+    const handleDeleteComment = (userId, commentId, postId) => {
+        const credentialsDeleteComment = [userId, commentId, postId];
+        axiosDeleteComment(credentialsDeleteComment);
+    }
+
+
+    // Affichage du textarea en cas de modif du commentaire
+    const [showChangeComment, setShowChangeComment] = useState();
+    const changestate = (id) => {
+        if (showChangeComment === id) {
+            setShowChangeComment();
+        } else {
+            setShowChangeComment(id);
+        }
+    }
+    useEffect(() => {
+    }, [showChangeComment]);
+
+    // Prise d'effet lors du chargement de la page
+    useEffect(() => {
+        getUserInfo();
+        getPosts();
+        getComments();
+    }, []);
 
     return (
         <div className="posts">
@@ -236,9 +252,7 @@ const Posts = () => {
                                 <p>
                                     <button className="btnSubmit" onClick={ () => handleSubmitCommentaires(data.id) }>Envoyer</button>
                                 </p>
-                            
                         </div>
-                    </div>
 
                     {/* Section liste commentaires post */} 
                     <div className="commentaireList">
@@ -255,23 +269,34 @@ const Posts = () => {
                                 
                                 <div className="container-commentaire" key={dataComment.id}>
                                     <div className="entete-commentaire">
-                                        Par {dataComment.username} le {dataComment.date}
+                                        Par {dataComment.username} le {dataComment.date} 
+                                        {((dataComment.userid === userId) || (datalevel >= 2)) && (<button aria-label="Modifier le commentaire" onClick={() => changestate(dataComment.id) }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier le commentaire"></i></button>)}
                                     </div>
                                     <div className="corps-commentaire">
-                                        {dataComment.content}
+                                    {(showChangeComment !== dataComment.id && (<span>{ dataComment.content }</span>))}
+                                    {(showChangeComment === dataComment.id && (
+                                    <span>
+                                        <textarea aria-label={ 'commentaire_'+dataComment.id } defaultValue={ dataComment.content }></textarea>
+                                        <button className="btn-valid-modif" aria-label="Valider la modification du commentaire">Modifier</button>
+                                        <button className="btn-valid-supp" aria-label="Supprimer le commentaire" onClick={ () => handleDeleteComment(userId, dataComment.id, dataComment.postid) }>Supprimer</button> 
+                                    </span>
+                                    ))}
                                     </div>
                                 </div>
                                 )
                                 )}
-
-
                         </div>
                     </div>
+
+                    </div>
+
+
 
                 </div>
                 <div className="footer-post">
                     <div className="footer-post-d">
                         <span>
+                            ({data.countcomment})
                             <button className="btn-link" aria-label="Commentaire" onClick={ () => showUpdatePost('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button>
                         </span>
                         <span>

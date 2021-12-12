@@ -22,11 +22,25 @@ exports.addComment = (req, res, next) => {
             return res.status(400).json("erreur");
         }else{
 
-            // Si valide, retourne 201
-            console.log('Commentaire envoyé avec succes');
-            return res.status(201).json({
-                message: 'Commentaire envoyé avec succes'
-            });
+          // Comptage nombre dislikes 
+          db.query(`SELECT COUNT (*) AS countComments FROM comments WHERE postid=${postId}`, (err, result, rows) => {
+
+            // Mise à jour de la table posts avec le nombre de dislikes pour le post
+            db.query(`UPDATE posts SET countcomment=${result[0].countComments} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+              if (errcount) {
+                console.log(errcount);
+                return res.status(400).json(errcount);
+              }else{
+                return res.status(201);
+              }
+            })
+          })
+
+          // Si valide, retourne 201
+          console.log('Commentaire envoyé avec succes');
+          return res.status(201).json({
+            message: 'Commentaire envoyé avec succes'
+          });
         }
     });
 }
@@ -41,4 +55,55 @@ exports.getComments = (req, res, next) => {
     }
       res.status(200).json(result)
   })
+}
+
+// ---------- DELETE COMMENTS ----------
+
+exports.deleteComment = (req, res, next) => {
+
+  // Récupération des données de la requete
+  const commentId = req.body.commentId;
+  const postId = req.body.postId;
+
+    // Suppression du commentaire selectionné
+    db.query(`DELETE FROM comments WHERE id='${commentId}' AND postid='${postId}'`, (err)  => {
+
+      // Si erreur retourne 400
+      if (err) {
+        console.log(err)
+        return res.status(400).json(err)
+      } else {
+        
+        // Recherche l'ancien nombre de commentaires pour le post
+        db.query(`SELECT countcomment FROM posts WHERE id=${postId}`, (errOld, resultOld, rowsOld) => {
+
+          if (errOld) {
+            console.log(errOld)
+            return res.status(400).json(errOld)
+          } else {
+
+            // Déduction de 1 car suppression de 1 commentaire
+            let oldCountComments = resultOld[0].countcomment;
+            let newCountComments = oldCountComments -1;
+  
+            // Mise à jour du nouveau nombre de commentaires
+            db.query(`UPDATE posts SET countcomment=${newCountComments} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+  
+              // Si erreur retourne 400
+              if (errcount) {
+                console.log(errcount)
+                return res.status(400).json(errcount)
+              } else {
+  
+                // Si valide, retourne 201
+                console.log('Commentaire supprimé avec succes');
+                res.status(201).json({
+                  message: 'Commentaire supprimé avec succes'
+                });
+              }
+            })
+          }
+        })
+      }
+    })
 }

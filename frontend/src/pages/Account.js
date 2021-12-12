@@ -8,11 +8,33 @@ import {
     logout, 
     axiosupdateUserEmail, 
     axiosupdateUserDescription,
-    getLevel
+    getUserId
 } from '../services/userApi';
 import { checkChangePassword, checkChangeEmail } from '../services/checkform';
 
 const Account = () => {
+
+    // State contenant les infos du user connecté / function getUserInfo
+    const [userId, setUserId] = useState();
+    const [email, setEmail] = useState();
+    const [level, setLevel] = useState();
+    const [lastName, setLastName] = useState();
+    const [firstname, setFirstname] = useState();
+    const [description, setDescription] = useState();
+
+    const getUserInfo = async () => {
+        try {
+            const response = await getUserId();
+            setUserId(response.id); // user Id
+            setLevel(response.accesslevel); // user level
+            setFirstname(response.firstname); // first name
+            setLastName(response.lastname); // last name
+            setEmail(response.email); // user mail
+            setDescription(response.description); // user description
+        } catch ({ error }) {
+            console.log(error);
+        }
+    }
 
     // State data
     const { setisAuthenticated } = useContext(Auth);
@@ -21,16 +43,6 @@ const Account = () => {
     const [newPassword, setNewPassword] = useState();
     const [newEmail, setNewEmail] = useState();
     const [newDescription, setnewDescription] = useState();
-    const [datalevel, setdatalevel] = useState();
-
-    // Récupération info user dans storage
-    const getinfouser = JSON.parse(localStorage.getItem("storageUserInfo"));
-        const getUserId = [getinfouser[0]];
-        const userId = getinfouser[0];
-        const email = getinfouser[1];
-        const lastName = getinfouser[2];
-        const firstname = getinfouser[3];
-        const description = getinfouser[4];
 
     // Récupération url avatar dans storage
     const getinfouseravatar = localStorage.getItem("storageUserAvatar");
@@ -81,10 +93,10 @@ const Account = () => {
         } catch ({ response }) {
           console.log(response);
         }
-      }
+    }
 
 
-      // Fonction update description
+    // Fonction update description
       const handleSubmitChangeDescription = event => {
         event.preventDefault();
         try {
@@ -107,7 +119,7 @@ const Account = () => {
          } 
          hide();
        }
-
+       
        function hide() {
          let div, i, id;
          for(i = 0; i < divs.length; i++) {
@@ -119,20 +131,11 @@ const Account = () => {
              div.style.display = "none";
            }
          }
-       }  
+       } 
 
-       // Appel la fonction pour chercher le niveau d'acces admin dans la BDD
-       const level = async () => {
-        try {
-          const response = await getLevel(getUserId);
-          setdatalevel(response);
-        } catch ({ response }) {
-            console.log(response);
-        }
-      }
-      useEffect(() => {
-        level();
-      });
+       useEffect(() => {
+           getUserInfo();
+        }, []);
 
     return (
         <div className="account">
@@ -162,14 +165,14 @@ const Account = () => {
                             <button className="btn-link" aria-label="Modifier l'adresse mail" onClick={() => showHidden("updateEmail")}><i className="far fa-edit" aria-hidden="true" title="Modifier l'adresse mail"></i></button>
                         </span>
                     </p>
-                    { (datalevel >= 3 &&(<p>
+                    { (level >= 3 &&(<p>
                         <span className="title-p">Mon niveau :</span>
                         <span> Administrateur</span>
                         <span>
                             <button className="btn-link" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}><i className="fas fa-tools" aria-hidden="true" title="Acces à l'administration"></i></button>
                         </span>
                     </p>))}
-                    {(datalevel <= 1 &&(<p>
+                    {(level <= 1 &&(<p>
                         <span className="title-p">Mon niveau :</span>
                         <span> Utilisateur</span>
                     </p>))}
@@ -255,9 +258,8 @@ const Account = () => {
                     <form onSubmit={ handleSubmitChangeDescription }>
                         <p className="p-content-update-description">
                             <label htmlFor="newDescription">Nouvelle description : </label>
-                            <textarea className="form-control description" id="newDescription" name="newDescription" rows="3" onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
+                            <textarea className="form-control description" id="newDescription" name="newDescription" rows="3" defaultValue={ description } onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
                         </p>
-                        <p className="info">La modification sera visible lors de votre prochaine connexion.</p>
                         <p className="p-content-update-description">
                             <button type="submit">Modifier ma description</button>
                         </p>

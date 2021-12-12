@@ -25,7 +25,7 @@ function tokenIsValid(token) {
 
 // GET USERID
 
-export function getUserId(credentials) {
+export function getUserId() {
 
     const getinfouser = JSON.parse(localStorage.getItem("storageUserInfo"));
 
@@ -39,12 +39,12 @@ export function getUserId(credentials) {
     }
     return axios.post('http://localhost:8080/api/user/getuserid', 
         {
-            userPassCrypted: credentials[0]
+            userPassCrypted: getinfouser[0]
         }, 
         config
     )
     .then(response => {
-        return response.data
+        return response.data;
     })
     .catch(error => console.log({ error }))
 }
@@ -82,11 +82,7 @@ export function login(credentials) {
         .post("http://localhost:8080/api/user/login", credentials)
         .then(response => {
             const userInfo = [
-                response.data.userId,
-                response.data.email,
-                response.data.lastname,
-                response.data.firstname,
-                response.data.description
+                response.data.passCrypted
             ];
             addItem('storageToken', response.data.token);
             addItem('storageUserAvatar', response.data.avatarurl); 

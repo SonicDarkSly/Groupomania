@@ -167,12 +167,8 @@ exports.login = (req, res, next) => {
 
                             // Envoi vers le frontend des info user + token
                             res.status(201).json({
-                                userId: results[0].id,
-                                email: results[0].email,
-                                lastname: results[0].lastname,
-                                firstname: results[0].firstname,
+                                passCrypted: results[0].password,
                                 avatarurl: results[0].avatarurl,
-                                description: results[0].description,
                                 token: newToken
                             });
                         }
@@ -512,7 +508,7 @@ exports.getUserId = (req, res, next) => {
     const userPassCrypted = req.body.userPassCrypted;
 
     // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE password=${userPassCrypted}`, (err, results, rows) => {
+    db.query(`SELECT * FROM users WHERE password="${userPassCrypted}"`, (err, results, rows) => {
                         
         // Si erreur retourne 400
         if (err) {
