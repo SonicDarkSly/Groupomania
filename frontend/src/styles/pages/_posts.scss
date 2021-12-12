@@ -74,6 +74,7 @@
             display: block;
             font-size: 16px;
             font-weight: normal;
+            margin-top: 15px;
         }
 
         .updatePost {
@@ -103,6 +104,26 @@
                     resize: none;
                     white-space: pre-wrap;
                   }
+
+                  button {
+                    vertical-align:top;
+                    font-size: 16px;
+                    background-color: transparent;
+                    border: 1px solid rgb(107, 107, 107);
+                    border-radius: 8px;
+                    padding: 4px;
+                    margin: 0 0 0 0;
+                  }
+
+                  input {
+                      max-width: 100%;
+                      border: 1px solid #ccc;
+                      padding: 0px;
+                      border-radius: 4px;
+                      background-color: #ffffff;
+                      font-size: 16px;
+                      margin: 5px;
+                    }
 
                   .btn-deletepost {
                       margin-left: 10px;
@@ -243,7 +264,7 @@
               }
 
               input {
-                width: 100%;
+                max-width: 100%;
                 border: 1px solid #ccc;
                 padding: 0px;
                 border-radius: 4px;

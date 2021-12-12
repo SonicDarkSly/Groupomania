@@ -209,13 +209,11 @@ const Account = () => {
                         <button type="submit">Modifier le mot de passe</button>
                     </div>
                     <p className="info">Le mot de passe doit respecter les conditions suivantes :
-                        
                             <span>Au moins 1 caractère majuscule.</span><br/>
                             <span>Au moins 1 caractère minuscule.</span><br/>
                             <span>Au moins 1 chiffre.</span><br/>
                             <span>Au moins 1 caractère spécial.</span><br/>
                             <span>Minimum 8 caractères.</span>
-                        
                     </p>
                 </form>
                 </div>

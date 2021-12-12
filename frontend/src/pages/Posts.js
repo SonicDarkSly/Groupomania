@@ -218,9 +218,7 @@ const Posts = () => {
                             <span><img className="avatar-post" src={data.useravatar} alt={ 'avatar de '+data.username+' pour le post '+data.id } /></span>
                             <span className="username"><a aria-label={data.username} href={'/users?userId='+data.userid}>{data.username}</a></span>
                         </div>
-                        <div className="c">
-                            <span>#{data.id}</span>
-                        </div>
+
                         <div className="d">
                             <span>{data.date}</span>
                         </div>
