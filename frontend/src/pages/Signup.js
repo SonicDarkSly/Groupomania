@@ -13,8 +13,7 @@ const Signup = ({ history }) => {
         "firstname": "",
         "email": "",
         "password": "",
-        "avatar": "",
-        "description": ""
+        "avatar": ""
       })
 
       const handleChange = ({currentTarget}) => {
@@ -63,10 +62,6 @@ const Signup = ({ history }) => {
                     <div className="form-group">
                         <label htmlFor="password">Mot de passe(*)</label><span id="msg_mdp_signup"></span>
                         <input type="password" className="form-control" id="password" name="password" minLength="8" placeholder="Mot de passe" onChange={ handleChange } required/>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="description">Description</label>
-                        <textarea className="form-control" id="description" name="description" rows="3" onChange={ handleChange }></textarea>
                     </div>
                     <div className="text-center form-group pt-4"> 
                         <button type="submit" aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>

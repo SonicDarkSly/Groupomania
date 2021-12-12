@@ -18,7 +18,6 @@ const path = require('path');
 
 exports.signup = (req, res, next) => {
 
-
     // Cherche si un user existe dans la BDD
     db.query(`SELECT COUNT (*) AS usrCount FROM users`, (err, resultsc, rows) => {
 
@@ -30,7 +29,7 @@ exports.signup = (req, res, next) => {
             .then(cryptedPassword => {
 
                 // Ajout à la BDD
-                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', '${req.body.description}')`, (err, results, fields) => {
+                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', NULL)`, (err, results, fields) => {
 
                 // Si erreur, retourne 400
                 if (err) {
@@ -88,7 +87,7 @@ exports.signup = (req, res, next) => {
 
 
                         // Ajout à la BDD - id, lastname, firstname, password, email, accesslevel, url avatar, description
-                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', '${req.body.description}')`, (err, results, fields) => {
+                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', NULL)`, (err, results, fields) => {
 
                             // Si erreur, retourne 400
                             if (err) {
@@ -256,6 +255,21 @@ exports.deleteUser = (req, res, next) => {
                         // Si valide retourne 200
                         console.log('Les likes / dislikes ont bien été supprimés')
                         return res.status(200).json({ message: 'Les likes / dislikes ont bien été supprimés' })
+                    }
+                })
+
+                // Suppression des likes / dislikes de l'user
+                db.query(`DELETE FROM comments WHERE userid='${req.body.userId}'`, (errPost)  => {
+
+                    // Si erreur retourne 400
+                    if (errPost) {
+                        console.log(errPost)
+                        return res.status(400).json(errPost)
+                    } else {
+                
+                        // Si valide retourne 200
+                        console.log('Les commentaires ont bien été supprimés')
+                        return res.status(200).json({ message: 'Les commentaires ont bien été supprimés' })
                     }
                 })
 

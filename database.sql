@@ -18,6 +18,33 @@ USE `groupomania`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `postid` int NOT NULL,
+  `userid` int NOT NULL,
+  `username` varchar(45) DEFAULT NULL,
+  `date` varchar(25) NOT NULL,
+  `content` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comments`
+--
+
+LOCK TABLES `comments` WRITE;
+/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `opinions`
 --
 
@@ -31,7 +58,7 @@ CREATE TABLE `opinions` (
   `likes` int DEFAULT '0',
   `dislikes` int DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +67,6 @@ CREATE TABLE `opinions` (
 
 LOCK TABLES `opinions` WRITE;
 /*!40000 ALTER TABLE `opinions` DISABLE KEYS */;
-INSERT INTO `opinions` VALUES (11,68,149,1,0);
 /*!40000 ALTER TABLE `opinions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,12 +83,13 @@ CREATE TABLE `posts` (
   `content` longtext NOT NULL,
   `imageurl` varchar(255) DEFAULT NULL,
   `date` varchar(25) NOT NULL,
-  `countlike` int DEFAULT NULL,
-  `countdislike` int DEFAULT NULL,
+  `countlike` int DEFAULT '0',
+  `countdislike` int DEFAULT '0',
   `username` varchar(255) NOT NULL,
   `useravatar` varchar(255) NOT NULL,
+  `countcomment` int DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +98,6 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (68,149,'test post','','04/12/2021 - 00h47',1,0,'dupont jean','http://localhost:8080/images/avatars/149/logo_1638371880698.png');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,7 +118,7 @@ CREATE TABLE `users` (
   `avatarurl` varchar(255) DEFAULT NULL,
   `description` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +127,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (149,'dupont','jean','$2b$10$VXIt2UsqxKoN66QkT0voDOaLx3vW6bHeeSFgwXMjiKBkhRLGUuNHi','jean.dupont@groupomania.com',4,'http://localhost:8080/images/avatars/149/logo_1638371880698.png','admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -114,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-04  1:14:57
+-- Dump completed on 2021-12-12 17:45:25

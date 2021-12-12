@@ -9,7 +9,6 @@ export function hasAuthenticated() {
     if(false === tokenIsValidn) {
         removeItem('storageToken');
         removeItem('storageUserInfo');
-        removeItem('storageUserAvatar');
     }
     return tokenIsValidn;
 }
@@ -85,7 +84,6 @@ export function login(credentials) {
                 response.data.passCrypted
             ];
             addItem('storageToken', response.data.token);
-            addItem('storageUserAvatar', response.data.avatarurl); 
             addItem('storageUserInfo', JSON.stringify(userInfo)); 
 
             return true
@@ -98,7 +96,6 @@ export function login(credentials) {
 
 export function logout() {
     removeItem('storageToken');
-    removeItem('storageUserAvatar');
     removeItem('storageUserInfo');
     window.location.reload(); 
 }
@@ -135,8 +132,6 @@ export function axiosupdateUserAvatar(credentials) {
         data: formData
     })
     .then(response => {
-        const newurlavatar = response.data.avatarurl;
-        addItem('storageUserAvatar', newurlavatar); 
         window.location.reload(); 
     })
     .catch(error => console.log({ error }))
@@ -165,7 +160,6 @@ export function deleteAccout(userid, userpass) {
     )
       .then(function (response) {
         removeItem('storageToken');
-        removeItem('storageUserAvatar');
         removeItem('storageUserInfo');
       })
       .catch(function (error) {

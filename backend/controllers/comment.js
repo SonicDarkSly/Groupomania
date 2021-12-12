@@ -23,10 +23,10 @@ exports.addComment = (req, res, next) => {
         }else{
 
           // Comptage nombre dislikes 
-          db.query(`SELECT COUNT (*) AS countComments FROM comments WHERE postid=${postId}`, (err, result, rows) => {
+          db.query(`SELECT COUNT (*) AS countComments FROM comments WHERE postid='${postId}'`, (err, result, rows) => {
 
             // Mise à jour de la table posts avec le nombre de dislikes pour le post
-            db.query(`UPDATE posts SET countcomment=${result[0].countComments} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+            db.query(`UPDATE posts SET countcomment='${result[0].countComments}' WHERE id='${postId}'`, (errcount, resultscount, rowscount)  => {
               if (errcount) {
                 console.log(errcount);
                 return res.status(400).json(errcount);
@@ -57,6 +57,32 @@ exports.getComments = (req, res, next) => {
   })
 }
 
+// ---------- UPDATE COMMENTS ----------
+
+exports.updateComment = (req, res, next) => {
+
+  // Récupération des données de la requete
+  const commentId = req.body.commentId;
+  const commentContent = req.body.commentContent;
+
+            // Mise à jour du nouveau nombre de commentaires
+            db.query(`UPDATE comments SET content="${commentContent.replace(/\"/g, "\"\"")}" WHERE id='${commentId}'`, (err, result, rows)  => {
+  
+              // Si erreur retourne 400
+              if (err) {
+                console.log(err)
+                return res.status(400).json(err)
+              } else {
+  
+                // Si valide, retourne 201
+                console.log('Commentaire modifier avec succes');
+                res.status(201).json({
+                  message: 'Commentaire modifier avec succes'
+                });
+              }
+            })
+}
+
 // ---------- DELETE COMMENTS ----------
 
 exports.deleteComment = (req, res, next) => {
@@ -75,7 +101,7 @@ exports.deleteComment = (req, res, next) => {
       } else {
         
         // Recherche l'ancien nombre de commentaires pour le post
-        db.query(`SELECT countcomment FROM posts WHERE id=${postId}`, (errOld, resultOld, rowsOld) => {
+        db.query(`SELECT countcomment FROM posts WHERE id='${postId}'`, (errOld, resultOld, rowsOld) => {
 
           if (errOld) {
             console.log(errOld)
@@ -87,7 +113,7 @@ exports.deleteComment = (req, res, next) => {
             let newCountComments = oldCountComments -1;
   
             // Mise à jour du nouveau nombre de commentaires
-            db.query(`UPDATE posts SET countcomment=${newCountComments} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+            db.query(`UPDATE posts SET countcomment='${newCountComments}' WHERE id='${postId}'`, (errcount, resultscount, rowscount)  => {
   
               // Si erreur retourne 400
               if (errcount) {

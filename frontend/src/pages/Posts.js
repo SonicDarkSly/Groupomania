@@ -6,7 +6,7 @@ import { getUserId } from '../services/userApi';
 import { axiosCreatePost, axiosDeletePost, axiosUpdatePost, axiosCreateComment } from '../services/postApi';
 import { axiosOpinionPost } from '../services/opinionApi';
 import { getItem } from "../services/Localestorage";
-import { axiosDeleteComment } from '../services/commentApi';
+import { axiosDeleteComment, axiosUpdateComment } from '../services/commentApi';
 
 const Posts = () => {
 
@@ -14,10 +14,7 @@ const Posts = () => {
     const [userId, setUserId] = useState();
     const [userName, setUserName] = useState();
     const [datalevel, setdatalevel] = useState();
-
-    // Récupère l'avatar du user dans le localstorage
-    const getavataruser = localStorage.getItem("storageUserAvatar"); 
-        const userAvatar = getavataruser;
+    const [userAvatar, setAvatar] = useState();
     
     // State post
     const [imagePost, setimagePost] = useState('');
@@ -27,6 +24,7 @@ const Posts = () => {
     // State commentaires
     const [commentairePost, setCommentairePost] = useState('');
     const [comments, setComments] = useState([]);
+    const [updateComment, setUpdateComment] = useState();
 
     // Submit du formulaire pour envois du post
     const handleSubmit = event => {
@@ -118,6 +116,7 @@ const Posts = () => {
             const response = await getUserId();
             setUserId(response.id); // user Id
             setdatalevel(response.accesslevel); // user level
+            setAvatar(response.avatarurl); // user level
             setUserName(response.lastname+' '+response.firstname); // user name
         } catch ({ error }) {
             console.log(error);
@@ -129,14 +128,37 @@ const Posts = () => {
     // Submit du formulaire pour envois du commentaire
     const handleSubmitCommentaires = (postId) => {
             const credentialsCommentaire = [userId, postId, userName, commentairePost];
-            axiosCreateComment(credentialsCommentaire);
-            setTimeout(function(){ 
-                window.location.reload() 
-            }, 300);
+            if (document.getElementById('addCommentairePost_'+postId).value === '') {
+                alert('Veuillez indiquer un texte');
+            }else{
+                axiosCreateComment(credentialsCommentaire);
+                setTimeout(function(){ 
+                    window.location.reload() 
+                }, 300);
+            }
     }
 
-    // Delete du commentaire par le user connecté
-    const handleDeleteComment = (userId, commentId, postId) => {
+    // Update du commemtaire
+    const handleUpdateComment = (commentId, commentUserId) => {
+
+        if (document.getElementById('updateCommentairePost_'+commentId).value === '') {
+            alert('Veuillez indiquer un texte');
+        }else{
+
+            let msgModifComment = '';
+            if (userId !== commentUserId) {
+                msgModifComment = updateComment+' - Post modéré par '+userName;
+            }else{
+                msgModifComment = updateComment; 
+            }
+            const credentialsUpdatePost = [userId, commentId, msgModifComment];
+            axiosUpdateComment(credentialsUpdatePost);
+        }
+        
+    }
+
+    // Delete du commentaire 
+    const handleDeleteComment = (commentId, postId) => {
         const credentialsDeleteComment = [userId, commentId, postId];
         axiosDeleteComment(credentialsDeleteComment);
     }
@@ -208,7 +230,7 @@ const Posts = () => {
 
                     {/* Controle si une image existe et affiche */}  
                     {(data.imageurl && (
-                        <span className="content-img"><img className="image-posts" src={data.imageurl} alt="poste" /></span>
+                        <span className="content-img"><img className="image-posts" src={data.imageurl} alt={'image du post'+data.id} /></span>
                     ))}
                     <span className="content">{data.content}</span>
 
@@ -255,6 +277,7 @@ const Posts = () => {
                         </div>
 
                     {/* Section liste commentaires post */} 
+                    {(data.countcomment > 0 && (
                     <div className="commentaireList">
                         <hr/>
                         <div className="sectionCommentaires">
@@ -276,9 +299,9 @@ const Posts = () => {
                                     {(showChangeComment !== dataComment.id && (<span>{ dataComment.content }</span>))}
                                     {(showChangeComment === dataComment.id && (
                                     <span>
-                                        <textarea aria-label={ 'commentaire_'+dataComment.id } defaultValue={ dataComment.content }></textarea>
-                                        <button className="btn-valid-modif" aria-label="Valider la modification du commentaire">Modifier</button>
-                                        <button className="btn-valid-supp" aria-label="Supprimer le commentaire" onClick={ () => handleDeleteComment(userId, dataComment.id, dataComment.postid) }>Supprimer</button> 
+                                        <textarea aria-label={ 'commentaire_'+dataComment.id } defaultValue={ dataComment.content } id={ 'updateCommentairePost_'+dataComment.id } onChange={ (e) => setUpdateComment(e.target.value) }></textarea>
+                                        <button className="btn-valid-modif" aria-label="Valider la modification du commentaire" onClick={ () => handleUpdateComment(dataComment.id, dataComment.userid) }>Modifier</button>
+                                        <button className="btn-valid-supp" aria-label="Supprimer le commentaire" onClick={ () => handleDeleteComment(dataComment.id, dataComment.postid) }>Supprimer</button> 
                                     </span>
                                     ))}
                                     </div>
@@ -287,11 +310,9 @@ const Posts = () => {
                                 )}
                         </div>
                     </div>
+                    ))}
 
                     </div>
-
-
-
                 </div>
                 <div className="footer-post">
                     <div className="footer-post-d">

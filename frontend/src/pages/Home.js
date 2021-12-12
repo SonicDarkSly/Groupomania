@@ -75,14 +75,15 @@ const Home = () => {
                             
                             {/* Controle si une image existe et affiche */}  
                                 {(data.imageurl && (
-                                    <span className="content-img"><img className="image-posts" src={data.imageurl} alt="poste" /></span>
+                                    <span className="content-img"><img className="image-posts" src={data.imageurl} alt={'image du poste'+data.id} /></span>
                                 ))}
                                 <span className="content">{data.content}</span>
                             </div>
                         <div className="footer">
                             <div className="footer-post-d">
-                                <span>({data.countlike}) <i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></span>
-                                <span>({data.countdislike}) <i className="fas fa-thumbs-down" aria-hidden="true" title="Dislike"></i></span>
+                                <span>({data.countcomment}) <button className="btn-link" aria-label="Commentaire"><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button></span>
+                                <span>({data.countlike}) <button className="btn-link" aria-label="Like"><i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></button></span>
+                                <span>({data.countdislike}) <button className="btn-link" aria-label="Dislike"><i className="fas fa-thumbs-down" aria-hidden="true" title="Dislike"></i></button></span>
                             </div>
                         </div>
                         </div>
@@ -99,7 +100,7 @@ const Home = () => {
                 </div>
                 {
                     <> 
-                    {/* Boucle map du state posts */}  
+                    {/* Boucle map user */}  
                     {user.map(data => 
                         <div className="div-container-user" key={data.id}>
                             <p>
@@ -111,7 +112,9 @@ const Home = () => {
                             <p>
                                 {data.firstname}    
                             </p>
-                           
+                            <p>
+                                <a href={ '/users?userId='+data.id }>Voir le profil</a>
+                            </p>
                         </div>
                     )}
                     </>

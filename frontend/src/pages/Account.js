@@ -21,6 +21,7 @@ const Account = () => {
     const [lastName, setLastName] = useState();
     const [firstname, setFirstname] = useState();
     const [description, setDescription] = useState();
+    const [avatar, setAvatar] = useState();
 
     const getUserInfo = async () => {
         try {
@@ -31,6 +32,7 @@ const Account = () => {
             setLastName(response.lastname); // last name
             setEmail(response.email); // user mail
             setDescription(response.description); // user description
+            setAvatar(response.avatarurl); // user avatar
         } catch ({ error }) {
             console.log(error);
         }
@@ -44,9 +46,6 @@ const Account = () => {
     const [newEmail, setNewEmail] = useState();
     const [newDescription, setnewDescription] = useState();
 
-    // Récupération url avatar dans storage
-    const getinfouseravatar = localStorage.getItem("storageUserAvatar");
-        const avatar = getinfouseravatar;
 
     // Fonction delete
     const handleDelete = () => {

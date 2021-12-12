@@ -12,6 +12,7 @@ const controller = require('../controllers/comment');
 // Appel aux fonctions du CONTROLLER selon route
 router.post('/addcomment',auth, controller.addComment);
 router.get('/viewcomment',auth, controller.getComments);
+router.post('/updatecomment',auth, controller.updateComment);
 router.post('/deletecomment',auth, controller.deleteComment);
 
 // Exportation du ROUTER
