@@ -252,3 +252,74 @@ exports.adminUpdateUserFirstName = (req, res, next) => {
         }
     })
 }
+
+// ---------- DELETE USER BY ADMIN ----------
+
+exports.adminDeleteUser = (req, res, next) => {
+
+    // Récupère l'userid et le nouveau lastname de la requete
+    const userIdToUpdate = req.body.userIdToUpdate;
+
+
+
+    // Suppression des posts de l'user
+    db.query(`DELETE FROM posts WHERE userid='${userIdToUpdate}'`, (err, results, rows)  => {
+
+        // Si erreur retourne 400
+        if (err) {
+            console.log(err)
+            return res.status(400).json(err)
+        } else {
+                
+            // Si valide retourne 200
+            console.log('Les posts du user '+userIdToUpdate+' ont bien été supprimés')
+
+            // Suppression des likes / dislikes de l'user
+            db.query(`DELETE FROM opinions WHERE userid='${userIdToUpdate}'`, (err)  => {
+
+                // Si erreur retourne 400
+                if (err) {
+                    console.log(err)
+                    return res.status(400).json(err)
+                } else {
+                    
+                    // Si valide retourne 200
+                    console.log('Les likes / dislikes du user '+userIdToUpdate+' ont bien été supprimés')
+                    
+                        // Suppression des commentaires de l'user
+                        db.query(`DELETE FROM comments WHERE userid='${userIdToUpdate}'`, (err)  => {
+
+                            // Si erreur retourne 400
+                            if (err) {
+                                console.log(err)
+                                return res.status(400).json(err)
+                            } else {
+                    
+                                // Si valide retourne 200
+                                console.log('Les commentaires '+userIdToUpdate+' ont bien été supprimés')
+                                
+                                // Suppression des commentaires de l'user
+                                db.query(`DELETE FROM users WHERE id='${userIdToUpdate}'`, (err)  => {
+
+                                    // Si erreur retourne 400
+                                    if (err) {
+                                        console.log(err)
+                                        return res.status(400).json(err)
+                                    } else {
+                    
+                                        // Si valide retourne 200
+                                        console.log('Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes')
+                                        return res.status(200).json({ message: 'Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes' })
+                                    }
+                                })
+                            }
+                        })
+                }
+            })
+        }
+    })
+
+
+
+
+}

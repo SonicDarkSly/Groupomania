@@ -45,7 +45,7 @@ const Signup = ({ history }) => {
         <div className="signup">
             <Header />
             <h1>Enregistrement</h1>
-            <div className="container">
+            <div className="container container-signup">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="lastname">Nom(*)</label>

@@ -258,7 +258,7 @@ exports.deleteUser = (req, res, next) => {
                     }
                 })
 
-                // Suppression des likes / dislikes de l'user
+                // Suppression des commentaires de l'user
                 db.query(`DELETE FROM comments WHERE userid='${req.body.userId}'`, (errPost)  => {
 
                     // Si erreur retourne 400

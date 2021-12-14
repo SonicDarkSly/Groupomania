@@ -317,6 +317,35 @@ const Admin = () => {
         }
     }
 
+    /* DELETE USER */
+
+    // Fonction delete user
+    const adminDeleteUser = () => {
+        const promptIdUpdate = prompt("Veuillez tapez l'ID \""+userIdToUpdate+"\"  de l'utilisateur concerné par la suppression de compte", "");
+        if (promptIdUpdate === userIdToUpdate) {
+                let config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization' : 'Bearer '+token
+                    }
+                }
+                axios.post('http://localhost:8080/api/admin/update/delete', 
+                    {
+                        userId: adminId,
+                        userIdToUpdate: userIdToUpdate,
+                    }, 
+                    config
+                )
+                .then(response => {
+                    window.location.reload(); 
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }else{
+            alert('ID utilisateur incorrect ou action annulée');
+        }
+    }
 
     // Après controle, affiche l'espace admin
     useEffect(() => {
@@ -365,11 +394,12 @@ const Admin = () => {
                         </select>
                     </div>
                 </div>
-                <div className="div-container">
+                
 
                 {/* map les info du user sélectionné */}  
                 {getuser.map(data =>
-                    <div key={ 'pKey_'+data.id }>
+                <div className="div-container" key={ 'pKey_'+data.id }>
+                    <div>
                         <h3>Utilisateur sélectionné : #{ data.id } { data.lastname } { data.firstname }</h3>
                         <div className="container-update">
                             <div className="label-update">
@@ -431,9 +461,18 @@ const Admin = () => {
                             </div>
                         </div>
                         ))}
+                        <div className="container-update">
+                            <div className="label-update">
+                                <label>Suppression du compte : </label>
+                            </div>
+                            <div className="input-delete">
+                                <button id="btnDelete" className="btn-valid-delete" aria-label="Supprimer le compte" onClick={ adminDeleteUser }>Supprimer le compte</button>
+                            </div>
+                        </div>
                     </div>
-                )}
                 </div>
+                )}
+                
             </div>
             ))}
 

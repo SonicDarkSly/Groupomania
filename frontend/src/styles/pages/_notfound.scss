@@ -1,3 +1,15 @@
 .notfound {
-    color: black;
+    height: 100vh;
+    background-image: $backgroung-image;
+    background-attachment: fixed;
+
+    .container-notfound{
+        color: black;
+        background-color: $color6;
+        border-radius: 20px;
+        padding: 10px;
+        margin: auto;
+        margin-top: 30px;
+        width: 80%;
+    }
 }

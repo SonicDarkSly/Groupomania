@@ -44,7 +44,7 @@ const Login = ({ history }) => {
     <div className="login">
       <Header />
       <h1>Se connecter</h1>
-      <div className="container">
+      <div className="container container-login">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="form-group">
           <label htmlFor="email">Email(*)</label>

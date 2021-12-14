@@ -1,5 +1,7 @@
 .posts {
-    
+    background-image: $backgroung-image;
+    background-attachment: fixed;
+
     h1 {
         text-align: center;
         border-bottom: 1px solid black;
@@ -8,11 +10,15 @@
         margin-bottom: 20px;
     }
     
+    .container-principale {
+        width: 75%;
+        margin: auto;
+    }
     .addEnteteNewPost {
-        background-color: rgba(233, 127, 94, 0.541);
-        color:#5c5c5c;
+        background-color: $color1;
+        color:$color3;
         font-weight: 600;
-        padding: 10px;
+        padding: 10px; 
         margin-top: 30px;
         border-radius: 0 30px 0 0; //hg hd bd bg
         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
@@ -25,7 +31,6 @@
             flex-direction: row;
             flex-wrap: nowrap;
             justify-content: space-between;
-
             .g {
                 float: left;
                 .username {
@@ -33,13 +38,10 @@
                     text-transform: uppercase;
 
                     a {
-                        color: #5c5c5c;
+                        color: $color3;
                         text-decoration: none;
                     }
                 }
-            }
-            .c {
-                text-align: center;
             }
             .d {
                 float: right;
@@ -49,12 +51,13 @@
 
         .avatar-post {
             width: 30px;
+            border-radius: 8px;
         }
     }
 
     .addContainerCorpsNewPost {
         width: 100%;
-        background-color: rgb(255, 255, 255);
+        background-color: $color5;
         color:#000000;
         font-weight: 600;
         padding: 10px;
@@ -84,13 +87,13 @@
                 display: block;
                 align-items: center;
                 border-radius: 15px;
-                background-color: rgba(207, 207, 207, 0.63);
+                background-color: $color6;
                 padding: 10px;
 
                 #updateImgPost {
                     width: 100%;
                     border: 1px solid #ccc;
-                    background-color: rgb(255, 255, 255);
+                    background-color: $color5;
                 }
 
                 textarea {
@@ -145,7 +148,7 @@
                 display: block;
                 align-items: center;
                 border-radius: 15px;
-                background-color: rgba(207, 207, 207, 0.63);
+                background-color: $color6;
                 padding: 10px;
 
                   .Commentaire-title {
@@ -181,7 +184,7 @@
                 display: block;
                 align-items: center;
                 border-radius: 15px;
-                background-color: rgba(207, 207, 207, 0.63);
+                background-color: $color4;
                 padding: 10px;
 
                   .Commentaire-title {

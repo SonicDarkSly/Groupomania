@@ -1,7 +1,7 @@
 .header {
     width: 100%;
-    background-color: rgba(233, 127, 94, 0.541);
-    border-bottom: solid 4px rgba(172, 0, 0, 0.699);
+    background-color: $backgroung-header;
+    border-bottom: solid 4px $color2;
     /* logo */
 
     .logo{
@@ -13,13 +13,13 @@
     }
 
     .nav-link{
-      color:rgb(112, 112, 112);
+      color:$color3;
       font-size:30px;
       max-width: 100px;
       text-decoration:none;
     }
     .nav-link:hover{
-        color:rgba(102, 0, 0, 0.527);
+        color:$color2;
         font-size:30px;
         text-decoration:none;
     }

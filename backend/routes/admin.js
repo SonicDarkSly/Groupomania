@@ -21,6 +21,7 @@ router.post('/update/password', auth, controller.adminUpdateUserPassword);
 router.post('/update/email', auth, controller.adminUpdateUserEmail);
 router.post('/update/lastname', auth, controller.adminUpdateUserLastName);
 router.post('/update/firstname', auth, controller.adminUpdateUserFirstName);
+router.post('/update/delete', auth, controller.adminDeleteUser);
 
 // Exportation du ROUTER
 module.exports = router;

@@ -1,8 +1,10 @@
 .home{
-    
+    background-image: $backgroung-image;
+    background-attachment: fixed;
+
     h1 {
         text-align: center;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid $color3;
         padding-bottom: 10px;
         margin-top: 10px;
         margin-bottom: 20px;
@@ -15,20 +17,22 @@
     }
 
     .block-posts {
-        background-color: rgba(187, 187, 187, 0.527);
+        background-color: $color4;
         border-radius: 15px;
         min-width: 60%;
         margin: 5px;
         padding: 5px;
+        box-shadow: 4px 8px 10px rgba(56, 56, 56, 0.534);
     }
 
     .block-user {
-        background-color: rgba(187, 187, 187, 0.527);
+        background-color: $color4;
         border-radius: 15px;
         min-width: 30%;
         margin: 5px;
         padding: 5px;
         height: 370px;
+        box-shadow: 4px 8px 10px rgba(56, 56, 56, 0.534);
     }
 
     .title {
@@ -44,14 +48,15 @@
         padding: 5px;
 
         .entete {
-            background-color: rgba(233, 127, 94, 0.541);
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-            border-radius: 0 20px 0 0; //hg hd bd bg
-            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.534);
-
+            background-color: $color1;
+            color:$color3;
+            font-weight: 600;
+            padding: 10px; 
+            margin-top: 15px;
+            border-radius: 0 30px 0 0; //hg hd bd bg
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
+            font-style: italic;
+            height: 45px;
             .g {
                 float: left;
                 .username {
@@ -59,21 +64,19 @@
                     text-transform: uppercase;
 
                     a {
-                        color: #161616;
+                        color: $color3;
                         text-decoration: none;
                     }
                 }
-            }
-            .c {
-                text-align: center;
             }
             .d {
                 float: right;
                 margin-right: 10px;
             }
 
-            img {
+            .avatar-post {
                 width: 30px;
+                border-radius: 8px;
             }
         }
 
@@ -84,6 +87,7 @@
             font-weight: 600;
             padding: 10px;
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
+
 
             .image-posts {
                 text-align: center;
@@ -156,7 +160,7 @@
         }
 
         a {
-            color: #161616;
+            color: $color3;
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;

@@ -188,7 +188,7 @@ const Posts = () => {
             <Header />
             <h1>Fil des posts</h1>
             {/* Section pour publier un post */}  
-            <div className="container">
+            <div className="container-principale">
                 <div className="addEnteteNewPost">Publier un nouveau post</div>
                 <div className="addContainerCorpsNewPost">
                     <form onSubmit={ handleSubmit }>
@@ -211,7 +211,7 @@ const Posts = () => {
             <> 
             {/* Boucle map du state posts */}  
             {posts.map(data => 
-            <div className="container" key={data.id}>
+            <div className="container-principale" key={data.id}>
                 <div className="addEnteteNewPost">
                     <div className="container-entete-post">
                         <div className="g">

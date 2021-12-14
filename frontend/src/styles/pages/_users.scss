@@ -1,4 +1,7 @@
 .users {
+    height: 100vh;
+    background-image: $backgroung-image;
+    background-attachment: fixed;
 
     button {
         color: rgb(39, 39, 39);
@@ -12,7 +15,7 @@
         flex-wrap: wrap;
         margin: 10px;
         padding: 0px;
-        background-color: rgb(223, 223, 223);
+        background-color: $color4;
         border-radius: 20px;
         box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.534);
     }
@@ -32,18 +35,6 @@
             margin-right: auto;
         }
 
-        .icon-edit-avatar {
-            font-size: 30px;
-            font-weight: bold;
-            position: relative;
-            top:0px;
-            right:-15px;
-            
-            .fa-edit{
-                color: rgba(75, 116, 116, 0.753);
-            }
-            
-        }
     }
 
     .div-infouser {
@@ -59,121 +50,6 @@
 
         .title-p {
             font-weight: 600;
-        }
-
-        .fa-edit {
-            margin-left: 15px;
-            font-weight: 600;
-            color: rgba(75, 116, 116, 0.753);
-        }
-
-        .fa-user-times {
-            margin-left: 15px;
-            font-weight: 600;
-            color: rgba(75, 116, 116, 0.753);
-        }
-
-        .fa-key {
-            margin-left: 20px;
-            font-weight: 600;
-            color: rgba(75, 116, 116, 0.753);
-        }
-
-        .fa-tools {
-            margin-left: 20px;
-            font-weight: 600;
-            color: rgba(75, 116, 116, 0.753);
-        }
-    }
-
-    .updateAvatar {
-        display: none;
-    }
-
-    .updatePassword {
-        display: none;
-    }
-
-    .deleteAccount {
-        display: none;
-    }
-
-    .updateEmail {
-        display: none;
-    }
-
-    .updateDescription {
-        display: none;
-    }
-
-    .title-section {
-        padding-top: 2px;
-        text-align: center;
-        font-size: 24px;
-        font-weight: 700;
-        margin: 10px;
-        margin-top: 15px;
-        border-radius: 20px;
-        background-color: rgb(223, 223, 223);
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
-    }
-
-    .content-section {
-        padding: 10px;
-        text-align: left;
-        margin: 10px;
-        border-radius: 20px;
-        background-color: rgb(223, 223, 223);
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.534);
-
-        .warning {
-            background-color: rgb(255, 195, 195);
-            font-weight: 600;
-            text-align: center;
-            border-radius: 10px;
-            padding: 5px;
-        }
-        
-        .info {
-            background-color: rgb(255, 221, 157);
-            font-weight: 600;
-            text-align: left;
-            border-radius: 10px;
-            padding: 5px;
-        }
-
-        .p-content-update-email {
-            text-align: center;
-        }
-
-        .p-content-delete-account {
-            text-align: center;
-        }
-
-        .p-content-update-avatar {
-            text-align: center;
-             input {
-                overflow: hidden;
-                background-color: rgb(255, 255, 255);
-             }
-        }
-
-        .p-content-update-avatar {
-            text-align: center;
-             input {
-                 background-color: rgb(255, 255, 255);
-             }
-        }
-
-        .p-content-update-description {
-            text-align: center;
-
-            .description {
-                max-width: 50%;
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-            }
         }
     }
 }
