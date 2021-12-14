@@ -32,6 +32,7 @@ const Login = ({ history }) => {
     }
   }
   
+  // Redirection si non connecté
   useEffect(() => {
     if (isAuthenticated === true) {
       history.replace('/account');
@@ -45,7 +46,7 @@ const Login = ({ history }) => {
       <Header />
       <h1>Se connecter</h1>
       <div className="container container-login">
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <form onSubmit={ handleSubmit } encType="multipart/form-data">
         <div className="form-group">
           <label htmlFor="email">Email(*)</label>
           <input type="email" className="form-control" id="email" name="email" placeholder="Email" onChange={ handleChange } required />

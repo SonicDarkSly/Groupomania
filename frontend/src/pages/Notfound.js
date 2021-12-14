@@ -5,7 +5,6 @@ const Notfound = () => {
     return (
         <div className="notfound">
             <Header />
-            
             <div className="container text-center container-notfound">
                     <h1>Error 404</h1>
                     <p>Page not found</p>

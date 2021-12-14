@@ -94,6 +94,7 @@ const Posts = () => {
         });
     };
 
+    // Requete des commentaires dans la BDD
     const getComments = () => {
         const token = getItem('storageToken');
         axios
@@ -111,6 +112,7 @@ const Posts = () => {
         });
     };
     
+    // Requete des info du user connecté dans la BDD
     const getUserInfo = async () => {
         try {
             const response = await getUserId();

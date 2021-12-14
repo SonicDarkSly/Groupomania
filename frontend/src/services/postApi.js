@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { getItem } from "./Localestorage";
 
+const token = getItem('storageToken');
+
 // ADD POST
 
 export function axiosCreatePost(credentials) {
 
-    const token = getItem('storageToken');
-
+    // formatage de la date
     let date = new Date();
     let jour = date.getDate();
         if (jour < 10){jour = '0'+jour;}
@@ -45,8 +46,6 @@ export function axiosCreatePost(credentials) {
 
 export function axiosDeletePost(credentials) {
 
-    const token = getItem('storageToken');
-
     let config = {
         headers: {
             'Content-Type': 'application/json',
@@ -73,8 +72,6 @@ export function axiosDeletePost(credentials) {
 // UPDATE POST
 
 export function axiosUpdatePost(credentials) {
-
-    const token = getItem('storageToken');
 
     const formData = new FormData();
     formData.append('userId', credentials[0]);
@@ -103,8 +100,7 @@ export function axiosUpdatePost(credentials) {
 
 export function axiosCreateComment(credentials) {
 
-    const token = getItem('storageToken');
-
+    // formatage de la date
     let date = new Date();
     let jour = date.getDate();
         if (jour < 10){jour = '0'+jour;}
@@ -138,6 +134,4 @@ export function axiosCreateComment(credentials) {
       .catch(function (error) {
         console.log(error);
       });
-
-console.log(credentials[1]);
 }

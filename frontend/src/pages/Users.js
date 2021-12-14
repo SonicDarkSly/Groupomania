@@ -5,8 +5,10 @@ import { getItem } from "../services/Localestorage";
 
 const Users = () => {
 
+    // Initialise le state en tableau pour map
     const [user, setUser] = useState([]);
 
+    // Récupère les info du user selon adresse url (id)
     const getUser = () => {
 
         const token = getItem('storageToken');
@@ -39,6 +41,7 @@ const Users = () => {
         <div className="users">
             <Header />
 
+            {/* map le state avec les info du user */}
             {      
             <> 
             {user.map(data => 

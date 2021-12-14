@@ -6,8 +6,10 @@ import { checksignup } from '../services/checkform'
 
 const Signup = ({ history }) => {
 
+  // Récupere le context pour le controle de la connection
     const { isAuthenticated } = useContext(Auth);
 
+    // State initial
     const [usersignup, setusersignup] = useState({
         "lastname": "",
         "firstname": "",
@@ -16,15 +18,16 @@ const Signup = ({ history }) => {
         "avatar": ""
       })
 
+      // Change le state avec les info du formulaire (objet)
       const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setusersignup({...usersignup, [name]: value})
       }
 
+      // Validation du formulaire
       const handleSubmit = event => {
         event.preventDefault();
         try {
-          
           if (checksignup()) {
             history.replace('/account');
             signup(usersignup);
@@ -35,7 +38,8 @@ const Signup = ({ history }) => {
         }
       }
 
-    useEffect(() => {
+      // Redirection si non connecté
+      useEffect(() => {
         if (isAuthenticated === true) {
           history.replace('/account');
         }
