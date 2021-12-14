@@ -62,6 +62,19 @@ const Signup = ({ history }) => {
                     <div className="form-group">
                         <label htmlFor="password">Mot de passe(*)</label><span id="msg_mdp_signup"></span>
                         <input type="password" className="form-control" id="password" name="password" minLength="8" placeholder="Mot de passe" onChange={ handleChange } required/>
+                        <div className="info">
+                          <p className='title'>Le mot de passe doit respecter les conditions suivantes :</p>
+                          <p>
+                            <span>Au moins 1 caractère majuscule.</span><br/>
+                            <span>Au moins 1 caractère minuscule.</span><br/>
+                            <span>Au moins 1 chiffre.</span><br/>
+                            <span>Au moins 1 caractère spécial.</span><br/>
+                            <span>Minimum 8 caractères.</span>
+                          </p>
+                        </div>
+                        <div>
+                          <p>(*) : Champs obligatoires</p>
+                        </div>
                     </div>
                     <div className="text-center form-group pt-4"> 
                         <button type="submit" aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>

@@ -22,10 +22,10 @@ exports.addComment = (req, res, next) => {
             return res.status(400).json("erreur");
         }else{
 
-          // Comptage nombre dislikes 
+          // Comptage nombre commentaires 
           db.query(`SELECT COUNT (*) AS countComments FROM comments WHERE postid='${postId}'`, (err, result, rows) => {
 
-            // Mise à jour de la table posts avec le nombre de dislikes pour le post
+            // Mise à jour de la table posts avec le nombre de commentaires pour le post
             db.query(`UPDATE posts SET countcomment='${result[0].countComments}' WHERE id='${postId}'`, (errcount, resultscount, rowscount)  => {
               if (errcount) {
                 console.log(errcount);

@@ -236,7 +236,6 @@ exports.deleteUser = (req, res, next) => {
                       return res.status(400).json(err)
                     } else {
 
-
                         // Si valide retourne 200
                         console.log('Les posts ont bien été supprimés')
                         return res.status(200).json({ message: 'Les posts ont bien été supprimés' })

@@ -306,7 +306,7 @@ exports.adminDeleteUser = (req, res, next) => {
                                         console.log(err)
                                         return res.status(400).json(err)
                                     } else {
-                    
+                                        
                                         // Si valide retourne 200
                                         console.log('Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes')
                                         return res.status(200).json({ message: 'Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes' })
