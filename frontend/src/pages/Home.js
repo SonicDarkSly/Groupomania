@@ -48,7 +48,7 @@ const Home = () => {
     return (
         <div className="home">
             <Header />
-            <h1>Bievenue sur le Groupomania Social Network</h1>
+            <h1>Bienvenue sur le Groupomania Social Network</h1>
 
             <div className="block-line">
 
