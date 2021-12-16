@@ -23,4 +23,20 @@
         border-radius: 20px;
         padding: 10px;
     }
+
+    .div-error {
+        background-color: $color4;
+        max-width: 270px;
+        border-radius: 20px;
+        margin: auto;
+        margin-top: 15px;
+        text-align: center;
+
+        .error {
+            color: red;
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+
 }

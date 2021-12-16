@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 
-import { getUserId } from '../services/userApi';
-import { axiosCreatePost, axiosDeletePost, axiosUpdatePost, axiosCreateComment } from '../services/postApi';
+import { axiosCreateComment, axiosDeleteComment, axiosUpdateComment } from '../services/commentApi';
 import { axiosOpinionPost } from '../services/opinionApi';
+import { getUserId } from '../services/userApi';
+import { axiosCreatePost, axiosUpdatePost, axiosDeletePost} from '../services/postApi';
 import { getItem } from "../services/Localestorage";
-import { axiosDeleteComment, axiosUpdateComment } from '../services/commentApi';
 
 const Posts = () => {
 
@@ -26,24 +26,58 @@ const Posts = () => {
     const [comments, setComments] = useState([]);
     const [updateComment, setUpdateComment] = useState();
 
+    // State pour actualisation useEffect
+    //posts
+    const [addPosts, setAddPosts] = useState(false);
+    const [updatePosts, setUpdatePosts] = useState(false);
+    const [deletePosts, setDeletePosts] = useState(false);
+
+    //commentaires
+    const [addComments, setAddComments] = useState(false);
+    const [updateComments, setUpdateComments] = useState(false);
+    const [deleteComments, setDeleteComments] = useState(false);
+
+    //opinions
+    const [opinions, setOpinions] = useState(false);
+
+    // Requete des info du user connecté dans la BDD
+    const getUserInfo = async () => {
+        try {
+            const response = await getUserId();
+            setUserId(response.id); // user Id
+            setdatalevel(response.accesslevel); // user level
+            setAvatar(response.avatarurl); // user level
+            setUserName(response.lastname+' '+response.firstname); // user name
+        } catch ({ error }) {
+            console.log(error);
+        }
+    }
+
+
+
+    // -------------- Posts --------------
+
+
+    // Affichage du textarea en cas de modif du post
+    const [showChangePost, setShowChangePost] = useState();
+    const changestatePost = (id) => {
+        if (showChangePost === id) {
+            setShowChangePost();
+        } else {
+            setShowChangePost(id);
+        }
+    }
+    useEffect(() => {
+    }, [showChangePost]);
+
     // Submit du formulaire pour envois du post
     const handleSubmit = event => {
         event.preventDefault();
         try {
             const credentialsPost = [userId, contentPost, imagePost, userName, userAvatar];
             axiosCreatePost(credentialsPost);
-        } catch ({ response }) {
-          
-        }
-    }
-
-    // Affichage de sections de post
-    const showUpdatePost = (postId) => {
-        if (document.getElementById(postId).style.display === 'block') {
-            document.getElementById(postId).style.display = 'none';
-        } else {
-            document.getElementById(postId).style.display = 'block';
-        }
+            setAddPosts(true)
+        } catch ({ response }) {}
     }
 
     // Submit du formulaire pour modifications post
@@ -58,8 +92,11 @@ const Posts = () => {
                 msgModifPost = contentPost; 
             }
             const credentialsUpdatePost = [userId, postId, postUserId, msgModifPost, imagePost];
-            console.log(credentialsUpdatePost);
             axiosUpdatePost(credentialsUpdatePost);
+            setUpdatePosts(true); 
+            if (showChangePost) {
+                setShowChangePost();
+            }
         }
     }
 
@@ -67,12 +104,14 @@ const Posts = () => {
     const handleDeletePost = (postId, postUserId) => {
         const credentialsDeletePost = [userId, postId, postUserId];
         axiosDeletePost(credentialsDeletePost);
+        setDeletePosts(true);
     }
   
     // Like/Dislike d'un post
     const handleOpinionPost = (opinion, userId, postId) => {
         const credentialsOpinion = [opinion, userId, postId];
         axiosOpinionPost(credentialsOpinion);
+        setOpinions(true); 
     }
 
     // Requete des posts dans la BDD
@@ -87,12 +126,31 @@ const Posts = () => {
         })
         .then((datas) => {
             setPosts(datas.data);
+            setOpinions(false);
+            setAddPosts(false);
+            setUpdatePosts(false);
+            setDeletePosts(false);
             
         })
         .catch((err) => {
             console.log(err);
         });
     };
+
+
+
+    // -------------- Commentaires --------------
+
+
+
+    // Affichage de sections de commentaires
+    const showUpdateComments = (postId) => {
+        if (document.getElementById(postId).style.display === 'block') {
+            document.getElementById(postId).style.display = 'none';
+        } else {
+            document.getElementById(postId).style.display = 'block';
+        }
+    }
 
     // Requete des commentaires dans la BDD
     const getComments = () => {
@@ -106,26 +164,14 @@ const Posts = () => {
         })
         .then((res) => {
             setComments(res.data);
+            setAddComments(false);
+            setDeleteComments(false);
+            setUpdateComments(false);
         })
         .catch((err) => {
             console.log(err);
         });
-    };
-    
-    // Requete des info du user connecté dans la BDD
-    const getUserInfo = async () => {
-        try {
-            const response = await getUserId();
-            setUserId(response.id); // user Id
-            setdatalevel(response.accesslevel); // user level
-            setAvatar(response.avatarurl); // user level
-            setUserName(response.lastname+' '+response.firstname); // user name
-        } catch ({ error }) {
-            console.log(error);
-        }
     }
-
-    // -------------- Commentaires --------------
 
     // Submit du formulaire pour envois du commentaire
     const handleSubmitCommentaires = (postId) => {
@@ -134,15 +180,12 @@ const Posts = () => {
                 alert('Veuillez indiquer un texte');
             }else{
                 axiosCreateComment(credentialsCommentaire);
-                setTimeout(function(){ 
-                    window.location.reload() 
-                }, 300);
+                setAddComments(true);
             }
     }
 
     // Update du commemtaire
     const handleUpdateComment = (commentId, commentUserId) => {
-
         if (document.getElementById('updateCommentairePost_'+commentId).value === '') {
             alert('Veuillez indiquer un texte');
         }else{
@@ -155,16 +198,19 @@ const Posts = () => {
             }
             const credentialsUpdatePost = [userId, commentId, msgModifComment];
             axiosUpdateComment(credentialsUpdatePost);
+            setUpdateComments(true)
+            if (showChangeComment) {
+                setShowChangeComment();
+            }
         }
-        
     }
 
     // Delete du commentaire 
     const handleDeleteComment = (commentId, postId) => {
         const credentialsDeleteComment = [userId, commentId, postId];
         axiosDeleteComment(credentialsDeleteComment);
+        setDeleteComments(true)
     }
-
 
     // Affichage du textarea en cas de modif du commentaire
     const [showChangeComment, setShowChangeComment] = useState();
@@ -183,7 +229,17 @@ const Posts = () => {
         getUserInfo();
         getPosts();
         getComments();
-    }, []);
+
+
+        
+    }, [addComments,
+        deleteComments, 
+        updateComments, 
+        opinions, 
+        addPosts, 
+        updatePosts,
+        deletePosts
+    ]);
 
     return (
         <div className="posts">
@@ -228,15 +284,19 @@ const Posts = () => {
                 </div>
                 <div id={'post_'+data.id} className="addContainerCorpsNewPost">
 
-                    {/* Controle si une image existe et affiche */}  
-                    {(data.imageurl && (
+                    {/* Controle si une image existe et affiche */}
+
+                    
+                    {((data.imageurl) && (showChangePost !== data.id) &&(
                         <span className="content-img"><img className="image-posts" src={data.imageurl} alt={'image du post'+data.id} /></span>
                     ))}
-                    <span className="content">{data.content}</span>
+                    {(showChangePost !== data.id && (
+                        <span className="content">{data.content}</span>
+                    ))}
 
                     {/* Section modification post */} 
+                    {(showChangePost === data.id && (
                     <div className="updatePost" id={'updatePost_'+data.id}>
-                        <hr/>
                         <div className="sectionUpdate">
                             <p className="update-title">Modification du post #{data.id}</p>
                             <p>
@@ -244,6 +304,7 @@ const Posts = () => {
                                     <label htmlFor={ 'updateContentPost_'+data.id }>Post(*) : </label>
                                     <textarea id={ 'updateContentPost_'+data.id } onChange={ (e) => setcontentPost(e.target.value) } defaultValue={ data.content } required></textarea>
                                 </span>
+                            
                             </p>
                             <p>
                                 <span>
@@ -252,11 +313,18 @@ const Posts = () => {
                                 </span>
                             </p>
                             <p>
-                                <span><button onClick={ () => handleSubmitUpdatePost(data.id, data.userid) }>Modifier</button></span>
-                                { ((userId === data.userid) || (datalevel >= 2)) && (<span className="btn-deletepost"><button onClick={ () => handleDeletePost(data.id, data.userid) }>Supprimer</button></span>)}
+                                <span>
+                                    <button onClick={ () => handleSubmitUpdatePost(data.id, data.userid) }>Modifier</button>
+                                </span>
+                                { ((userId === data.userid) || (datalevel >= 2)) && (
+                                    <span className="btn-deletepost">
+                                        <button onClick={ () => handleDeletePost(data.id, data.userid) }>Supprimer</button>
+                                    </span>
+                                )}
                             </p>
                         </div>
                     </div>
+                    ))}
 
                     {/* Section add commentaires post */} 
                     <div className="commentairePost" id={'commentairePost_'+data.id}>
@@ -318,7 +386,7 @@ const Posts = () => {
                     <div className="footer-post-d">
                         <span>
                             ({data.countcomment})
-                            <button className="btn-link" aria-label="Commentaire" onClick={ () => showUpdatePost('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button>
+                            <button className="btn-link" aria-label="Commentaire" onClick={ () => showUpdateComments('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button>
                         </span>
                         <span>
                             ({data.countlike})
@@ -330,7 +398,7 @@ const Posts = () => {
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <button className="btn-link" aria-label="Modification" onClick={ () => showUpdatePost('updatePost_'+data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button>
+                                <button className="btn-link" aria-label="Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button>
                             ) }   
                         </span>
                     </div>

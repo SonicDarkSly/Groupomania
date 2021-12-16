@@ -21,5 +21,4 @@ export function axiosOpinionPost(credentials) {
         config
     )
     .catch(error => console.log({ error }))
-    window.location.reload(); 
 }

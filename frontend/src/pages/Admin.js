@@ -7,6 +7,8 @@ import { getUserId } from '../services/userApi';
 
 const Admin = () => {
     
+    const [msgError, setMsgError] = useState()
+
     // State pour afficher l'espace admin (true / false)
     const [userAdmin, setUserAdmin] = useState(false);
 
@@ -68,7 +70,12 @@ const Admin = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                if (err.response.status === 403) {
+                    setMsgError('Pas le niveau nécéssaire');
+                  }  
+                if (err.response.status === 401) {
+                    setMsgError('Mot de passe incorrect');
+                }
             });
         }
     };
@@ -350,7 +357,7 @@ const Admin = () => {
     // Après controle, affiche l'espace admin
     useEffect(() => {
         getUser();
-    }, [userAdmin],[adminLevel]);
+    }, [userAdmin],[adminLevel],msgError);
 
     useEffect(() => {
         getUserInfo();
@@ -370,6 +377,9 @@ const Admin = () => {
                 <div className="adminAccess-corps">
                     <label htmlFor="passAdminAccess">Mot de passe</label>
                     <input id="passAdminAccess" type="password" onChange={ (e) => setAdminPass(e.target.value) } required />
+                    <div className="div-error">
+                        { (msgError &&(<span className='error'>Erreur : { msgError }</span>)) }
+                    </div>
                     <button className="btn-admin-access" onClick={ reqAccess }>Valider</button>
                 </div>
             </div>

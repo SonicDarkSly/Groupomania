@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getItem, addItem, removeItem } from "./Localestorage";
+import { getItem, removeItem } from "./Localestorage";
 
 const jwt = require('jsonwebtoken');
 
@@ -70,25 +70,6 @@ export function getLevel(credentials) {
         return response.data
     })
     .catch(error => console.log({ error }))
-}
-
-
-// LOGIN
-
-export function login(credentials) {
-
-    return axios
-        .post("http://localhost:8080/api/user/login", credentials)
-        .then(response => {
-            const userInfo = [
-                response.data.passCrypted
-            ];
-            addItem('storageToken', response.data.token);
-            addItem('storageUserInfo', JSON.stringify(userInfo)); 
-
-            return true
-        })
-        .catch(error => console.log({ error }))
 }
 
 
@@ -168,32 +149,7 @@ export function deleteAccout(userid, userpass) {
 }
 
 
-// UPDATE PASSWORD
 
-export function axiosupdateUserPassword(credentials) {
-
-    const token = getItem('storageToken');
-
-    let config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization' : 'Bearer '+token
-        }
-    }
-
-    axios.post('http://localhost:8080/api/user/update/password', 
-        {
-            userId: credentials[0],
-            oldPassword: credentials[1],
-            newPassword: credentials[2]
-        }, 
-        config
-    )
-    .then(response => {
-        window.location.reload(); 
-    })
-    .catch(error => console.log({ error }))
-}
 
 
 // UPDATE EMAIL

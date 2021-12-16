@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useContext} from 'react';
 import Header from '../components/Header';
 import Auth from "../context/Auth";
-import { login } from '../services/userApi';
+
+import axios from 'axios';
+import { addItem } from "../services/Localestorage";
 
 const Login = ({ history }) => {
 
   // Appel du context Auth
   const { isAuthenticated, setisAuthenticated } = useContext(Auth);
+
+  const [msgError, setMsgError] = useState()
 
   // Initialisation State
   const [user, setUser] = useState({
@@ -28,16 +32,41 @@ const Login = ({ history }) => {
       const response = await login(user);
       setisAuthenticated(response);
     } catch ({ response }) {
-      
+      console.log(response);
     }
   }
   
+function login(credentials) {
+
+    return axios
+        .post("http://localhost:8080/api/user/login", credentials)
+        .then((response) => {
+            const userInfo = [
+                response.data.passCrypted
+            ];
+            console.log(response.data.message);
+            addItem('storageToken', response.data.token);
+            addItem('storageUserInfo', JSON.stringify(userInfo)); 
+
+            return true
+        })
+        .catch(error => {
+          if (error.response.status === 404) {
+            setMsgError('Utilisateur inconnu');
+          }  
+          if (error.response.status === 401) {
+            setMsgError('Mot de pass incorrect');
+          }
+        })
+}
+
+
   // Redirection si non connecté
   useEffect(() => {
     if (isAuthenticated === true) {
       history.replace('/account');
     }
-  }, [history, isAuthenticated]);
+  }, [history, isAuthenticated, msgError]);
   
 
 
@@ -55,6 +84,9 @@ const Login = ({ history }) => {
           <label htmlFor="password">Mot de passe(*)</label>
           <input type="password" className="form-control" id="password" name="password" placeholder="Mot de passe" onChange={ handleChange } required />
         </div>
+        <div className="div-error">
+         { (msgError &&(<span className='error'>Erreur : { msgError }</span>)) }
+       </div>
         <div className="text-center form-group pt-4">
           <button aria-label="Se connecter" type="submit">Se connecter</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/signup'}>S'enregistrer</button>
        </div>

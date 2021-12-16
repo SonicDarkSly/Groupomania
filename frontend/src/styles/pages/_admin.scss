@@ -60,8 +60,8 @@
             border: 1px solid black;
             border-bottom: 0px;
             border-radius: 20px 20px 0 0; //hg hd bd bg
-            background-color: rgba(189, 1, 1, 0.877);
-            color: rgb(223, 223, 223);
+            background-color: $color3;
+            color: $color5;
             width: 260px;
             text-align: center;
             margin: 0 auto;
@@ -73,7 +73,7 @@
             margin: 0 auto;
             border: 1px solid black;
             border-radius: 0 0 20px 20px; //hg hd bd bg
-            background-color: rgb(223, 223, 223);
+            background-color: $color6;
             color: black;
             width: 260px;
             text-align: center;
@@ -84,6 +84,20 @@
                 border-radius: 10px;
                 padding: 10px;
                 margin-top: 10px;
+            }
+        }
+
+        .div-error {
+            max-width: 270px;
+            border-radius: 20px;
+            margin: auto;
+            margin-top: 15px;
+            text-align: center;
+    
+            .error {
+                color: red;
+                font-size: 14px;
+                font-weight: 600;
             }
         }
     }

@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { getItem } from "../services/Localestorage";
 import Header from '../components/Header';
 import Auth from '../context/Auth';
 import { 
     deleteAccout, 
     axiosupdateUserAvatar, 
-    axiosupdateUserPassword,
     logout, 
     axiosupdateUserEmail, 
     axiosupdateUserDescription,
@@ -46,6 +47,7 @@ const Account = () => {
     const [newEmail, setNewEmail] = useState();
     const [newDescription, setnewDescription] = useState();
 
+    const [msgError, setMsgError] = useState()
 
     // Fonction delete
     const handleDelete = () => {
@@ -80,6 +82,36 @@ const Account = () => {
           console.log(response);
         }
       }
+
+      // UPDATE PASSWORD
+      function axiosupdateUserPassword(credentials) {
+
+        const token = getItem('storageToken');
+
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/user/update/password', {
+            userId: credentials[0],
+            oldPassword: credentials[1],
+            newPassword: credentials[2]
+        }, 
+        config
+        )
+        .then(response => {
+            alert('Pour des raisons de sécurité, vous allez être déconnecté');
+            logout();
+        })
+        .catch((err) => {
+            if (err.response.status === 401) {
+                setMsgError(err.response.data.message);
+            }
+        });
+    }
+
 
     // Fonction update email
     const handleSubmitChangeEmail = event => {
@@ -134,7 +166,7 @@ const Account = () => {
 
        useEffect(() => {
            getUserInfo();
-        }, []);
+        }, [msgError]);
 
     return (
         <div className="account">
@@ -206,6 +238,9 @@ const Account = () => {
                     <div className="p-content-update-password">
                         <p><label htmlFor="oldPassword">Mot de passe actuel : </label><input type="password" id="oldPassword" name="oldPassword"  placeholder="Mot de passe actuel"  onChange={ (e) => setoldPassword(e.target.value) } required /></p>
                         <p><label htmlFor="newPassword">Nouveau mot de passe : </label><input type="password" id="newPassword" name="newPassword"  minLength="8" placeholder="Nouveau mot de passe" onChange={ (e) => setNewPassword(e.target.value) } required /></p>
+                        <div className="div-error">
+                            { (msgError &&(<span className='error'>Erreur : { msgError }</span>)) }
+                        </div>
                         <button type="submit">Modifier le mot de passe</button>
                     </div>
                     <p className="info">Le mot de passe doit respecter les conditions suivantes :

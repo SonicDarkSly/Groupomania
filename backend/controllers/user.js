@@ -384,9 +384,9 @@ exports.deleteUser = (req, res, next) => {
 
             // Si mauvais mot de passe
             if (!valid) {
-                console.log('Mot de passe incorrect.');
+                console.log('Ancien mot de passe incorrect.');
                 return res.status(401).json({
-                    message: 'Mot de passe incorrect.'
+                    message: 'Ancien mot de passe incorrect.'
                 });
             } else {
 
