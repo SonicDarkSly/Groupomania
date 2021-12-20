@@ -55,7 +55,7 @@ const Home = () => {
             
             <div className="block-posts">
                 <div className="title">
-                    Les 3 derniers posts
+                    Le dernier post
                 </div>
                 {
                     <> 

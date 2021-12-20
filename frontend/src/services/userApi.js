@@ -173,10 +173,10 @@ export function axiosupdateUserEmail(credentials) {
         config
     )
     .then(response => {
-        alert("Votre adresse mail à bien été modifier, vous allez être déconnecté");
-        logout();
+       
     })
-    .catch(error => console.log({ error }))
+    .catch(error => 
+        console.log({ error }))
 }
 
 // UPDATE DESCRIPTION
@@ -200,7 +200,7 @@ export function axiosupdateUserDescription(credentials) {
         config
     )
     .then(response => {
-        window.location.reload(); 
+
     })
     .catch(error => console.log({ error }))
 }

@@ -2,7 +2,7 @@
     height: 100vh;
     background-image: $backgroung-image;
     background-attachment: fixed;
-    
+
     .div-error {
         max-width: 270px;
         border-radius: 20px;
@@ -13,7 +13,7 @@
 
         .error {
             color: red;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
         }
     }
@@ -33,88 +33,99 @@
         padding: 10px;
     }
 
-    .btn-link {
-        background-color: transparent;
-        border: none;
-    }
+
+
     .div-container {
         display: flex;
-        align-items: flex-start;
         flex-wrap: wrap;
-        margin: 10px;
+        margin: auto;
         padding: 0px;
         background-color: $color4;
         border-radius: 20px;
         box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.534);
-    }
-
-    .div-avatar {
-        flex-wrap: wrap;
-        text-align: center;
-        max-width: 200px;
-        padding: 10px;
-
-        img {
-            max-width: 200px;
-            border-radius: 20px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .icon-edit-avatar {
-            font-size: 30px;
-            font-weight: bold;
-            position: relative;
-            top:0px;
-            right:-15px;
+    
+        .div-update-btn {
+            border: dotted 1px black;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
             
-            .fa-edit{
-                color: rgb(173, 2, 2);
+            span {
+                margin: 10px;
+            }
+            .btn-link {
+                background-color: $color1;
+                text-decoration: none;
+                padding: 5px;
             }
             
         }
+
+        .div-avatar {
+            justify-content: center;
+            margin: auto;
+            padding: 10px;
+            img {
+                max-width: 200px;
+                border-radius: 20px;
+                margin: auto;
+            }
+    
+            .icon-edit-avatar {
+                font-size: 30px;
+                font-weight: bold;
+                margin: auto;
+                text-align: center;
+                .fa-edit{
+                    color: rgb(173, 2, 2);
+                }
+            }
+        }
+    
+        .div-infouser {
+            margin: auto;
+            padding: 10px;
+            min-width: 50%;
+            max-width: 100%;
+
+            .btn-valid {
+                background-color: transparent;
+                border: 1px solid rgb(107, 107, 107);
+                border-radius: 10px;
+                color: rgba(2, 117, 2, 0.781);
+                padding: 2px 2px 2px 2px;
+                margin: 0 0 0 5px;
+            }
+            
+            .container-name{
+                width: 100%;
+                
+                .name {
+                    display: inline-block;
+                    text-transform: uppercase;
+                    font-size: 16px;
+                    font-weight: 800;
+                }
+            }
+
+            .title-p {
+                font-weight: 600;
+            }
+    
+
+    
+            input {
+                width: 250px;  
+            }
+      
+        }
     }
+    
 
-    .div-infouser {
-        flex-wrap: wrap;
-        padding: 10px;
-        margin-left: 15px;
 
-        .name {
-            text-transform: uppercase;
-            font-size: 16px;
-            font-weight: 800;
-        }
 
-        .title-p {
-            font-weight: 600;
-        }
 
-        .fa-edit {
-            margin-left: 15px;
-            font-weight: 600;
-            color: rgb(173, 2, 2);
-        }
 
-        .fa-user-times {
-            margin-left: 15px;
-            font-weight: 600;
-            color: rgb(173, 2, 2);
-        }
-
-        .fa-key {
-            margin-left: 20px;
-            font-weight: 600;
-            color: rgb(173, 2, 2);
-        }
-
-        .fa-tools {
-            margin-left: 20px;
-            font-weight: 600;
-            color: rgb(173, 2, 2);
-        }
-    }
 
     .updateAvatar {
         display: none;
@@ -204,12 +215,7 @@
         .p-content-update-description {
             text-align: center;
 
-            .description {
-                max-width: 50%;
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-            }
+
         }
     }
 }

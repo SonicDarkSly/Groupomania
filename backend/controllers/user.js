@@ -446,12 +446,12 @@ exports.updateUserEmail = (req, res, next) => {
                 // Si erreur retourne 400
                 if (err) {
                     console.log(err)
-                    return res.status(400).json(err)
+                    return res.status(400).json({ message: 'Adresse email non modifié' })  
                 }
                     
                 // Si valide, retourne 201 vers le frontend
                 console.log('Adresse email modifier avec succes')
-                return res.status(201).json({ message: 'Adresse email modifier avec succes' })  
+                return res.status(201).json({ message: 'Adresse email modifié avec succes' })  
             }
         })
     })

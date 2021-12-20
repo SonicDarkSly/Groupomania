@@ -48,7 +48,6 @@ const Users = () => {
                 <div className="div-container" key={data.id}>
                     <div className="div-avatar">
                         <img src={ data.avatarurl } alt="mon avatar" />
-                        <span className="icon-edit-avatar"></span>
                     </div>
                     <div className="div-infouser">
                         <div className="name">

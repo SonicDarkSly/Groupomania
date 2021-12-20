@@ -47,7 +47,12 @@ const Account = () => {
     const [newEmail, setNewEmail] = useState();
     const [newDescription, setnewDescription] = useState();
 
+    // State message d'erreur
     const [msgError, setMsgError] = useState()
+
+    // State affichage section update
+    const [showUpdateMail, setShowUpdateMail] = useState(false)
+    const [showUpdateDescription, setShowUpdateDescription] = useState(false)
 
     // Fonction delete
     const handleDelete = () => {
@@ -114,12 +119,20 @@ const Account = () => {
 
 
     // Fonction update email
+    const showEmail = () => {
+        if (showUpdateMail === false) {
+            setShowUpdateMail(true);
+        } else {
+            setShowUpdateMail(false);
+        }
+    }
     const handleSubmitChangeEmail = event => {
         event.preventDefault();
         try {
-          if (checkChangeEmail()) {
+          if ((checkChangeEmail()) && newEmail) {
             const credentialsEmail = [userId, newEmail];
-            axiosupdateUserEmail(credentialsEmail)   
+            axiosupdateUserEmail(credentialsEmail)
+            setShowUpdateMail(false)
           }
         } catch ({ response }) {
           console.log(response);
@@ -127,21 +140,30 @@ const Account = () => {
     }
 
 
+
     // Fonction update description
-      const handleSubmitChangeDescription = event => {
+    const showDescription = () => {
+        if (showUpdateDescription === false) {
+            setShowUpdateDescription(true);
+        } else {
+            setShowUpdateDescription(false);
+        }
+    }
+    const handleSubmitChangeDescription = event => {
         event.preventDefault();
         try {
             const credentialsDescription = [userId, newDescription];
             axiosupdateUserDescription(credentialsDescription)   
-          
+            setShowUpdateDescription(false);
         } catch ({ response }) {
           console.log(response);
         }
-      }
+    }
+
 
     // Fonctions affichage sections
 
-       let divs = ["updateAvatar", "updatePassword", "deleteAccount", "updateEmail", "updateDescription"];
+       let divs = ["updateAvatar", "updatePassword", "deleteAccount", "updateDescription"];
        let visibleId = null;
 
        function showHidden(id) {
@@ -166,54 +188,75 @@ const Account = () => {
 
        useEffect(() => {
            getUserInfo();
-        }, [msgError]);
+        }, [msgError, showUpdateMail, showUpdateDescription]);
 
     return (
         <div className="account">
             <Header />
             <h1>Bienvenue sur votre espace utilisateur</h1>
+
+            {/* div container principale */}
             <div className="div-container">
+
+                {/* div avatar gauche */}
                 <div className="div-avatar">
-                    <img src={ avatar } alt="mon avatar" />
-                    <span className="icon-edit-avatar">
-                        <button className="btn-link" aria-label="Modifier l'avatar" onClick={() => showHidden("updateAvatar")}><i className="far fa-edit" aria-hidden="true" title="Modifier l'avatar"></i></button>
-                    </span>
+                    <div><img src={ avatar } alt="mon avatar" /></div>
                 </div>
+
+                {/* div info user droit */}
                 <div className="div-infouser">
-                    <p className="name">
-                        <span>#{ userId } { firstname } { lastName }</span>
-                        <span>
-                            <button className="btn-link" aria-label="Supprimer le compte" onClick={() => showHidden("deleteAccount")}><i className="fas fa-user-times" aria-hidden="true" title="Supprimer le compte"></i></button>
-                        </span>
-                        <span>
-                            <button className="btn-link" aria-label="Mettre à jour le mot de passe" onClick={() => showHidden("updatePassword")}><i className="fas fa-key" aria-hidden="true" title="Mettre à jour le mot de passe"></i></button>
-                        </span>
+
+                    <div className='div-update-btn'>
+                        <span><button className="btn-link" aria-label="Supprimer le compte" onClick={() => showHidden("deleteAccount")}>Supprimer le compte</button></span>
+                        <span><button className="btn-link" aria-label="Mettre à jour le mot de passe" onClick={() => showHidden("updatePassword")}>Modifier mot de passe</button></span>
+                        <span><button className="btn-link" aria-label="Modifier la description" onClick={ showDescription }>Modifier description</button></span>
+                        <span><button className="btn-link" aria-label="Modifier l'adresse mail" onClick={ showEmail }>Modifier email</button></span>
+                        <span><button className="btn-link" aria-label="Modifier l'avatar" onClick={() => showHidden("updateAvatar")}>Modifier avatar</button></span>
+                        {(level >= 3 &&(<span><button className="btn-link" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}>Acces administration</button></span>))}
+                    </div>
+
+
+                    <p className="container-name">
+                        <span className='name'>#{ userId } { firstname } { lastName }</span>
                     </p>
                     <p>
                         <span className="title-p">Mon email : </span>
-                        <span>{ email }</span>
-                        <span>
-                            <button className="btn-link" aria-label="Modifier l'adresse mail" onClick={() => showHidden("updateEmail")}><i className="far fa-edit" aria-hidden="true" title="Modifier l'adresse mail"></i></button>
-                        </span>
+                        {(showUpdateMail === false && (
+                            <span>{ email }</span>
+                        ))}
+                        {(showUpdateMail === true && (
+                            <span>
+                                <input type="text" id="newEmail" name="newEmail" aria-label="Modifier l'adresse email" defaultValue={email} onChange={ (e) => setNewEmail(e.target.value) } required />
+                                <button className="btn-valid" aria-label="Valider la nouvelle adresse email" onClick={ handleSubmitChangeEmail }>Modifier</button>
+                            </span>
+                        ))}
+                        
                     </p>
-                    { (level >= 3 &&(<p>
+                    {(level >= 3 &&(<p>
                         <span className="title-p">Mon niveau :</span>
                         <span> Administrateur</span>
-                        <span>
-                            <button className="btn-link" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}><i className="fas fa-tools" aria-hidden="true" title="Acces à l'administration"></i></button>
-                        </span>
                     </p>))}
                     {(level <= 1 &&(<p>
                         <span className="title-p">Mon niveau :</span>
                         <span> Utilisateur</span>
                     </p>))}
-                    <p>
+                    <div className='pdescr'>
                         <span className="title-p">Ma description :</span>
-                        <span>{ description }</span>
-                        <span>
-                            <button className="btn-link" aria-label="Modifier la description" onClick={() => showHidden("updateDescription")}><i className="far fa-edit" aria-hidden="true" title="Modifier la description"></i></button>
-                        </span>
-                    </p>
+                        {(showUpdateDescription === false && (
+                            <>
+                            <span>{ description }</span>
+                            </>
+                        ))}
+                        {(showUpdateDescription === true && (
+                            
+                            <span>
+                                <textarea className="form-control description" id="newDescription" name="newDescription" rows="4" cols='60' defaultValue={ description } onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
+                                <button onClick={ handleSubmitChangeDescription }>Modifier ma description</button>
+                            </span>
+                            
+                        ))}
+                        
+                    </div>
                 </div>
             </div>
 
@@ -261,24 +304,6 @@ const Account = () => {
                 <div className="content-section">
                     <p className="warning">ATTENTION : La suppression du compte est définitive, toutes les données relative au compte seront supprimées. Aucun retour en arrière ne sera possible.</p>
                     <p className="p-content-delete-account"><button onClick={ handleDelete }>Supprimer mon compte</button></p>
-                </div>
-            </div>
-
-            <div className="updateEmail show" id="updateEmail">
-                <div className="title-section">
-                     <h2>Modification de l'adresse mail</h2>
-                </div>
-                <div className="content-section">
-                    <form onSubmit={ handleSubmitChangeEmail }>
-                        <p className="warning">ATTENTION : L'adresse mail vous sert pour vous connecter, vous devrez vous re-connecter une fois modifier.</p>
-                        <p className="p-content-update-email">
-                            <label htmlFor="newEmail">Nouvelle adresse mail : </label>
-                            <input type="text" id="newEmail" name="newEmail"  placeholder="Nouvelle adresse mail"  onChange={ (e) => setNewEmail(e.target.value) } required />
-                        </p>
-                        <p className="p-content-update-email">
-                            <button type="submit">Modifier email</button>
-                        </p>
-                    </form>
                 </div>
             </div>
 

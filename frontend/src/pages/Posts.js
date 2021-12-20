@@ -5,8 +5,10 @@ import Header from '../components/Header';
 import { axiosCreateComment, axiosDeleteComment, axiosUpdateComment } from '../services/commentApi';
 import { axiosOpinionPost } from '../services/opinionApi';
 import { getUserId } from '../services/userApi';
-import { axiosCreatePost, axiosUpdatePost, axiosDeletePost} from '../services/postApi';
+import { axiosDeletePost } from '../services/postApi';
 import { getItem } from "../services/Localestorage";
+
+const token = getItem('storageToken');
 
 const Posts = () => {
 
@@ -57,6 +59,53 @@ const Posts = () => {
 
     // -------------- Posts --------------
 
+    // ADD POST
+    function axiosCreatePost(credentials) {
+
+        // formatage de la date
+        let date = new Date();
+        let jour = date.getDate();
+            if (jour < 10){jour = '0'+jour;}
+        let mois = date.getMonth()+1;
+            if (mois < 10){mois = '0'+mois;}
+        let annee = date.getFullYear();
+        let heures = date.getHours();
+            if (heures < 10){heures = '0'+heures;}
+        let minutes = date.getMinutes();
+            if (minutes < 10){minutes = '0'+minutes;}
+        let formatDate = jour+"/"+mois+"/"+annee+" - "+heures+"h"+minutes;
+
+        const formData = new FormData();
+        formData.append('userId', credentials[0]);
+        formData.append('contentPost', credentials[1]);
+        formData.append('imgPost', credentials[2]);
+        formData.append('date', formatDate);
+        formData.append('userName', credentials[3]);
+        formData.append('userAvatar', credentials[4]);
+    
+        axios({
+            headers: { Authorization: `Bearer ${token}` },
+            'Content-Type': 'application/json',
+            url: 'http://localhost:8080/api/posts/addpost',
+            method: 'POST',
+            data: formData
+        })
+        .then(response => {
+            setAddPosts(true)
+        })
+        .catch(error => console.log({ error }))
+    }
+
+    // Submit du formulaire pour envois du post
+    const handleSubmit = event => {
+        event.preventDefault();
+        try {
+            const credentialsPost = [userId, contentPost, imagePost, userName, userAvatar];
+            axiosCreatePost(credentialsPost);
+            
+        } catch ({ response }) {}
+    }
+
 
     // Affichage du textarea en cas de modif du post
     const [showChangePost, setShowChangePost] = useState();
@@ -70,14 +119,28 @@ const Posts = () => {
     useEffect(() => {
     }, [showChangePost]);
 
-    // Submit du formulaire pour envois du post
-    const handleSubmit = event => {
-        event.preventDefault();
-        try {
-            const credentialsPost = [userId, contentPost, imagePost, userName, userAvatar];
-            axiosCreatePost(credentialsPost);
-            setAddPosts(true)
-        } catch ({ response }) {}
+    // UPDATE POST
+    function axiosUpdatePost(credentials) {
+
+        const formData = new FormData();
+        formData.append('userId', credentials[0]);
+        formData.append('postId', credentials[1]);
+        formData.append('postUserId', credentials[2]);
+        formData.append('contentPost', credentials[3]);
+        formData.append('imgPost', credentials[4]);
+        
+        axios({
+            headers: { Authorization: `Bearer ${token}` },
+            'Content-Type': 'application/json',
+            url: 'http://localhost:8080/api/posts/updatepost',
+            method: 'POST',
+            data: formData
+        })
+        .then(response => {
+            setUpdatePosts(true); 
+        })
+        
+        .catch(error => console.log({ error }))
     }
 
     // Submit du formulaire pour modifications post
@@ -93,7 +156,6 @@ const Posts = () => {
             }
             const credentialsUpdatePost = [userId, postId, postUserId, msgModifPost, imagePost];
             axiosUpdatePost(credentialsUpdatePost);
-            setUpdatePosts(true); 
             if (showChangePost) {
                 setShowChangePost();
             }
@@ -105,6 +167,7 @@ const Posts = () => {
         const credentialsDeletePost = [userId, postId, postUserId];
         axiosDeletePost(credentialsDeletePost);
         setDeletePosts(true);
+        document.getElementById('contentPost').value = '';
     }
   
     // Like/Dislike d'un post
@@ -229,9 +292,6 @@ const Posts = () => {
         getUserInfo();
         getPosts();
         getComments();
-
-
-        
     }, [addComments,
         deleteComments, 
         updateComments, 
@@ -254,7 +314,7 @@ const Posts = () => {
                             <label htmlFor="contentPost">Post(*) : </label>
                             <textarea id="contentPost" onChange={ (e) => setcontentPost(e.target.value) } required></textarea>
                             <label htmlFor="imgPost">Image : </label>
-                            <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg" onChange={(e) => setimagePost(e.target.files[0])} />
+                            <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg, .gif" onChange={(e) => setimagePost(e.target.files[0])} />
                         </div>
                         <div className="text-center">
                             <button type="submit">Envoyer</button>
@@ -309,7 +369,7 @@ const Posts = () => {
                             <p>
                                 <span>
                                     <label htmlFor={ 'updateImgPost'+data.id }>Image : </label>
-                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg" onChange={ (e) => setimagePost(e.target.files[0]) } />
+                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setimagePost(e.target.files[0]) } />
                                 </span>
                             </p>
                             <p>

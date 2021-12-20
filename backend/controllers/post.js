@@ -131,7 +131,7 @@ exports.getMessages = (req, res, next) => {
 
 //Affichage des derniers messages postés
 exports.getLastPosts= (req, res, next) => {
-  db.query('SELECT * FROM posts ORDER BY date DESC LIMIT 3', (error, result, field) => {
+  db.query('SELECT * FROM posts ORDER BY date DESC LIMIT 1', (error, result, field) => {
     if (error) {
       return res.status(400).json({ error })
     }

@@ -6,22 +6,10 @@
 
     .logo{
       text-align: center;
+      margin: auto;
         img {
-            max-width: 230px;
-            margin-top: 15px;
+            max-width: 250px;
+            margin-top: 10px;
         }
     }
-
-    .nav-link{
-      color:$color3;
-      font-size:30px;
-      max-width: 100px;
-      text-decoration:none;
-    }
-    .nav-link:hover{
-        color:$color2;
-        font-size:30px;
-        text-decoration:none;
-    }
-
 }
