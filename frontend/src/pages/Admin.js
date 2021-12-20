@@ -7,6 +7,15 @@ import { getUserId } from '../services/userApi';
 
 const Admin = () => {
     
+    // State message
+    const [msgUpdateLastName, setMsgUpdateLastName] = useState()
+    const [msgUpdateFirstName, setMsgUpdateFirstName] = useState()
+    const [msgUpdateEmail, setMsgUpdateEmail] = useState()
+    const [msgUpdatePassword, setMsgUpdatePassword] = useState()
+    const [msgUpdateLevel, setMsgUpdateLevel] = useState()
+    const [msgUpdateDelete, setMsgUpdateDelete] = useState()
+
+    // State message d'erreur
     const [msgError, setMsgError] = useState()
 
     // State pour afficher l'espace admin (true / false)
@@ -46,7 +55,7 @@ const Admin = () => {
     // Requete pour controle acces administration
     const reqAccess = () => {
         if (!adminPass) {
-            alert('Veuillez indiquer un mot de passe');
+            setMsgError('Veuillez indiquer un mot de passe');
         } else {
             let config = {
                 headers: {
@@ -114,6 +123,12 @@ const Admin = () => {
     const handleChange = () => {
         const userid = document.getElementById('user').value;
         if (userid !== '') {
+            setMsgUpdateLastName();
+            setMsgUpdateFirstName();
+            setMsgUpdateEmail();
+            setMsgUpdatePassword();
+            setMsgUpdateLevel();
+            setMsgUpdateDelete();
             setUserIdToUpdate(userid);
             getUserById(userid);  
         }
@@ -164,6 +179,9 @@ const Admin = () => {
                     }, 
                     config
                 )
+                .then((res) => {
+                    setMsgUpdateLevel(res.data.message);
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -202,6 +220,9 @@ const Admin = () => {
                         }, 
                         config
                     )
+                    .then((res) => {
+                        setMsgUpdatePassword(res.data.message);
+                    })
                     .catch((err) => {
                         console.log(err);
                     });
@@ -241,6 +262,9 @@ const Admin = () => {
                     }, 
                     config
                 )
+                .then((res) => {
+                    setMsgUpdateEmail(res.data.message);
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -278,6 +302,9 @@ const Admin = () => {
                     }, 
                     config
                 )
+                .then((res) => {
+                    setMsgUpdateLastName(res.data.message);
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -315,6 +342,9 @@ const Admin = () => {
                     }, 
                     config
                 )
+                .then((res) => {
+                    setMsgUpdateFirstName(res.data.message);
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -343,8 +373,8 @@ const Admin = () => {
                     }, 
                     config
                 )
-                .then(response => {
-                    window.location.reload(); 
+                .then((res) => {
+                    setMsgUpdateDelete(res.data.message);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -362,6 +392,15 @@ const Admin = () => {
     useEffect(() => {
         getUserInfo();
      }, []);
+
+     useEffect(() => {
+     }, [msgUpdateLastName,
+        msgUpdateFirstName,
+        msgUpdateEmail,
+        msgUpdatePassword,
+        msgUpdateLevel,
+        msgUpdateDelete
+    ]);
 
     return (
         <div className="admin">
@@ -415,9 +454,10 @@ const Admin = () => {
                             <div className="label-update">
                                 <label htmlFor="updateLastName">Nom : </label>
                             </div>
-                            <div className="input-update">
+                            <div>
                                 <input id="updateLastName" type="text" defaultValue={ data.lastname } onChange={ (e) => setLastNameUpdate(e.target.value) }/>
                                 <button id="btnUpdateLastName" className="btn-valid" aria-label="Modifier le nom" onClick={ adminUpdateLastname }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier le nom'"></i></button>
+                                { (msgUpdateLastName &&(<span className='msgUpdate'>{ msgUpdateLastName }</span>)) }
                             </div>
                         </div>
                         <div className="container-update">
@@ -427,6 +467,7 @@ const Admin = () => {
                             <div className="input-update">
                                 <input id="updateFirstName" type="text" defaultValue={ data.firstname } onChange={ (e) => setFirstNameUpdate(e.target.value) }/>
                                 <button id="btnUpdateFirstName" className="btn-valid" aria-label="Modifier le prénom" onClick={ adminUpdateFirstname }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier le prénom'"></i></button>
+                                { (msgUpdateFirstName &&(<span className='msgUpdate'>{ msgUpdateFirstName }</span>)) }
                             </div>
                         </div>
                         <div className="container-update">
@@ -436,6 +477,7 @@ const Admin = () => {
                             <div className="input-update">
                                 <input className="input-mail" id="updateEmail" type="text" defaultValue={ data.email } onChange={ (e) => setEmailUpdate(e.target.value) }/>
                                 <button id="btnUpdateEmail" className="btn-valid" aria-label="Modifier l'email" onClick={ adminUpdateEmail }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier l'email'"></i></button>
+                                { (msgUpdateEmail &&(<span className='msgUpdate'>{ msgUpdateEmail }</span>)) }
                             </div>
                         </div>
                         <div className="container-update">
@@ -445,6 +487,7 @@ const Admin = () => {
                             <div className="input-update">
                                 <input id="updatePassword" type="password" defaultValue="" onChange={ (e) => setPasswordUpdate(e.target.value) }/>
                                 <button id="btnUpdatePassword" className="btn-valid" aria-label="Modifier le password" onClick={ adminUpdatePassword }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier le mot de passe"></i></button>
+                                { (msgUpdatePassword &&(<span className='msgUpdate'>{ msgUpdatePassword }</span>)) }
                             </div>
                         </div>
 
@@ -468,6 +511,7 @@ const Admin = () => {
                                     <option value="4">Super administrateur</option>
                                 </select>
                                 <button id="btnUpdateLevel" className="btn-valid" aria-label="Modifier le niveau" onClick={ adminUpdateLevel }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier le niveau"></i></button>
+                                { (msgUpdateLevel &&(<span className='msgUpdate'>{ msgUpdateLevel }</span>)) }
                             </div>
                         </div>
                         ))}
@@ -477,6 +521,7 @@ const Admin = () => {
                             </div>
                             <div className="input-delete">
                                 <button id="btnDelete" className="btn-valid-delete" aria-label="Supprimer le compte" onClick={ adminDeleteUser }>Supprimer le compte</button>
+                                { (msgUpdateDelete &&(<span className='msgUpdate'>{ msgUpdateDelete }</span>)) }
                             </div>
                         </div>
                     </div>

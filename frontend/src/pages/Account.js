@@ -139,8 +139,6 @@ const Account = () => {
         }
     }
 
-
-
     // Fonction update description
     const showDescription = () => {
         if (showUpdateDescription === false) {
@@ -159,7 +157,6 @@ const Account = () => {
           console.log(response);
         }
     }
-
 
     // Fonctions affichage sections
 
@@ -212,10 +209,10 @@ const Account = () => {
                         <span><button className="btn-link" aria-label="Modifier la description" onClick={ showDescription }>Modifier description</button></span>
                         <span><button className="btn-link" aria-label="Modifier l'adresse mail" onClick={ showEmail }>Modifier email</button></span>
                         <span><button className="btn-link" aria-label="Modifier l'avatar" onClick={() => showHidden("updateAvatar")}>Modifier avatar</button></span>
-                        {(level >= 3 &&(<span><button className="btn-link" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}>Acces administration</button></span>))}
+                        {(level >= 3 &&(<span><button className="btn-link-admin" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}>Acces administration</button></span>))}
                     </div>
 
-
+                    <div className='container-infouser'>
                     <p className="container-name">
                         <span className='name'>#{ userId } { firstname } { lastName }</span>
                     </p>
@@ -251,11 +248,11 @@ const Account = () => {
                             
                             <span>
                                 <textarea className="form-control description" id="newDescription" name="newDescription" rows="4" cols='60' defaultValue={ description } onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
-                                <button onClick={ handleSubmitChangeDescription }>Modifier ma description</button>
+                                <button className="btn-valid" onClick={ handleSubmitChangeDescription }>Modifier ma description</button>
                             </span>
                             
                         ))}
-                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -286,13 +283,16 @@ const Account = () => {
                         </div>
                         <button type="submit">Modifier le mot de passe</button>
                     </div>
-                    <p className="info">Le mot de passe doit respecter les conditions suivantes :
-                            <span>Au moins 1 caractère majuscule.</span><br/>
-                            <span>Au moins 1 caractère minuscule.</span><br/>
-                            <span>Au moins 1 chiffre.</span><br/>
-                            <span>Au moins 1 caractère spécial.</span><br/>
-                            <span>Minimum 8 caractères.</span>
-                    </p>
+                    <div className="info">
+                        <p>Le mot de passe doit respecter les conditions suivantes :</p>
+                            <p>
+                                <span>Au moins 1 caractère majuscule.</span><br/>
+                                <span>Au moins 1 caractère minuscule.</span><br/>
+                                <span>Au moins 1 chiffre.</span><br/>
+                                <span>Au moins 1 caractère spécial.</span><br/>
+                                <span>Minimum 8 caractères.</span>
+                            </p>
+                    </div>
                 </form>
                 </div>
             </div>

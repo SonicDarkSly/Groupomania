@@ -38,6 +38,15 @@
 
         .container-update {
             display: block;
+
+            .msgUpdate {
+                border: 1px solid $color3;
+                border-radius: 10px;
+                background-color: green;
+                color: $color5;
+                margin-left: 5px;
+                padding: 4px;
+            }
         }
 
         .btn-valid {
