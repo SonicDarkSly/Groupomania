@@ -52,7 +52,7 @@ function login(credentials) {
         })
         .catch(error => {
           if (error.response.status === 404) {
-            setMsgError('Utilisateur inconnu');
+            setMsgError('Email inconnu');
           }  
           if (error.response.status === 401) {
             setMsgError('Mot de pass incorrect');

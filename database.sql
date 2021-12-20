@@ -32,7 +32,7 @@ CREATE TABLE `comments` (
   `date` varchar(25) NOT NULL,
   `content` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,6 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (41,101,155,'Fleur Aurélia','12/12/2021 - 17h57','J\'adore ce nouveau concept, je pense que cela va bien amélioré la com au sein de l\'entreprise !'),(42,102,154,'Dupont Jean','12/12/2021 - 19h05','oui enfin fini...');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +58,7 @@ CREATE TABLE `opinions` (
   `likes` int DEFAULT '0',
   `dislikes` int DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +67,6 @@ CREATE TABLE `opinions` (
 
 LOCK TABLES `opinions` WRITE;
 /*!40000 ALTER TABLE `opinions` DISABLE KEYS */;
-INSERT INTO `opinions` VALUES (32,101,154,0,0),(33,101,155,1,0),(34,102,154,1,0);
 /*!40000 ALTER TABLE `opinions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +89,7 @@ CREATE TABLE `posts` (
   `useravatar` varchar(255) NOT NULL,
   `countcomment` int DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +98,6 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (101,154,'Hello world, bienvenue sur le nouveau réseau de com !','http://localhost:8080/images/posts/154/154_post_1639327907357.png','12/12/2021 - 17h51',1,0,'Dupont Jean','http://localhost:8080/images/avatars/154/sonic-icon-17_1639327851350.jpg',1),(102,155,'Avez vous fini vos achats de noel ? - Post modéré par Dupont Jean','http://localhost:8080/images/posts/155/155_post_1639328412937.jpg','12/12/2021 - 18h00',1,0,'Fleur Aurélia','http://localhost:8080/images/avatars/155/Crash_Bandicoot_Mobile_Logo_1639328199347.png',1);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,7 +127,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (154,'Dupont','Jean','$2b$10$xlNaWrHbrpA7qms3T57P6url13ukbuP36smhzVKTCfkhocYnho2kS','jean.dupont@groupomania.com',4,'http://localhost:8080/images/avatars/154/sonic-icon-17_1639327851350.jpg','Chargé de communication et administrateur du réseau social.'),(155,'Fleur','Aurélia','$2b$10$hwkHhj7qIT4DPxWBC8KI1.lww5/PTmV0SqUPDVJnDLIQ4pGHsyNkK','aurelia.fleur@groupomania.com',1,'http://localhost:8080/images/avatars/155/Crash_Bandicoot_Mobile_Logo_1639328199347.png','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -143,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-14 16:53:35
+-- Dump completed on 2021-12-20 22:42:49

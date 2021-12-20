@@ -14,6 +14,7 @@ const NavHeader = () => {
 
     return (
         <div className="navHeader">
+            <div className='container-nav'>
             <nav>
                 <NavLink exact to="/" aria-label="Home"><i className="fas fa-home" aria-hidden="true" title="Home"></i></NavLink>
                 {(isAuthenticated === true && (
@@ -26,6 +27,7 @@ const NavHeader = () => {
                 <NavLink exact to="/login" aria-label="Connexion"><i className="fas fa-sign-in-alt" aria-hidden="true" title="Connexion"></i></NavLink>
                 )}
             </nav>
+            </div>
         </div>
     );
 };
