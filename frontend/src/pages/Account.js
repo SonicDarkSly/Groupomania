@@ -5,7 +5,6 @@ import Header from '../components/Header';
 import Auth from '../context/Auth';
 import { 
     deleteAccout, 
-    axiosupdateUserAvatar, 
     logout, 
     axiosupdateUserEmail, 
     axiosupdateUserDescription,
@@ -54,6 +53,9 @@ const Account = () => {
     const [showUpdateMail, setShowUpdateMail] = useState(false)
     const [showUpdateDescription, setShowUpdateDescription] = useState(false)
 
+    // State useEffect
+    const [updateAvatarActu, setUpdateAvatarActu] = useState()
+
     // Fonction delete
     const handleDelete = () => {
         const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
@@ -70,10 +72,30 @@ const Account = () => {
         if (!profilImage) {
             alert('Veuillez sélectionnez un fichier image');
         } else {
-            axiosupdateUserAvatar(credentialsAvatar) 
+            axiosupdateUserAvatar(credentialsAvatar)
         }
-        
     }
+
+    // UPDATE AVATAR
+    function axiosupdateUserAvatar(credentials) {
+        const token = getItem('storageToken');
+        const formData = new FormData();
+        formData.append('userId', credentials[0]);
+        formData.append('avatar', credentials[1]);
+
+        axios({
+            headers: { Authorization: `Bearer ${token}` },
+            'Content-Type': 'application/json',
+            url: 'http://localhost:8080/api/user/update/profile-picture',
+            method: 'POST',
+            data: formData
+        })
+        .then(response => {
+            setUpdateAvatarActu(response) 
+        })
+        .catch(error => console.log({ error }))
+    }
+
 
     // Fonction update password
     const handleSubmitChangePassword = event => {
@@ -185,8 +207,9 @@ const Account = () => {
 
        useEffect(() => {
            getUserInfo();
-        }, [msgError, showUpdateMail, showUpdateDescription]);
+        }, [msgError, showUpdateMail, showUpdateDescription, updateAvatarActu]);
 
+        
     return (
         <div className="account">
             <Header />

@@ -163,7 +163,7 @@ const Admin = () => {
         const promptIdUpdate = prompt("Veuillez tapez l'ID \""+userIdToUpdate+"\"  de l'utilisateur concerné par la modification du niveau", "");
         if (promptIdUpdate === userIdToUpdate) {
             if (!levelUpdate) {
-                alert("Veuillez sélectionnez un niveau différent de l'ancien");
+                setMsgUpdateLevel("Veuillez sélectionnez un niveau différent de l'ancien");
             } else {
                 let config = {
                     headers: {
@@ -204,7 +204,7 @@ const Admin = () => {
         if (promptIdUpdate === userIdToUpdate) {
             if (checkChangePasswordAdmin()) {
                 if (!passwordUpdate) {
-                    alert('Veuillez sélectionnez un mot de passe');
+                    setMsgUpdatePassword('Veuillez sélectionnez un mot de passe');
                 } else {
                     let config = {
                         headers: {
@@ -246,7 +246,7 @@ const Admin = () => {
         const promptIdUpdate = prompt("Veuillez tapez l'ID \""+userIdToUpdate+"\"  de l'utilisateur concerné par la modification de l'email", "");
         if (promptIdUpdate === userIdToUpdate) {
             if (!emailUpdate) {
-                alert("Veuillez sélectionnez un email différent de l'ancien");
+                setMsgUpdateEmail("Veuillez sélectionnez un email différent de l'ancien");
             } else {
                 let config = {
                     headers: {
@@ -286,7 +286,7 @@ const Admin = () => {
         const promptIdUpdate = prompt("Veuillez tapez l'ID \""+userIdToUpdate+"\"  de l'utilisateur concerné par la modification du nom", "");
         if (promptIdUpdate === userIdToUpdate) {
             if (!lastNameUpdate) {
-                alert("Veuillez sélectionnez un nom différent de l'ancien");
+                setMsgUpdateLastName("Veuillez sélectionnez un nom différent de l'ancien");
             } else {
                 let config = {
                     headers: {
@@ -326,7 +326,7 @@ const Admin = () => {
         const promptIdUpdate = prompt("Veuillez tapez l'ID \""+userIdToUpdate+"\"  de l'utilisateur concerné par la modification du prénom", "");
         if (promptIdUpdate === userIdToUpdate) {
             if (!firstNameUpdate) {
-                alert("Veuillez sélectionnez un prénom différent de l'ancien");
+                setMsgUpdateFirstName("Veuillez sélectionnez un prénom différent de l'ancien");
             } else {
                 let config = {
                     headers: {

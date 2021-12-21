@@ -214,16 +214,20 @@
                           font-weight: 500;
                           font-style: italic;
 
-                          button {
-                            vertical-align:top;
-                            font-size: 12px;
+                          .btn-update-com {
+                            font-size: 16px;
+                            font-weight: 600;
                             background-color: transparent;
-                            border: 1px solid rgb(107, 107, 107);
-                            border-radius: 8px;
-                            color: rgba(2, 117, 2, 0.781);
-                            padding: 2 2 2 2;
-                            margin: 0 0 0 5px;
+                            border: none;
+                            color: $color2;
+                            padding: 2px 2px 2px 4px;
+                            margin: -3px 0 0 5px;
                         }
+
+                        .com-name {
+                            text-transform: uppercase;
+                        }
+
                       }
 
                       .corps-commentaire {

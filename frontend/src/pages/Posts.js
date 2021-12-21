@@ -420,8 +420,8 @@ const Posts = () => {
                                 
                                 <div className="container-commentaire" key={dataComment.id}>
                                     <div className="entete-commentaire">
-                                        Par {dataComment.username} le {dataComment.date} 
-                                        {((dataComment.userid === userId) || (datalevel >= 2)) && (<button aria-label="Modifier le commentaire" onClick={() => changestate(dataComment.id) }><i className="fas fa-sync-alt" aria-hidden="true" title="Modifier le commentaire"></i></button>)}
+                                        Par <span className='com-name'>{dataComment.username}</span> le {dataComment.date} 
+                                        {((dataComment.userid === userId) || (datalevel >= 2)) && (<button className='btn-update-com' aria-label="Modifier le commentaire" onClick={() => changestate(dataComment.id) }><i className="far fa-edit" aria-hidden="true" title="Modifier le commentaire"></i></button>)}
                                     </div>
                                     <div className="corps-commentaire">
                                     {(showChangeComment !== dataComment.id && (<span>{ dataComment.content }</span>))}

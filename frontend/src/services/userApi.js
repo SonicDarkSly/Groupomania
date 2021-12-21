@@ -94,31 +94,6 @@ export function signup(credentials) {
         .catch(error => console.log({ error }))
 }
 
-
-// UPDATE AVATAR
-
-export function axiosupdateUserAvatar(credentials) {
-
-    const token = getItem('storageToken');
-
-    const formData = new FormData();
-    formData.append('userId', credentials[0]);
-    formData.append('avatar', credentials[1]);
-
-    axios({
-        headers: { Authorization: `Bearer ${token}` },
-        'Content-Type': 'application/json',
-        url: 'http://localhost:8080/api/user/update/profile-picture',
-        method: 'POST',
-        data: formData
-    })
-    .then(response => {
-        window.location.reload(); 
-    })
-    .catch(error => console.log({ error }))
-}
-
-
 // DELETE ACCOUNT
 
 export function deleteAccout(userid, userpass) {
