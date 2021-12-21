@@ -205,13 +205,13 @@ const Posts = () => {
     // -------------- Commentaires --------------
 
 
-
     // Affichage de sections de commentaires
     const showUpdateComments = (postId) => {
         if (document.getElementById(postId).style.display === 'block') {
             document.getElementById(postId).style.display = 'none';
         } else {
             document.getElementById(postId).style.display = 'block';
+            
         }
     }
 
@@ -336,7 +336,6 @@ const Posts = () => {
                             <span><img className="avatar-post" src={data.useravatar} alt={ 'avatar de '+data.username+' pour le post '+data.id } /></span>
                             <span className="username"><a aria-label={data.username} href={'/users?userId='+data.userid}>{data.username}</a></span>
                         </div>
-
                         <div className="d">
                             <span>{data.date}</span>
                         </div>
@@ -446,7 +445,7 @@ const Posts = () => {
                     <div className="footer-post-d">
                         <span>
                             ({data.countcomment})
-                            <button className="btn-link" aria-label="Commentaire" onClick={ () => showUpdateComments('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button>
+                            <a role='button' href={'#commentairePost_'+data.id} aria-label="ancreCommentaire"><button className="btn-link" aria-label="bouton Commentaire" onClick={ () => showUpdateComments('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button></a>
                         </span>
                         <span>
                             ({data.countlike})
@@ -458,7 +457,7 @@ const Posts = () => {
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <button className="btn-link" aria-label="Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button>
+                                <a role='button' href={'#updatePost_'+data.id} aria-label="ancreUpdate"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
                             ) }   
                         </span>
                     </div>
