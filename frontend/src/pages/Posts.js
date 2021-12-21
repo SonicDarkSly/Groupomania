@@ -354,6 +354,7 @@ const Posts = () => {
                     ))}
 
                     {/* Section modification post */} 
+                    <div id={'ancreupdatePost_'+data.id}></div>
                     {(showChangePost === data.id && (
                     <div className="updatePost" id={'updatePost_'+data.id}>
                         <div className="sectionUpdate">
@@ -457,7 +458,7 @@ const Posts = () => {
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <a role='button' href={'#updatePost_'+data.id} aria-label="ancreUpdate"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
+                                <a role='button' href={'#ancreupdatePost_'+data.id} aria-label="ancreUpdate"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
                             ) }   
                         </span>
                     </div>
