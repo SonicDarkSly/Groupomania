@@ -7,6 +7,7 @@ const Header = () => {
             <div className="">
                 <div className="logo">
                     <img src="./images/logo.png" alt="logo du groupe groupomania"/>
+                    <div className='titleHeader'><span>Social Network</span></div>
                 </div>
                 <div>
                     <NavHeader />

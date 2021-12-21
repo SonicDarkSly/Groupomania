@@ -1,7 +1,7 @@
 .header {
     width: 100%;
     background-color: $backgroung-header;
-    border-bottom: solid 4px $color2;
+
     /* logo */
 
     .logo{
@@ -10,6 +10,14 @@
         img {
             max-width: 250px;
             margin-top: 10px;
+        }
+
+        .titleHeader {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: $color3;
+            margin-top: -5px;
         }
     }
 }
