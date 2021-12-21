@@ -44,10 +44,11 @@ const Account = () => {
     const [oldPassword, setoldPassword] = useState();
     const [newPassword, setNewPassword] = useState();
     const [newEmail, setNewEmail] = useState();
-    const [newDescription, setnewDescription] = useState();
+    const [newDescription, setnewDescription] = useState('');
 
     // State message d'erreur
     const [msgError, setMsgError] = useState()
+    const [msgErrorUpdateAvatar, setMsgErrorUpdateAvatar] = useState()
 
     // State affichage section update
     const [showUpdateMail, setShowUpdateMail] = useState(false)
@@ -70,9 +71,10 @@ const Account = () => {
     const handleUpdateAvatar = () => {
         const credentialsAvatar = [userId, profilImage];
         if (!profilImage) {
-            alert('Veuillez sélectionnez un fichier image');
+            setMsgErrorUpdateAvatar('Veuillez sélectionnez un fichier image');
         } else {
             axiosupdateUserAvatar(credentialsAvatar)
+            setMsgErrorUpdateAvatar()
         }
     }
 
@@ -182,7 +184,7 @@ const Account = () => {
 
     // Fonctions affichage sections
 
-       let divs = ["updateAvatar", "updatePassword", "deleteAccount", "updateDescription"];
+       let divs = ["updateAvatar", "updatePassword", "deleteAccount"];
        let visibleId = null;
 
        function showHidden(id) {
@@ -207,7 +209,7 @@ const Account = () => {
 
        useEffect(() => {
            getUserInfo();
-        }, [msgError, showUpdateMail, showUpdateDescription, updateAvatarActu]);
+        }, [msgError, showUpdateMail, showUpdateDescription, updateAvatarActu, msgErrorUpdateAvatar]);
 
         
     return (
@@ -227,11 +229,11 @@ const Account = () => {
                 <div className="div-infouser">
 
                     <div className='div-update-btn'>
-                        <span><button className="btn-link" aria-label="Supprimer le compte" onClick={() => showHidden("deleteAccount")}>Supprimer le compte</button></span>
-                        <span><button className="btn-link" aria-label="Mettre à jour le mot de passe" onClick={() => showHidden("updatePassword")}>Modifier mot de passe</button></span>
-                        <span><button className="btn-link" aria-label="Modifier la description" onClick={ showDescription }>Modifier description</button></span>
-                        <span><button className="btn-link" aria-label="Modifier l'adresse mail" onClick={ showEmail }>Modifier email</button></span>
-                        <span><button className="btn-link" aria-label="Modifier l'avatar" onClick={() => showHidden("updateAvatar")}>Modifier avatar</button></span>
+                        <span><a role='button' href='#deleteAccount' aria-label="Ancre supprimer le compte"><button className="btn-link" aria-label="Supprimer le compte" onClick={() => showHidden("deleteAccount")}>Supprimer le compte</button></a></span>
+                        <span><a role='button' href='#updatePassword' aria-label="Ancre mettre à jour le mot de passe"><button className="btn-link" aria-label="Mettre à jour le mot de passe" onClick={() => showHidden("updatePassword")}>Modifier mot de passe</button></a></span>
+                        <span><a role='button' href='#userDescription' aria-label="Ancre modifier la description"><button className="btn-link" aria-label="Modifier la description" onClick={ showDescription }>Modifier description</button></a></span>
+                        <span><a role='button' href='#updateEmail' aria-label="Ancre modifier l'email"><button className="btn-link" aria-label="Modifier l'adresse mail" onClick={ showEmail }>Modifier email</button></a></span>
+                        <span><a role='button' href='#updateAvatar' aria-label="Ancre modifier l'avatar"><button className="btn-link" aria-label="Modifier l'avatar" onClick={() => showHidden("updateAvatar")}>Modifier avatar</button></a></span>
                         {(level >= 3 &&(<span><button className="btn-link-admin" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}>Acces administration</button></span>))}
                     </div>
 
@@ -240,7 +242,7 @@ const Account = () => {
                         <span className='name'>#{ userId } { firstname } { lastName }</span>
                     </p>
                     <p>
-                        <span className="title-p">Mon email : </span>
+                        <span className="title-p" id='updateEmail'>Mon email : </span>
                         {(showUpdateMail === false && (
                             <span>{ email }</span>
                         ))}
@@ -261,7 +263,7 @@ const Account = () => {
                         <span> Utilisateur</span>
                     </p>))}
                     <div className='pdescr'>
-                        <span className="title-p">Ma description :</span>
+                        <span className="title-p" id='userDescription'>Ma description :</span>
                         {(showUpdateDescription === false && (
                             <>
                             <span>{ description }</span>
@@ -286,8 +288,19 @@ const Account = () => {
                     <h2>Modification de l'avatar</h2>
                 </div>
                 <div className="content-section">
-                    <p className="p-content-update-avatar"><label htmlFor="avatar">Avatar : </label><input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" onChange={ (e) => setProfilImage(e.target.files[0]) }/></p>
-                    <p className="p-content-update-avatar"><button onClick={ handleUpdateAvatar }>Modifier mon avatar</button></p>
+                    <p className="p-content-update-avatar">
+                        <label htmlFor="avatar">Avatar : </label>
+                        <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" onChange={ (e) => setProfilImage(e.target.files[0]) }/>
+                        <span className='info-format-image'>(*.png, *.jpg, *.jpeg)</span>
+                    </p>
+                    {((msgErrorUpdateAvatar) && (!profilImage) && (
+                        <p>
+                            <span className='msgAlert'>{ msgErrorUpdateAvatar }</span>
+                        </p>
+                    ))}
+                    <p className="p-content-update-avatar">
+                        <button onClick={ handleUpdateAvatar }>Modifier mon avatar</button>
+                    </p>
                 </div>
             </div>
          
@@ -329,24 +342,6 @@ const Account = () => {
                     <p className="p-content-delete-account"><button onClick={ handleDelete }>Supprimer mon compte</button></p>
                 </div>
             </div>
-
-            <div className="updateDescription show" id="updateDescription">
-                <div className="title-section">
-                    <h2>Modification de la description</h2>
-                </div>
-                <div className="content-section">
-                    <form onSubmit={ handleSubmitChangeDescription }>
-                        <p className="p-content-update-description">
-                            <label htmlFor="newDescription">Nouvelle description : </label>
-                            <textarea className="form-control description" id="newDescription" name="newDescription" rows="3" defaultValue={ description } onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
-                        </p>
-                        <p className="p-content-update-description">
-                            <button type="submit">Modifier ma description</button>
-                        </p>
-                    </form>
-                </div>
-            </div>
-
         </div>
     );
 };

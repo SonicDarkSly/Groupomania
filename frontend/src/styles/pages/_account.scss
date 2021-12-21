@@ -18,6 +18,16 @@
         }
     }
 
+    .msgAlert {
+        background-color: rgb(184, 1, 1);
+        color: $color5;
+        border-radius: 10px;
+        padding: 5px;
+        margin: auto;
+        max-width: 200px;
+        font-size: 12px;
+    }
+
     h1 {
         text-align: center;
         border-bottom: 1px solid black;
@@ -94,7 +104,7 @@
         .div-infouser {
             margin: auto;
             padding: 10px;
-            min-width: 50%;
+            min-width: 60%;
             max-width: 100%;
 
             .container-infouser {
@@ -126,13 +136,10 @@
             .title-p {
                 font-weight: 600;
             }
-    
 
-    
             input {
                 width: 250px;  
             }
-      
         }
     }
     
@@ -154,14 +161,6 @@
         display: none;
     }
 
-    .updateEmail {
-        display: none;
-    }
-
-    .updateDescription {
-        display: none;
-    }
-
     .title-section {
         padding-top: 2px;
         text-align: center;
@@ -176,7 +175,7 @@
 
     .content-section {
         padding: 10px;
-        text-align: left;
+        text-align: center;
         margin: 10px;
         border-radius: 20px;
         background-color: $color4;
@@ -202,6 +201,7 @@
         .p-content-update-email {
             text-align: center;
             input {
+                width: 100%;
                 color: black;
                 background-color: $color5;
             }
@@ -214,6 +214,7 @@
         .p-content-update-avatar {
             text-align: center;
              input {
+                max-width: 100%;
                 overflow: hidden;
                 background-color: $color5;
              }
@@ -225,12 +226,6 @@
                  color: black;
                  background-color: $color5;
              }
-        }
-
-        .p-content-update-description {
-            text-align: center;
-
-
         }
     }
 }

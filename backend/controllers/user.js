@@ -227,9 +227,6 @@ exports.deleteUser = (req, res, next) => {
             // Si bon mot de passe
             } else {
 
-
-
-
                 // Suppression des posts de l'user
                 db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (err, results, rows)  => {
 
@@ -464,9 +461,17 @@ exports.updateUserEmail = (req, res, next) => {
 
 exports.updateUserDescription = (req, res, next) => {
 
-    // Récupère l'userid et le nouveau email de la requete
+    // Récupère l'userid et la nouvelle description de la requete
+    let newDescription
+    if (req.body.newDescription === '') {
+        newDescription = '';
+    }else{
+        newDescription = req.body.newDescription;
+    }
+
     const userid = req.body.userId;
-    const newDescription = req.body.newDescription;
+    
+
 
     // Recherche dans la BDD selon userid
     db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
@@ -520,7 +525,7 @@ exports.getOneUser = (req, res, next) => {
 
 exports.getUserId = (req, res, next) => {
 
-    // Récupère l'userid
+    // Récupère le password crypté
     const userPassCrypted = req.body.userPassCrypted;
 
     // Recherche dans la BDD selon userid

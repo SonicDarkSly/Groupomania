@@ -37,7 +37,7 @@ exports.getAccessAdmin = (req, res, next) => {
                 if (!valid) {
                     console.log('Mot de passe incorrect')
                     return res.status(401).json({
-                        message: 'Mot de passe incorrect.'
+                        message: 'Mot de passe incorrect'
                     });
                         
                 // Si MDP valide
@@ -47,8 +47,10 @@ exports.getAccessAdmin = (req, res, next) => {
                     if (results[0].accesslevel >= 3) {
                         res.status(200).json(results[0].accesslevel)
                     } else {
-                        console.log('Pas le niveau nécéssaire.')
-                        return res.status(403).json(err)
+                        console.log('Pas le niveau nécéssaire')
+                        return res.status(403).json({
+                            message: 'Pas le niveau nécéssaire'
+                        });
                     }
                 }
             });

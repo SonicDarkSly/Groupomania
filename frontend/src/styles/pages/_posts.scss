@@ -10,6 +10,21 @@
         margin-bottom: 20px;
     }
     
+    .msgAlert {
+        background-color: rgb(184, 1, 1);
+        color: $color5;
+        border-radius: 10px;
+        padding: 5px;
+        margin: 5px;
+        max-width: 200px;
+    }
+
+    .info-format-image {
+        font-style: italic;
+        font-weight: 400;
+        font-size: 14px;
+    }
+
     .container-principale {
         width: 75%;
         margin: auto;

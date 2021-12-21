@@ -124,10 +124,6 @@ export function deleteAccout(userid, userpass) {
       });
 }
 
-
-
-
-
 // UPDATE EMAIL
 
 export function axiosupdateUserEmail(credentials) {
@@ -148,9 +144,6 @@ export function axiosupdateUserEmail(credentials) {
         }, 
         config
     )
-    .then(response => {
-       
-    })
     .catch(error => 
         console.log({ error }))
 }
@@ -175,8 +168,5 @@ export function axiosupdateUserDescription(credentials) {
         }, 
         config
     )
-    .then(response => {
-
-    })
     .catch(error => console.log({ error }))
 }

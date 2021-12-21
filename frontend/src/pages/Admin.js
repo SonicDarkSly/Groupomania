@@ -80,10 +80,10 @@ const Admin = () => {
             })
             .catch((err) => {
                 if (err.response.status === 403) {
-                    setMsgError('Pas le niveau nécéssaire');
+                    setMsgError(err.response.data.message);
                   }  
                 if (err.response.status === 401) {
-                    setMsgError('Mot de passe incorrect');
+                    setMsgError(err.response.data.message);
                 }
             });
         }

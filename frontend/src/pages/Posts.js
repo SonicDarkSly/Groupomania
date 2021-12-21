@@ -12,6 +12,12 @@ const token = getItem('storageToken');
 
 const Posts = () => {
 
+
+    // State msg info erreur
+    const [msgAlertUpdatePost, setMsgAlertUpdatePost] = useState();
+    const [msgAlertComment, setMsgAlertComment] = useState();
+    const [msgAlertUpdateComment, setMsgAlertUpdateComment] = useState();
+
     // State contenant les infos du user connecté / function getUserInfo
     const [userId, setUserId] = useState();
     const [userName, setUserName] = useState();
@@ -146,7 +152,7 @@ const Posts = () => {
     // Submit du formulaire pour modifications post
     const handleSubmitUpdatePost = (postId, postUserId) => {
         if (document.getElementById('updateContentPost_'+postId).value === '') {
-            alert('Veuillez indiquer un texte');
+            setMsgAlertUpdatePost('Veuillez indiquer un texte');
         }else{
             let msgModifPost = '';
             if (userId !== postUserId) {
@@ -156,6 +162,7 @@ const Posts = () => {
             }
             const credentialsUpdatePost = [userId, postId, postUserId, msgModifPost, imagePost];
             axiosUpdatePost(credentialsUpdatePost);
+            setMsgAlertUpdatePost();
             if (showChangePost) {
                 setShowChangePost();
             }
@@ -240,17 +247,18 @@ const Posts = () => {
     const handleSubmitCommentaires = (postId) => {
             const credentialsCommentaire = [userId, postId, userName, commentairePost];
             if (document.getElementById('addCommentairePost_'+postId).value === '') {
-                alert('Veuillez indiquer un texte');
+                setMsgAlertComment('Veuillez indiquer un texte');
             }else{
                 axiosCreateComment(credentialsCommentaire);
                 setAddComments(true);
+                setMsgAlertComment();
             }
     }
 
     // Update du commemtaire
     const handleUpdateComment = (commentId, commentUserId) => {
         if (document.getElementById('updateCommentairePost_'+commentId).value === '') {
-            alert('Veuillez indiquer un texte');
+            setMsgAlertUpdateComment('Veuillez indiquer un texte');
         }else{
 
             let msgModifComment = '';
@@ -261,7 +269,8 @@ const Posts = () => {
             }
             const credentialsUpdatePost = [userId, commentId, msgModifComment];
             axiosUpdateComment(credentialsUpdatePost);
-            setUpdateComments(true)
+            setUpdateComments(true);
+            setMsgAlertUpdateComment();
             if (showChangeComment) {
                 setShowChangeComment();
             }
@@ -282,10 +291,11 @@ const Posts = () => {
             setShowChangeComment();
         } else {
             setShowChangeComment(id);
+            setMsgAlertUpdateComment();
         }
     }
     useEffect(() => {
-    }, [showChangeComment]);
+    }, [showChangeComment, msgAlertUpdatePost, msgAlertComment, msgAlertUpdateComment]);
 
     // Prise d'effet lors du chargement de la page
     useEffect(() => {
@@ -314,7 +324,7 @@ const Posts = () => {
                             <label htmlFor="contentPost">Post(*) : </label>
                             <textarea id="contentPost" onChange={ (e) => setcontentPost(e.target.value) } required></textarea>
                             <label htmlFor="imgPost">Image : </label>
-                            <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg, .gif" onChange={(e) => setimagePost(e.target.files[0])} />
+                            <input type="file" id="imgPost" name="imgPost" accept=".png, .jpg, .jpeg, .gif" onChange={(e) => setimagePost(e.target.files[0])} /><span className='info-format-image'>(*.png, *.jpg, *.jpeg, *.gif)</span>
                         </div>
                         <div className="text-center">
                             <button type="submit">Envoyer</button>
@@ -361,7 +371,7 @@ const Posts = () => {
                             <p className="update-title">Modification du post #{data.id}</p>
                             <p>
                                 <span>
-                                    <label htmlFor={ 'updateContentPost_'+data.id }>Post(*) : </label>
+                                    <label htmlFor={ 'updateContentPost_'+data.id }>Post(*) : </label>{(msgAlertUpdatePost && (<span className='msgAlert'>{ msgAlertUpdatePost }</span>))}
                                     <textarea id={ 'updateContentPost_'+data.id } onChange={ (e) => setcontentPost(e.target.value) } defaultValue={ data.content } required></textarea>
                                 </span>
                             
@@ -369,7 +379,7 @@ const Posts = () => {
                             <p>
                                 <span>
                                     <label htmlFor={ 'updateImgPost'+data.id }>Image : </label>
-                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setimagePost(e.target.files[0]) } />
+                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setimagePost(e.target.files[0]) } /><span className='info-format-image'>(*.png, *.jpg, *.jpeg, *.gif)</span>
                                 </span>
                             </p>
                             <p>
@@ -396,7 +406,7 @@ const Posts = () => {
                                     Ajouter un commentaire pour le post #{data.id}
                                 </p>
                                 <p>
-                                    <label htmlFor={ 'addCommentairePost_'+data.id }>Commentaire(*) : </label>
+                                    <label htmlFor={ 'addCommentairePost_'+data.id }>Commentaire(*) : </label><span>{(msgAlertComment && (<span className='msgAlert'>{ msgAlertComment }</span>))}</span>
                                     <textarea id={ 'addCommentairePost_'+data.id } onChange={ (e) => setCommentairePost(e.target.value) } required></textarea>
                                 </p>
                                 <p>
@@ -422,6 +432,8 @@ const Posts = () => {
                                     <div className="entete-commentaire">
                                         Par <span className='com-name'>{dataComment.username}</span> le {dataComment.date} 
                                         {((dataComment.userid === userId) || (datalevel >= 2)) && (<button className='btn-update-com' aria-label="Modifier le commentaire" onClick={() => changestate(dataComment.id) }><i className="far fa-edit" aria-hidden="true" title="Modifier le commentaire"></i></button>)}
+                                        {((msgAlertUpdateComment) && (showChangeComment) === dataComment.id && (<p className='msgAlert'>{msgAlertUpdateComment}</p>))}
+                                        
                                     </div>
                                     <div className="corps-commentaire">
                                     {(showChangeComment !== dataComment.id && (<span>{ dataComment.content }</span>))}
@@ -446,7 +458,7 @@ const Posts = () => {
                     <div className="footer-post-d">
                         <span>
                             ({data.countcomment})
-                            <a role='button' href={'#commentairePost_'+data.id} aria-label="ancreCommentaire"><button className="btn-link" aria-label="bouton Commentaire" onClick={ () => showUpdateComments('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button></a>
+                            <a role='button' href={'#commentairePost_'+data.id} aria-label="Ancre bouton commentaire"><button className="btn-link" aria-label="bouton Commentaire" onClick={ () => showUpdateComments('commentairePost_'+data.id) }><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button></a>
                         </span>
                         <span>
                             ({data.countlike})
@@ -458,7 +470,7 @@ const Posts = () => {
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <a role='button' href={'#ancreupdatePost_'+data.id} aria-label="ancreUpdate"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
+                                <a role='button' href={'#ancreupdatePost_'+data.id} aria-label="Ancre bouton modification"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
                             ) }   
                         </span>
                     </div>
