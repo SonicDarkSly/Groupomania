@@ -186,7 +186,7 @@ exports.login = (req, res, next) => {
 
 // ---------- DELETE PROFILE ----------
 
-const deleteFolderRecursive = function(folder) {
+const deleteFolderRecursive = (folder) => {
 
     if (!fs.existsSync(folder)) {
         console.log('1-'+folder);
@@ -226,6 +226,9 @@ exports.deleteUser = (req, res, next) => {
             
             // Si bon mot de passe
             } else {
+
+
+
 
                 // Suppression des posts de l'user
                 db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (err, results, rows)  => {
