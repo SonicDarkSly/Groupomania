@@ -117,6 +117,7 @@ export function deleteAccout(userid, userpass) {
       .then(function (response) {
         removeItem('storageToken');
         removeItem('storageUserInfo');
+        
       })
       .catch(function (error) {
         console.log(error);
