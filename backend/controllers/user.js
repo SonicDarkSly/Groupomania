@@ -229,9 +229,6 @@ exports.deleteUser = (req, res, next) => {
             // Si bon mot de passe
             } else {
 
-                const chemin = `${req.protocol}://${req.get('host')}/images/avatars/${req.body.userId}`;
-                rimraf(chemin);
-
                 // suppression de l'avatar
                 if (oldfilename !== 'avatar_user_default.jpeg') {
                     fs.unlink(`images/avatars/${req.body.userId}/${oldfilename}`, (err => {
@@ -244,6 +241,29 @@ exports.deleteUser = (req, res, next) => {
                         }
                     }));
                 }
+
+                // Recherche des images postées par le user
+                db.query(`SELECT * FROM posts WHERE userid='${req.body.userId}'`, (err, resultImgPost, rows) => {
+
+                    // boucle map
+                    resultImgPost.map(data => {
+                        const userImgPost = data.imageurl;
+                        const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
+        
+                        // suppression des images
+                        if (data.imageurl !== 'avatar_user_default.jpeg') {
+                            fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
+                                if (err) {
+                                    console.log(err);
+                                    return false
+                                } else {
+                                    console.log('Images de posts du user '+data.userid+' supprimer avec succes');
+                                    return true
+                                }
+                            }));
+                        }
+                    });
+                })
 
                 // Suppression des posts de l'user
                 db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (err, results, rows)  => {
