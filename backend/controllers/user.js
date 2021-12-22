@@ -186,31 +186,33 @@ exports.login = (req, res, next) => {
 
 // ---------- DELETE PROFILE ----------
 
-const deleteFolderRecursive = (folder) => {
-
-    if (!fs.existsSync(folder)) {
-        console.log('1-'+folder);
-
-        fs.readdirSync(folder).forEach((file, index) => {
-        const curPath = path.join(folder, file);
-        console.log('2-'+curPath);
-
-        if (fs.lstatSync(curPath).isDirectory()) { // recurse
-            console.log('3-'+curPath);
-
-          deleteFolderRecursive(curPath);
-        } else { // delete file
-          fs.unlink(curPath);
-        }
-      });
-      fs.rmdirSync(folder);
+/**
+ * Remove directory recursively
+ * @param {string} dir_path
+ * @see https://stackoverflow.com/a/42505874/3027390
+ */
+ function rimraf(dir_path) {
+    if (fs.existsSync(dir_path)) {
+        fs.readdirSync(dir_path).forEach(function(entry) {
+            var entry_path = path.join(dir_path, entry);
+            if (fs.lstatSync(entry_path).isDirectory()) {
+                rimraf(entry_path);
+            } else {
+                fs.unlinkSync(entry_path);
+            }
+        });
+        fs.rmdirSync(dir_path);
     }
-};
+}
 
 exports.deleteUser = (req, res, next) => {
 
     // Recherche dans la BDD les info du user selon son userid
     db.query(`SELECT * FROM users WHERE id='${req.body.userId}'`, (err, results, rows) => {
+
+        // Récupération de l'avatar
+        const oldavatar = results[0].avatarurl
+        const oldfilename = oldavatar.split(`/${req.body.userId}/`)[1];
 
         // Controle le mon de passe
         bcrypt.compare(req.body.userPass, results[0].password)
@@ -226,6 +228,22 @@ exports.deleteUser = (req, res, next) => {
             
             // Si bon mot de passe
             } else {
+
+                const chemin = `${req.protocol}://${req.get('host')}/images/avatars/${req.body.userId}`;
+                rimraf(chemin);
+
+                // suppression de l'avatar
+                if (oldfilename !== 'avatar_user_default.jpeg') {
+                    fs.unlink(`images/avatars/${req.body.userId}/${oldfilename}`, (err => {
+                        if (err) {
+                            console.log(err);
+                            return false
+                        } else {
+                            console.log("Avatar supprimer avec succes");
+                            return true
+                        }
+                    }));
+                }
 
                 // Suppression des posts de l'user
                 db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (err, results, rows)  => {

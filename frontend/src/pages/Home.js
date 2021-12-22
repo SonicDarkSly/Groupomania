@@ -81,9 +81,9 @@ const Home = () => {
                             </div>
                         <div className="footer">
                             <div className="footer-post-d">
-                                <span>({data.countcomment}) <button className="btn-link" aria-label="Commentaire"><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button></span>
-                                <span>({data.countlike}) <button className="btn-link" aria-label="Like"><i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></button></span>
-                                <span>({data.countdislike}) <button className="btn-link" aria-label="Dislike"><i className="fas fa-thumbs-down" aria-hidden="true" title="Dislike"></i></button></span>
+                                <span>{'('+data.countcomment+')'} <button className="btn-link" aria-label="Commentaire"><i className="fas fa-comment-alt" aria-hidden="true" title="Commentaires"></i></button></span>
+                                <span>{'('+data.countlike+')'} <button className="btn-link" aria-label="Like"><i className="fas fa-thumbs-up" aria-hidden="true" title="Like"></i></button></span>
+                                <span>{'('+data.countdislike+')'} <button className="btn-link" aria-label="Dislike"><i className="fas fa-thumbs-down" aria-hidden="true" title="Dislike"></i></button></span>
                             </div>
                         </div>
                         </div>

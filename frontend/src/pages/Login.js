@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext} from 'react';
 import Header from '../components/Header';
 import Auth from "../context/Auth";
-
 import axios from 'axios';
 import { addItem } from "../services/Localestorage";
 
