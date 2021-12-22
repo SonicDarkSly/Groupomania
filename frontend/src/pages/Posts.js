@@ -440,7 +440,7 @@ const Posts = () => {
                                     {(hideAddComments === false && (
                                     <span>
                                         <a role='button' href={'#commentairePost_'+data.id} aria-label="Ancre ajouter un commentaire"> 
-                                            <button className='btn-add-comment' aria-label="Ajouter un commentaire" onClick={changestateComment}>Ecrire commentaire</button>
+                                            <button className='btn-add-comment' aria-label="Ajouter un commentaire" onClick={changestateComment}>Ecrire nouveau commentaire</button>
                                         </a>
                                     </span>
                                     ))}
