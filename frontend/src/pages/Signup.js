@@ -1,22 +1,25 @@
 import React, { useEffect, useContext, useState} from 'react';
 import Auth from "../context/Auth";
 import Header from '../components/Header';
-import { signup } from '../services/userApi';
 import { checksignup } from '../services/checkform'
+import axios from 'axios';
 
 const Signup = ({ history }) => {
 
   // Récupere le context pour le controle de la connection
-    const { isAuthenticated } = useContext(Auth);
+  const { isAuthenticated } = useContext(Auth);
 
-    // State initial
-    const [usersignup, setusersignup] = useState({
+  // State initial
+  const [usersignup, setusersignup] = useState({
         "lastname": "",
         "firstname": "",
         "email": "",
         "password": "",
         "avatar": ""
-      })
+  })
+
+  // State message erreur
+  const [msgError, setMsgError] = useState();
 
       // Change le state avec les info du formulaire (objet)
       const handleChange = ({currentTarget}) => {
@@ -24,18 +27,26 @@ const Signup = ({ history }) => {
         setusersignup({...usersignup, [name]: value})
       }
 
+      // SIGNUP
+      function signup(credentials) {
+        return axios
+        .post("http://localhost:8080/api/user/signup", credentials)
+        .then(response => {
+          setMsgError(response);
+          history.replace('/account');
+        })
+        .catch((err) => {
+          setMsgError(err.response.data.message);
+        });
+      }
       // Validation du formulaire
       const handleSubmit = event => {
         event.preventDefault();
         try {
           if (checksignup()) {
-            history.replace('/account');
             signup(usersignup);
           }
-          
-        } catch ({ response }) {
-          
-        }
+        } catch ({ response }) {}
       }
 
       // Redirection si non connecté
@@ -61,6 +72,8 @@ const Signup = ({ history }) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email(*)</label>
+                        {(msgError &&(<span className='msgError'>{ msgError }</span>))}
+                        
                         <input type="email" className="form-control" id="email" name="email" placeholder="Email"  onChange={ handleChange } required/>
                     </div>
                     <div className="form-group">
@@ -80,7 +93,8 @@ const Signup = ({ history }) => {
                           <p>(*) : Champs obligatoires</p>
                         </div>
                     </div>
-                    <div className="text-center form-group pt-4"> 
+                    <div className="text-center form-group pt-4">
+                    {(msgError &&(<p><span className='msgError'>{ msgError }</span></p>))}
                         <button type="submit" aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>
                     </div>
                 </form>

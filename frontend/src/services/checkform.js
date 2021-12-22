@@ -24,7 +24,7 @@ export function checksignup() {
           inputLastName.style.backgroundColor = "#FF7878";
           suiviCheckForm = "error";
       } else {
-          inputLastName.style.backgroundColor = "#8CFF87";
+          inputLastName.style.backgroundColor = "#FFFFFF";
       }
 
     // Test du prénom
@@ -37,7 +37,7 @@ export function checksignup() {
             inputFirstName.style.backgroundColor = "#FF7878";
             suiviCheckForm = "error";
       } else {
-        inputFirstName.style.backgroundColor = "#8CFF87";
+        inputFirstName.style.backgroundColor = "#FFFFFF";
       }
 
     // Test de l'email
@@ -46,10 +46,10 @@ export function checksignup() {
         regexBlank.test(inputEmail.value) === true ||
         inputEmail.value === ""  
         ) {
-          inputEmail.style.backgroundColor = "#FF7878";
+          inputEmail.style.backgroundColor = "#FFFFFF";
           suiviCheckForm = "error";
       } else {
-        inputEmail.style.backgroundColor = "#8CFF87";
+        inputEmail.style.backgroundColor = "#FFFFFF";
       }
 
     // Test du mot de passe
@@ -62,11 +62,9 @@ export function checksignup() {
         inputPasswordMatch.match( /[A-Z]/g) && 
         inputPasswordMatch.match(/[a-z]/g) && 
         inputPasswordMatch.match( /[^a-zA-Z\d]/g)) {
-            inputPassword.style.backgroundColor = "#8CFF87";
-            document.getElementById("msg_mdp_signup").innerHTML= " : Mot de passe fort"; 
+            inputPassword.style.backgroundColor = "#FFFFFF";
         } else {
             inputPassword.style.backgroundColor = "#FF7878";
-            document.getElementById("msg_mdp_signup").innerHTML= " : Mot de passe faible"; 
             suiviCheckForm = "error";
         }
         
@@ -94,7 +92,7 @@ export function checkChangePassword() {
         inputPasswordMatch.match( /[A-Z]/g) && 
         inputPasswordMatch.match(/[a-z]/g) && 
         inputPasswordMatch.match( /[^a-zA-Z\d]/g)) {
-            inputPassword.style.backgroundColor = "#8CFF87";
+            inputPassword.style.backgroundColor = "#FFFFFF";
             return true;
         } else {
             alert("Veuillez respecter les conditions d'éligibilité du mot de passe");
@@ -120,7 +118,7 @@ export function checkChangeEmail() {
           alert("Controlez le format de l'adresse mail");
           return false
       } else {
-        inputEmail.style.backgroundColor = "#8CFF87";
+        inputEmail.style.backgroundColor = "#FFFFFF";
         return true
       }
 }

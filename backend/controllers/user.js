@@ -74,7 +74,7 @@ exports.signup = (req, res, next) => {
                 
                 // Si email deja utilisé, erreur 401
                 if (results.length > 0) {
-                    res.status(401).json({
+                    return res.status(401).json({
                         message: 'Email déjà existante'
                     });
                     

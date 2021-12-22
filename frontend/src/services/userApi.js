@@ -81,19 +81,6 @@ export function logout() {
     window.location.reload(); 
 }
 
-
-// SIGNUP
-
-export function signup(credentials) {
-
-    return axios
-        .post("http://localhost:8080/api/user/signup", credentials)
-        .then(response => {
-            
-        })
-        .catch(error => console.log({ error }))
-}
-
 // DELETE ACCOUNT
 
 export function deleteAccout(userid, userpass) {
