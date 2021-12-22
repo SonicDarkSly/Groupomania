@@ -263,80 +263,103 @@ exports.adminDeleteUser = (req, res, next) => {
     const userIdToUpdate = req.body.userIdToUpdate;
 
 
-    db.query(`SELECT * FROM users WHERE id='${userIdToUpdate}'`, (err, resultss, rows) => {
+    db.query(`SELECT * FROM users WHERE id='${userIdToUpdate}'`, (err, resultAvatar, rows) => {
 
         // Récupération de l'avatar
-        const oldavatar = resultss[0].avatarurl;
-        const oldfilename = oldavatar.split(`/${userIdToUpdate}/`)[1];
+        const useravatar = resultAvatar[0].avatarurl;
+        const avatarfilename = useravatar.split(`/${userIdToUpdate}/`)[1];
 
         // suppression de l'avatar
-        if (oldfilename !== 'avatar_user_default.jpeg') {
-            fs.unlink(`images/avatars/${userIdToUpdate}/${oldfilename}`, (err => {
+        if (avatarfilename !== 'avatar_user_default.jpeg') {
+            fs.unlink(`images/avatars/${userIdToUpdate}/${avatarfilename}`, (err => {
                 if (err) {
                     console.log(err);
                     return false
                 } else {
-                    console.log('Avatar du nuser '+userIdToUpdate+' supprimer avec succes');
+                    console.log('Avatar du user '+userIdToUpdate+' supprimer avec succes');
                     return true
                 }
             }));
         }
 
-        // Suppression des posts de l'user
-        db.query(`DELETE FROM posts WHERE userid='${userIdToUpdate}'`, (err, results, rows)  => {
+        // Recherche des images postées par le user
+        db.query(`SELECT * FROM posts WHERE userid='${userIdToUpdate}'`, (err, resultImgPost, rows) => {
 
-            // Si erreur retourne 400
-            if (err) {
-                console.log(err)
-                return res.status(400).json(err)
-            } else {
+            // boucle map
+            resultImgPost.map(data => {
+                const userImgPost = data.imageurl;
+                const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
+
+                // suppression des images
+                if (data.imageurl !== 'avatar_user_default.jpeg') {
+                    fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
+                        if (err) {
+                            console.log(err);
+                            return false
+                        } else {
+                            console.log('Images de posts du user '+data.userid+' supprimer avec succes');
+                            return true
+                        }
+                    }));
+                }
+            });
+            
+            // Suppression des posts de l'user
+            db.query(`DELETE FROM posts WHERE userid='${userIdToUpdate}'`, (err, results, rows)  => {
+
+                // Si erreur retourne 400
+                if (err) {
+                    console.log(err)
+                    return res.status(400).json(err)
+                } else {
                 
-                // Si valide retourne 200
-                console.log('Les posts du user '+userIdToUpdate+' ont bien été supprimés')
+                    // Si valide retourne 200
+                    console.log('Les posts du user '+userIdToUpdate+' ont bien été supprimés')
 
-                // Suppression des likes / dislikes de l'user
-                db.query(`DELETE FROM opinions WHERE userid='${userIdToUpdate}'`, (err)  => {
+                    // Suppression des likes / dislikes de l'user
+                    db.query(`DELETE FROM opinions WHERE userid='${userIdToUpdate}'`, (err)  => {
+                        
+                        // Si erreur retourne 400
+                        if (err) {
+                            console.log(err)
+                            return res.status(400).json(err)
+                        } else {
+                    
+                            // Si valide retourne 200
+                            console.log('Les likes / dislikes du user '+userIdToUpdate+' ont bien été supprimés')
+                    
+                            // Suppression des commentaires de l'user
+                            db.query(`DELETE FROM comments WHERE userid='${userIdToUpdate}'`, (err)  => {
 
-                    // Si erreur retourne 400
-                    if (err) {
-                        console.log(err)
-                        return res.status(400).json(err)
-                    } else {
+                                // Si erreur retourne 400
+                                if (err) {
+                                    console.log(err)
+                                    return res.status(400).json(err)
+                                } else {
                     
-                        // Si valide retourne 200
-                        console.log('Les likes / dislikes du user '+userIdToUpdate+' ont bien été supprimés')
-                    
-                        // Suppression des commentaires de l'user
-                        db.query(`DELETE FROM comments WHERE userid='${userIdToUpdate}'`, (err)  => {
-
-                            // Si erreur retourne 400
-                            if (err) {
-                                console.log(err)
-                                return res.status(400).json(err)
-                            } else {
-                    
-                                // Si valide retourne 200
-                                console.log('Les commentaires '+userIdToUpdate+' ont bien été supprimés')
+                                    // Si valide retourne 200
+                                    console.log('Les commentaires '+userIdToUpdate+' ont bien été supprimés')
                                 
-                                // Suppression des commentaires de l'user
-                                db.query(`DELETE FROM users WHERE id='${userIdToUpdate}'`, (err)  => {
+                                    // Suppression des commentaires de l'user
+                                    db.query(`DELETE FROM users WHERE id='${userIdToUpdate}'`, (err)  => {
 
-                                    // Si erreur retourne 400
-                                    if (err) {
-                                        console.log(err)
-                                        return res.status(400).json(err)
-                                    } else {
+                                        // Si erreur retourne 400
+                                        if (err) {
+                                            console.log(err)
+                                            return res.status(400).json(err)
+                                        } else {
                                         
-                                        // Si valide retourne 200
-                                        console.log('Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes')
-                                        return res.status(200).json({ message: 'Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes' })
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
+                                            // Si valide retourne 200
+                                            console.log('Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes')
+                                            return res.status(200).json({ message: 'Compte '+userIdToUpdate+' et toutes ses données supprimés avec succes' })
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
         })
     })
 }

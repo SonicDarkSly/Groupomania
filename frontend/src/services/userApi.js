@@ -89,7 +89,7 @@ export function signup(credentials) {
     return axios
         .post("http://localhost:8080/api/user/signup", credentials)
         .then(response => {
-            console.log(response);
+            
         })
         .catch(error => console.log({ error }))
 }

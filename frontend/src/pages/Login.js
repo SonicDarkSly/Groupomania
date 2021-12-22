@@ -43,11 +43,10 @@ function login(credentials) {
             const userInfo = [
                 response.data.passCrypted
             ];
-            console.log(response.data.message);
             addItem('storageToken', response.data.token);
             addItem('storageUserInfo', JSON.stringify(userInfo)); 
 
-            return true
+            window.location.reload();
         })
         .catch(error => {
           if (error.response.status === 404) {
@@ -57,6 +56,7 @@ function login(credentials) {
             setMsgError('Mot de pass incorrect');
           }
         })
+
 }
 
 

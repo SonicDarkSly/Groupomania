@@ -311,6 +311,9 @@ const Posts = () => {
         deletePosts
     ]);
 
+    useEffect(() => {
+
+    }, [addPosts]);
     return (
         <div className="posts">
             <Header />
