@@ -54,7 +54,8 @@ const Users = () => {
                             <h1>#{ data.id } { data.firstname } { data.lastname }</h1>
                         </div>
                         { (data.accesslevel >= 3 &&(<p><span className="title-p">Niveau : </span><span>Administrateur</span></p>)) }
-                        { (data.accesslevel <= 1 &&(<p><span className="title-p">Niveau : </span><span>Utilisateur</span></p>)) }
+                        { (data.accesslevel === 2 &&(<p><span className="title-p">Niveau : </span><span>Modérateur</span></p>)) }
+                        { (data.accesslevel === 1 &&(<p><span className="title-p">Niveau : </span><span>Utilisateur</span></p>)) }
                         <p><span className="title-p">Description : </span><span>{ data.description }</span></p>
                     </div>
                 </div>

@@ -258,7 +258,11 @@ const Account = () => {
                         <span className="title-p">Mon niveau :</span>
                         <span> Administrateur</span>
                     </p>))}
-                    {(level <= 1 &&(<p>
+                    {(level === 2 &&(<p>
+                        <span className="title-p">Mon niveau :</span>
+                        <span> Modérateur</span>
+                    </p>))}
+                    {(level === 1 &&(<p>
                         <span className="title-p">Mon niveau :</span>
                         <span> Utilisateur</span>
                     </p>))}

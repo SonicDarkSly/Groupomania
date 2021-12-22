@@ -41,6 +41,7 @@ const Posts = () => {
     const [deletePosts, setDeletePosts] = useState(false);
 
     //commentaires
+    const [hideAddComments, setHideAddComments] = useState(true);
     const [addComments, setAddComments] = useState(false);
     const [updateComments, setUpdateComments] = useState(false);
     const [deleteComments, setDeleteComments] = useState(false);
@@ -125,6 +126,18 @@ const Posts = () => {
     useEffect(() => {
     }, [showChangePost]);
 
+        // Affichage du textarea en cas de modif du post
+        const changestateComment = (id) => {
+            if (hideAddComments === true) {
+                setHideAddComments(false);
+            } else {
+                setHideAddComments(true);
+            }
+        }
+        useEffect(() => {
+        }, [showChangePost]);
+
+
     // UPDATE POST
     function axiosUpdatePost(credentials) {
 
@@ -208,7 +221,6 @@ const Posts = () => {
     };
 
 
-
     // -------------- Commentaires --------------
 
 
@@ -252,6 +264,7 @@ const Posts = () => {
                 axiosCreateComment(credentialsCommentaire);
                 setAddComments(true);
                 setMsgAlertComment();
+                setHideAddComments(false);
             }
     }
 
@@ -357,8 +370,6 @@ const Posts = () => {
                 <div id={'post_'+data.id} className="addContainerCorpsNewPost">
 
                     {/* Controle si une image existe et affiche */}
-
-                    
                     {((data.imageurl) && (showChangePost !== data.id) &&(
                         <span className="content-img"><img className="image-posts" src={data.imageurl} alt={'image du post'+data.id} /></span>
                     ))}
@@ -377,7 +388,6 @@ const Posts = () => {
                                     <label htmlFor={ 'updateContentPost_'+data.id }>Post(*) : </label>{(msgAlertUpdatePost && (<span className='msgAlert'>{ msgAlertUpdatePost }</span>))}
                                     <textarea id={ 'updateContentPost_'+data.id } onChange={ (e) => setcontentPost(e.target.value) } defaultValue={ data.content } required></textarea>
                                 </span>
-                            
                             </p>
                             <p>
                                 <span>
@@ -401,12 +411,13 @@ const Posts = () => {
 
                     {/* Section add commentaires post */} 
                     <div className="commentairePost" id={'commentairePost_'+data.id}>
+                    {(hideAddComments === true && (
+                        <>
                         <hr/>
-                        <div className="sectionCommentaires">
-                            
+                        <div className="sectionCommentaires" id={'addComment'+data.id}>
                                 <input type="hidden" id={ 'postidComment_'+data.id } value={ data.id } />
                                 <p className="Commentaire-title">
-                                    Ajouter un commentaire pour le post #{data.id}
+                                    <span>Ajouter un commentaire pour le post #{data.id}</span>
                                 </p>
                                 <p>
                                     <label htmlFor={ 'addCommentairePost_'+data.id }>Commentaire(*) : </label><span>{(msgAlertComment && (<span className='msgAlert'>{ msgAlertComment }</span>))}</span>
@@ -416,6 +427,8 @@ const Posts = () => {
                                     <button className="btnSubmit" onClick={ () => handleSubmitCommentaires(data.id) }>Envoyer</button>
                                 </p>
                         </div>
+                        </>
+                    ))}
 
                     {/* Section liste commentaires post */} 
                     {(data.countcomment > 0 && (
@@ -423,7 +436,14 @@ const Posts = () => {
                         <hr/>
                         <div className="sectionCommentaires">
                                 <p className="Commentaire-title">
-                                    Commentaires pour le post #{data.id}
+                                    <span>Commentaires pour le post #{data.id}</span>
+                                    {(hideAddComments === false && (
+                                    <span>
+                                        <a role='button' href={'#commentairePost_'+data.id} aria-label="Ancre ajouter un commentaire"> 
+                                            <button className='btn-add-comment' aria-label="Ajouter un commentaire" onClick={changestateComment}>Ecrire commentaire</button>
+                                        </a>
+                                    </span>
+                                    ))}
                                 </p>
 
                                 {/* afficher les commentaires si >0 */} 
