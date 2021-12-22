@@ -40,7 +40,7 @@ const Users = () => {
     return (
         <div className="users">
             <Header />
-
+            <h1>Profil</h1>
             {/* map le state avec les info du user */}
             {      
             <> 
@@ -51,7 +51,7 @@ const Users = () => {
                     </div>
                     <div className="div-infouser">
                         <div className="name">
-                            <h1>#{ data.id } { data.firstname } { data.lastname }</h1>
+                            <h2>#{ data.id } { data.firstname } { data.lastname }</h2>
                         </div>
                         { (data.accesslevel >= 3 &&(<p><span className="title-p">Niveau : </span><span>Administrateur</span></p>)) }
                         { (data.accesslevel === 2 &&(<p><span className="title-p">Niveau : </span><span>Modérateur</span></p>)) }
