@@ -233,7 +233,7 @@ exports.deleteUser = (req, res, next) => {
                 if (oldfilename !== 'avatar_user_default.jpeg') {
                     fs.unlink(`images/avatars/${req.body.userId}/${oldfilename}`, (err => {
                         if (err) {
-                            console.log(err);
+                            console.log('Aucun fichier trouvé');
                             return false
                         } else {
                             console.log("Avatar supprimer avec succes");
@@ -251,7 +251,6 @@ exports.deleteUser = (req, res, next) => {
                         const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
         
                         // suppression des images
-                        if (data.imageurl !== 'avatar_user_default.jpeg') {
                             fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
                                 if (err) {
                                     console.log(err);
@@ -261,7 +260,6 @@ exports.deleteUser = (req, res, next) => {
                                     return true
                                 }
                             }));
-                        }
                     });
                 })
 

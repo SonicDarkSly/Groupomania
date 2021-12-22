@@ -291,17 +291,15 @@ exports.adminDeleteUser = (req, res, next) => {
                 const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
 
                 // suppression des images
-                if (data.imageurl !== 'avatar_user_default.jpeg') {
                     fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
                         if (err) {
-                            console.log(err);
+                            console.log('Aucun fichier trouvé');
                             return false
                         } else {
                             console.log('Images de posts du user '+data.userid+' supprimer avec succes');
                             return true
                         }
                     }));
-                }
             });
             
             // Suppression des posts de l'user
