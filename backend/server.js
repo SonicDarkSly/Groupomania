@@ -19,8 +19,8 @@ const normalizePort = val => {
     return false
 }
 
-// Si aucun port n'est fourni on écoutera sur le port 3000
-const port = normalizePort(process.env.PORT || '3000')
+// Si aucun port n'est fourni on écoutera sur le port 8080
+const port = normalizePort(process.env.PORT || '8080')
 app.set('port', port)
 
 

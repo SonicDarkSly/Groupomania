@@ -280,7 +280,20 @@ exports.adminDeleteUser = (req, res, next) => {
                     return true
                 }
             }));
+
+            // Dossier du user contenant son avatar
+            const dirAvatar = `images/avatars/${userIdToUpdate}`;
+                            
+            // Suppression du dossier user
+            fs.rm(dirAvatar, { recursive: true, force: true }, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log(`${dirAvatar} supprimer avec succes`);
+            });
         }
+
+
 
         // Recherche des images postées par le user
         db.query(`SELECT * FROM posts WHERE userid='${userIdToUpdate}'`, (err, resultImgPost, rows) => {
@@ -301,6 +314,17 @@ exports.adminDeleteUser = (req, res, next) => {
                         }
                     }));
             });
+            // dossier du user contenant les images des post
+            const dir = `images/posts/${userIdToUpdate}`;
+                            
+            // Suppression du dossier user
+            fs.rm(dir, { recursive: true, force: true }, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log(`${dir} supprimer avec succes`);
+            });
+
             
             // Suppression des posts de l'user
             db.query(`DELETE FROM posts WHERE userid='${userIdToUpdate}'`, (err, results, rows)  => {

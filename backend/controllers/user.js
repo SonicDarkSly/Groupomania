@@ -240,6 +240,17 @@ exports.deleteUser = (req, res, next) => {
                             return true
                         }
                     }));
+
+                    // Dossier du user contenant son avatar
+                    const dirAvatar = `images/avatars/${req.body.userId}`;
+                            
+                    // Suppression du dossier user
+                    fs.rm(dirAvatar, { recursive: true, force: true }, (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log(`${dirAvatar} supprimer avec succes`);
+                    });
                 }
 
                 // Recherche des images postées par le user
@@ -251,15 +262,27 @@ exports.deleteUser = (req, res, next) => {
                         const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
         
                         // suppression des images
-                            fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
-                                if (err) {
-                                    console.log(err);
-                                    return false
-                                } else {
-                                    console.log('Images de posts du user '+data.userid+' supprimer avec succes');
-                                    return true
-                                }
-                            }));
+                        fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
+                            if (err) {
+                                console.log(err);
+                                return false
+                            } else {
+                                console.log('Images de posts du user '+data.userid+' supprimer avec succes');
+                                return true
+                            }
+                        }));
+
+                        // Suppression du dossier user
+                        // dossier du user contenant les images des post
+                        const dir = `images/posts/${data.userid}`;
+                            
+                        // Suppression du dossier user
+                        fs.rm(dir, { recursive: true, force: true }, (err) => {
+                            if (err) {
+                                throw err;
+                            }
+                            console.log(`${dir} supprimer avec succes`);
+                        });
                     });
                 })
 
