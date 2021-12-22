@@ -1,4 +1,4 @@
 node_modules
 .env
-images/avatars/
-images/posts/
+backend/images/avatars/
+backend/images/posts/
