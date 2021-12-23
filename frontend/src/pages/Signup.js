@@ -29,24 +29,21 @@ const Signup = ({ history }) => {
 
       // SIGNUP
       function signup(credentials) {
-        return axios
+        axios
         .post("http://localhost:8080/api/user/signup", credentials)
-        .then(response => {
-          setMsgError(response);
-          history.replace('/account');
+        .then(res => {
+          setMsgError(res.data.message);
+          history.replace('/login');
         })
         .catch((err) => {
           setMsgError(err.response.data.message);
         });
       }
       // Validation du formulaire
-      const handleSubmit = event => {
-        event.preventDefault();
-        try {
+      const handleSubmit = () => {
           if (checksignup()) {
             signup(usersignup);
           }
-        } catch ({ response }) {}
       }
 
       // Redirection si non connecté
@@ -61,7 +58,7 @@ const Signup = ({ history }) => {
             <Header />
             <h1>Enregistrement</h1>
             <div className="container container-signup">
-                <form onSubmit={handleSubmit}>
+                
                     <div className="form-group">
                         <label htmlFor="lastname">Nom(*)</label>
                         <input type="text" className="form-control" id="lastname" name="lastname" placeholder="Nom" onChange={ handleChange } required/>
@@ -95,9 +92,9 @@ const Signup = ({ history }) => {
                     </div>
                     <div className="text-center form-group pt-4">
                     {(msgError &&(<p><span className='msgError'>{ msgError }</span></p>))}
-                        <button type="submit" aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>
+                        <button onClick={handleSubmit} aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>
                     </div>
-                </form>
+                
             </div>
         </div>
     );

@@ -46,7 +46,7 @@ export function checksignup() {
         regexBlank.test(inputEmail.value) === true ||
         inputEmail.value === ""  
         ) {
-          inputEmail.style.backgroundColor = "#FFFFFF";
+          inputEmail.style.backgroundColor = "#FF7878";
           suiviCheckForm = "error";
       } else {
         inputEmail.style.backgroundColor = "#FFFFFF";
