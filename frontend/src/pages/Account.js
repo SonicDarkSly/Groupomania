@@ -63,6 +63,7 @@ const Account = () => {
         if (reqPassDelete !== "") {
             if (reqPassDelete) {
                 deleteAccout(userId, reqPassDelete);
+                logout();
                 setisAuthenticated(false);
             }
         }
