@@ -102,9 +102,7 @@ export function deleteAccout(userid, userpass) {
         config
     )
       .then(function (response) {
-        removeItem('storageToken');
-        removeItem('storageUserInfo');
-        
+        logout();
       })
       .catch(function (error) {
         console.log(error);

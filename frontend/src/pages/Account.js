@@ -60,10 +60,11 @@ const Account = () => {
     // Fonction delete
     const handleDelete = () => {
         const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
-        if (reqPassDelete) {
-            deleteAccout(userId, reqPassDelete);
-            logout();
-            setisAuthenticated(false);
+        if (reqPassDelete !== "") {
+            if (reqPassDelete) {
+                deleteAccout(userId, reqPassDelete);
+                setisAuthenticated(false);
+            }
         }
     }
 

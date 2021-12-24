@@ -29,7 +29,7 @@ exports.signup = (req, res, next) => {
             .then(cryptedPassword => {
 
                 // Ajout à la BDD
-                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', NULL)`, (err, results, fields) => {
+                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', 'Aucune description')`, (err, results, fields) => {
 
                 // Si erreur, retourne 400
                 if (err) {
@@ -87,7 +87,7 @@ exports.signup = (req, res, next) => {
 
 
                         // Ajout à la BDD - id, lastname, firstname, password, email, accesslevel, url avatar, description
-                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', NULL)`, (err, results, fields) => {
+                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', 'Aucune description')`, (err, results, fields) => {
 
                             // Si erreur, retourne 400
                             if (err) {
@@ -186,24 +186,7 @@ exports.login = (req, res, next) => {
 
 // ---------- DELETE PROFILE ----------
 
-/**
- * Remove directory recursively
- * @param {string} dir_path
- * @see https://stackoverflow.com/a/42505874/3027390
- */
- function rimraf(dir_path) {
-    if (fs.existsSync(dir_path)) {
-        fs.readdirSync(dir_path).forEach(function(entry) {
-            var entry_path = path.join(dir_path, entry);
-            if (fs.lstatSync(entry_path).isDirectory()) {
-                rimraf(entry_path);
-            } else {
-                fs.unlinkSync(entry_path);
-            }
-        });
-        fs.rmdirSync(dir_path);
-    }
-}
+
 
 exports.deleteUser = (req, res, next) => {
 
@@ -271,18 +254,18 @@ exports.deleteUser = (req, res, next) => {
                                 return true
                             }
                         }));
+                    });
 
-                        // Suppression du dossier user
-                        // dossier du user contenant les images des post
-                        const dir = `images/posts/${data.userid}`;
+                    // Suppression du dossier user
+                    // dossier du user contenant les images des post
+                    const dirPost = `images/posts/${req.body.userId}`;
                             
-                        // Suppression du dossier user
-                        fs.rm(dir, { recursive: true, force: true }, (err) => {
-                            if (err) {
-                                throw err;
-                            }
-                            console.log(`${dir} supprimer avec succes`);
-                        });
+                    // Suppression du dossier user
+                    fs.rm(dirPost, { recursive: true, force: true }, (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log(`${dirPost} supprimer avec succes`);
                     });
                 })
 
