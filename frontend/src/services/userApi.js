@@ -81,34 +81,6 @@ export function logout() {
     window.location.reload(); 
 }
 
-// DELETE ACCOUNT
-
-export function deleteAccout(userid, userpass) {
-
-    const token = getItem('storageToken');
-
-    let config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization' : 'Bearer '+token
-        }
-    }
-
-    axios.post('http://localhost:8080/api/user/delete', 
-        {
-            userId: userid,
-            userPass: userpass
-        }, 
-        config
-    )
-      .then(function (response) {
-        logout();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-}
-
 // UPDATE EMAIL
 
 export function axiosupdateUserEmail(credentials) {

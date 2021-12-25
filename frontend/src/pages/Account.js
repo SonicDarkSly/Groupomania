@@ -1,10 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getItem } from "../services/Localestorage";
 import Header from '../components/Header';
-import Auth from '../context/Auth';
 import { 
-    deleteAccout, 
     logout, 
     axiosupdateUserEmail, 
     axiosupdateUserDescription,
@@ -39,7 +37,6 @@ const Account = () => {
     }
 
     // State data
-    const { setisAuthenticated } = useContext(Auth);
     const [profilImage, setProfilImage] = useState();
     const [oldPassword, setoldPassword] = useState();
     const [newPassword, setNewPassword] = useState();
@@ -48,6 +45,7 @@ const Account = () => {
 
     // State message d'erreur
     const [msgError, setMsgError] = useState()
+    const [msgErrorDelete, setMsgErrorDelete] = useState()
     const [msgErrorUpdateAvatar, setMsgErrorUpdateAvatar] = useState()
 
     // State affichage section update
@@ -57,14 +55,38 @@ const Account = () => {
     // State useEffect
     const [updateAvatarActu, setUpdateAvatarActu] = useState()
 
+
+
+    // DELETE ACCOUNT
+    function deleteAccout(userid, userpass) {
+        const token = getItem('storageToken')
+        let config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer '+token
+        }
+    }
+    axios.post('http://localhost:8080/api/user/delete', 
+        {
+            userId: userid,
+            userPass: userpass
+        }, 
+        config
+    )
+    .then(function (response) {
+        logout();
+    })
+    .catch(function (error) {
+        setMsgErrorDelete(error.response.data.message);
+    })
+}
     // Fonction delete
     const handleDelete = () => {
         const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
         if (reqPassDelete !== "") {
             if (reqPassDelete) {
                 deleteAccout(userId, reqPassDelete);
-                logout();
-                setisAuthenticated(false);
+
             }
         }
     }
@@ -211,7 +233,7 @@ const Account = () => {
 
        useEffect(() => {
            getUserInfo();
-        }, [msgError, showUpdateMail, showUpdateDescription, updateAvatarActu, msgErrorUpdateAvatar]);
+        }, [msgError, showUpdateMail, showUpdateDescription, updateAvatarActu, msgErrorUpdateAvatar, msgErrorDelete]);
 
         
     return (
@@ -321,7 +343,7 @@ const Account = () => {
                         <p><label htmlFor="oldPassword">Mot de passe actuel : </label><input type="password" id="oldPassword" name="oldPassword"  placeholder="Mot de passe actuel"  onChange={ (e) => setoldPassword(e.target.value) } required /></p>
                         <p><label htmlFor="newPassword">Nouveau mot de passe : </label><input type="password" id="newPassword" name="newPassword"  minLength="8" placeholder="Nouveau mot de passe" onChange={ (e) => setNewPassword(e.target.value) } required /></p>
                         <div className="div-error">
-                            { (msgError &&(<span className='error'>Erreur : { msgError }</span>)) }
+                            { (msgError && (<span className='error'>Erreur : { msgError }</span>)) }
                         </div>
                         <button type="submit">Modifier le mot de passe</button>
                     </div>
@@ -345,9 +367,10 @@ const Account = () => {
                 </div>
                 <div className="content-section">
                     <p className="warning">ATTENTION : La suppression du compte est définitive, toutes les données relative au compte seront supprimées. Aucun retour en arrière ne sera possible.</p>
+                    { (msgErrorDelete && (<p className='msgAlert-delete'>{ msgErrorDelete }</p> )) }
                     <p className="p-content-delete-account"><button onClick={ handleDelete }>Supprimer mon compte</button></p>
                 </div>
-            </div>
+            </div> 
         </div>
     );
 };

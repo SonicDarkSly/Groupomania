@@ -232,100 +232,97 @@ exports.deleteUser = (req, res, next) => {
                         if (err) {
                             throw err;
                         }
-                        console.log(`${dirAvatar} supprimer avec succes`);
+                        console.log(`dossier ${dirAvatar} supprimer avec succes`);
                     });
                 }
 
                 // Recherche des images postées par le user
                 db.query(`SELECT * FROM posts WHERE userid='${req.body.userId}'`, (err, resultImgPost, rows) => {
 
-                    // boucle map
-                    resultImgPost.map(data => {
-                        const userImgPost = data.imageurl;
-                        const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
+                    if (err) {
+                        console.log(err)
+                        return res.status(400).json({ message: err })
+                    } else {
+
+                        // boucle map
+                        resultImgPost.map(data => {
+                            const userImgPost = data.imageurl;
+                            const imgPostfilename = userImgPost.split(`/${data.userid}/`)[1];
         
-                        // suppression des images
-                        fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
-                            if (err) {
-                                console.log(err);
-                                return false
-                            } else {
-                                console.log('Images de posts du user '+data.userid+' supprimer avec succes');
-                                return true
-                            }
-                        }));
-                    });
+                            // suppression des images
+                            fs.unlink(`images/posts/${data.userid}/${imgPostfilename}`, (err => {
+                                if (err) {
+                                    console.log(err);
+                                    return false
+                                } else {
+                                    console.log('images de posts du user '+data.userid+' supprimer avec succes');
+                                    return true
+                                }
+                            }));
+                        });
 
-                    // Suppression du dossier user
-                    // dossier du user contenant les images des post
-                    const dirPost = `images/posts/${req.body.userId}`;
+                        // Suppression du dossier user
+                        // dossier du user contenant les images des post
+                        const dirPost = `images/posts/${req.body.userId}`;
                             
-                    // Suppression du dossier user
-                    fs.rm(dirPost, { recursive: true, force: true }, (err) => {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log(`${dirPost} supprimer avec succes`);
-                    });
-                })
+                        // Suppression du dossier user
+                        fs.rm(dirPost, { recursive: true, force: true }, (err) => {
+                            if (err) {
+                                throw err;
+                            }
+                            console.log(`dossier ${dirPost} supprimer avec succes`);
+                        });
 
-                // Suppression des posts de l'user
-                db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (err, results, rows)  => {
+                        // Suppression des posts de l'user
+                        db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (errPost, results, rows)  => {
 
-                    // Si erreur retourne 400
-                    if (err) {
-                      console.log(err)
-                      return res.status(400).json(err)
-                    } else {
+                            // Si erreur retourne 400
+                            if (errPost) {
+                                console.log(errPost)
+                                return res.status(400).json({ message: errPost })
+                            } else {
+                                console.log('Les posts ont bien été supprimés')
 
-                        // Si valide retourne 200
-                        console.log('Les posts ont bien été supprimés')
-                        return res.status(200).json({ message: 'Les posts ont bien été supprimés' })
-                    }
-                })
+                                // Suppression des likes / dislikes de l'user
+                                db.query(`DELETE FROM opinions WHERE userid='${req.body.userId}'`, (errOpinion)  => {
+                                    
+                                    // Si erreur retourne 400
+                                    if (errOpinion) {
+                                        console.log(errOpinion)
+                                        return res.status(400).json({ message: errOpinion })
+                                    } else {
+                                        console.log('Les likes / dislikes ont bien été supprimés')
 
-                // Suppression des likes / dislikes de l'user
-                db.query(`DELETE FROM opinions WHERE userid='${req.body.userId}'`, (errPost)  => {
+                                        // Suppression des commentaires de l'user
+                                        db.query(`DELETE FROM comments WHERE userid='${req.body.userId}'`, (errComment)  => {
 
-                    // Si erreur retourne 400
-                    if (errPost) {
-                      console.log(errPost)
-                      return res.status(400).json(errPost)
-                    } else {
+                                            // Si erreur retourne 400
+                                            if (errComment) {
+                                                console.log(errComment)
+                                                return res.status(400).json({ message: errComment })
+                                            } else {
+                                                console.log('Les commentaires ont bien été supprimés')
 
-                        // Si valide retourne 200
-                        console.log('Les likes / dislikes ont bien été supprimés')
-                        return res.status(200).json({ message: 'Les likes / dislikes ont bien été supprimés' })
-                    }
-                })
+                                                // Suppression du user
+                                                db.query(`DELETE FROM users WHERE id='${req.body.userId}'`, (errUser, results, rows)  => {
 
-                // Suppression des commentaires de l'user
-                db.query(`DELETE FROM comments WHERE userid='${req.body.userId}'`, (errPost)  => {
+                                                    // Si erreur retourne 400
+                                                    if (errUser) {
+                                                        console.log(errUser)
+                                                        return res.status(400).json({ message: errUser })
+                                                    } else {
 
-                    // Si erreur retourne 400
-                    if (errPost) {
-                        console.log(errPost)
-                        return res.status(400).json(errPost)
-                    } else {
-                
-                        // Si valide retourne 200
-                        console.log('Les commentaires ont bien été supprimés')
-                        return res.status(200).json({ message: 'Les commentaires ont bien été supprimés' })
-                    }
-                })
-
-                // Suppression du user
-                db.query(`DELETE FROM users WHERE id='${req.body.userId}'`, (err, results, rows)  => {
-
-                    // Si erreur retourne 400
-                    if (err) {
-                      console.log(err)
-                      return res.status(400).json(err)
-                    } else {
-
-                        // Si valide retourne 200
-                        console.log('Le compte a bien été supprimé !')
-                        return res.status(200).json({ message: 'Le compte a bien été supprimé !' })
+                                                        // Si valide retourne 200
+                                                        console.log('Le compte a bien été supprimé !')
+                                                        return res.status(200).json({ message: 'Le compte a bien été supprimé !' })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
             }

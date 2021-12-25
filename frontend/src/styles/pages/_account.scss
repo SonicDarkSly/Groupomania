@@ -28,6 +28,18 @@
         font-size: 12px;
     }
 
+    .msgAlert-delete {
+        background-color: rgb(184, 1, 1);
+        color: $color5;
+        border-radius: 10px;
+        padding: 5px;
+        margin: auto;
+        margin-bottom: 15px;
+        max-width: 200px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
     h1 {
         text-align: center;
         border-bottom: 1px solid black;
