@@ -69,12 +69,13 @@
             border: 1px solid black;
             border-bottom: 0px;
             border-radius: 20px 20px 0 0; //hg hd bd bg
-            background-color: $color3;
+            background-color: $color7;
             color: $color5;
             max-width: 320px;
             text-align: center;
             margin: 0 auto;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 18px;
         }
 
         .adminAccess-corps {
@@ -107,11 +108,12 @@
             margin: auto;
             margin-top: 15px;
             text-align: center;
+            background-color: $color5;
     
             .error {
-                color: red;
+                color: rgb(202, 5, 5);
                 font-size: 14px;
-                font-weight: 600;
+                font-weight: 500;
             }
         }
     }

@@ -515,6 +515,9 @@ const Admin = () => {
                             </div>
                         </div>
                         ))}
+
+                        {/* Si le niveau de l'administrateur est >= 4, affiche la suppression de compte */}
+                        {(adminLevel >= 4 &&(
                         <div className="container-update">
                             <div className="label-update">
                                 <label>Suppression du compte : </label>
@@ -524,6 +527,7 @@ const Admin = () => {
                                 { (msgUpdateDelete &&(<span className='msgUpdate'>{ msgUpdateDelete }</span>)) }
                             </div>
                         </div>
+                        ))}
                     </div>
                 </div>
                 )}

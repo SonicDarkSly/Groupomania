@@ -273,7 +273,7 @@ exports.adminDeleteUser = (req, res, next) => {
         if (avatarfilename !== 'avatar_user_default.jpeg') {
             fs.unlink(`images/avatars/${userIdToUpdate}/${avatarfilename}`, (err => {
                 if (err) {
-                    console.log(err);
+                    console.log('Aucun fichier trouvé');
                     return false
                 } else {
                     console.log('Avatar du user '+userIdToUpdate+' supprimer avec succes');
@@ -289,7 +289,7 @@ exports.adminDeleteUser = (req, res, next) => {
                 if (err) {
                     throw err;
                 }
-                console.log(`${dirAvatar} supprimer avec succes`);
+                console.log(`dossier ${dirAvatar} supprimer avec succes`);
             });
         }
 
@@ -309,11 +309,12 @@ exports.adminDeleteUser = (req, res, next) => {
                             console.log('Aucun fichier trouvé');
                             return false
                         } else {
-                            console.log('Images de posts du user '+data.userid+' supprimer avec succes');
+                            console.log('images de posts du user '+data.userid+' supprimer avec succes');
                             return true
                         }
                     }));
             });
+            
             // dossier du user contenant les images des post
             const dir = `images/posts/${userIdToUpdate}`;
                             
@@ -322,7 +323,7 @@ exports.adminDeleteUser = (req, res, next) => {
                 if (err) {
                     throw err;
                 }
-                console.log(`${dir} supprimer avec succes`);
+                console.log(`dossier ${dir} supprimer avec succes`);
             });
 
             
