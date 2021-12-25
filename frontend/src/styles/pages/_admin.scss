@@ -71,21 +71,26 @@
             border-radius: 20px 20px 0 0; //hg hd bd bg
             background-color: $color3;
             color: $color5;
-            width: 260px;
+            max-width: 320px;
             text-align: center;
             margin: 0 auto;
             font-weight: 700;
         }
 
         .adminAccess-corps {
-            padding: 10px;
+            padding: 15px;
             margin: 0 auto;
             border: 1px solid black;
             border-radius: 0 0 20px 20px; //hg hd bd bg
             background-color: $color6;
             color: black;
-            width: 260px;
+            max-width: 320px;
             text-align: center;
+            font-weight: 700;
+
+            input {
+                width: 100%;
+            }
 
             .btn-admin-access {
                 color: rgb(39, 39, 39);
@@ -97,7 +102,7 @@
         }
 
         .div-error {
-            max-width: 270px;
+            max-width: 280px;
             border-radius: 20px;
             margin: auto;
             margin-top: 15px;

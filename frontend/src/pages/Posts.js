@@ -109,7 +109,10 @@ const Posts = () => {
         try {
             const credentialsPost = [userId, contentPost, imagePost, userName, userAvatar];
             axiosCreatePost(credentialsPost);
-            
+            setcontentPost('');
+            setimagePost('');
+            document.getElementById('contentPost').value = '';
+            document.getElementById('imgPost').value = '';
         } catch ({ response }) {}
     }
 
@@ -331,6 +334,7 @@ const Posts = () => {
         <div className="posts">
             <Header />
             <h1>Fil des posts</h1>
+
             {/* Section pour publier un post */}  
             <div className="container-principale">
                 <div className="addEnteteNewPost">Publier un nouveau post</div>
