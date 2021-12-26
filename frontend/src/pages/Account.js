@@ -61,32 +61,32 @@ const Account = () => {
     function deleteAccout(userid, userpass) {
         const token = getItem('storageToken')
         let config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization' : 'Bearer '+token
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
         }
-    }
-    axios.post('http://localhost:8080/api/user/delete', 
+
+        axios.post('http://localhost:8080/api/user/delete', 
         {
             userId: userid,
             userPass: userpass
         }, 
         config
-    )
-    .then(function (response) {
-        logout();
-    })
-    .catch(function (error) {
-        setMsgErrorDelete(error.response.data.message);
-    })
-}
+        )
+        .then(function (response) {
+            logout();
+        })
+        .catch(function (error) {
+            setMsgErrorDelete(error.response.data.message);
+        })
+    }
     // Fonction delete
     const handleDelete = () => {
         const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
         if (reqPassDelete !== "") {
             if (reqPassDelete) {
                 deleteAccout(userId, reqPassDelete);
-
             }
         }
     }
