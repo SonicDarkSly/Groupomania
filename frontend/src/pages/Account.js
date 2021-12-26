@@ -310,8 +310,8 @@ const Account = () => {
                     </div>
                 </div>
             </div>
-
-
+            
+            {/* div update avatar */}
             <div className="updateAvatar show" id="updateAvatar">
                 <div className="title-section">
                     <h2>Modification de l'avatar</h2>
@@ -332,8 +332,8 @@ const Account = () => {
                     </p>
                 </div>
             </div>
-         
-
+            
+            {/* div update password */}
             <div className="updatePassword  show" id="updatePassword">
             <div className="title-section">
                     <h2>Modification du mot de passe</h2>
@@ -362,6 +362,7 @@ const Account = () => {
                 </div>
             </div>
 
+            {/* div delete account */}
             <div className="deleteAccount show" id="deleteAccount">
                 <div className="title-section">
                     <h2>Suppression du compte</h2>
