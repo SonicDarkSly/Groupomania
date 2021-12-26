@@ -21,7 +21,14 @@ function App() {
   const [isAuthenticated, setisAuthenticated] = useState(hasAuthenticated());
 
   return (
+    
+    /* Utilisation de Provider pour passer en props la validité du token contenu dans le state (connexion du user) */
     <Auth.Provider value={{isAuthenticated, setisAuthenticated}}>
+
+      { 
+      /* AuthenticatedRoute = Si user non connecté, renvoi vers page login */ 
+      /* Route = Page accessible sans login */ 
+      }
 
       <BrowserRouter>
          <Switch>
