@@ -404,7 +404,8 @@ const Posts = () => {
     const handleDeleteComment = (commentId, postId) => {
         const credentialsDeleteComment = [userId, commentId, postId];
         axiosDeleteComment(credentialsDeleteComment);
-        setDeleteComments(true)
+        setDeleteComments(true);
+        setHideAddComments(true);
     }
 
     // Affichage du textarea en cas de modif du commentaire
