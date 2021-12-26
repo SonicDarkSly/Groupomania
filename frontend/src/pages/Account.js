@@ -57,6 +57,16 @@ const Account = () => {
 
 
 
+    // Fonction delete
+    const handleDelete = () => {
+        const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
+        if (reqPassDelete !== "") {
+            if (reqPassDelete) {
+                deleteAccout(userId, reqPassDelete);
+            }
+        }
+    }
+
     // DELETE ACCOUNT
     function deleteAccout(userid, userpass) {
         const token = getItem('storageToken')
@@ -80,15 +90,6 @@ const Account = () => {
         .catch(function (error) {
             setMsgErrorDelete(error.response.data.message);
         })
-    }
-    // Fonction delete
-    const handleDelete = () => {
-        const reqPassDelete = prompt("Veuillez tapez votre mot de passe", "");
-        if (reqPassDelete !== "") {
-            if (reqPassDelete) {
-                deleteAccout(userId, reqPassDelete);
-            }
-        }
     }
 
     // Fonction update avatar
