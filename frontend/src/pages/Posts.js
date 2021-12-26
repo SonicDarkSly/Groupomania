@@ -118,11 +118,12 @@ const Posts = () => {
 
     // Affichage du textarea en cas de modif du post
     const [showChangePost, setShowChangePost] = useState();
-    const changestatePost = (id) => {
+    const changestatePost = (id, content) => {
         if (showChangePost === id) {
             setShowChangePost();
         } else {
             setShowChangePost(id);
+            setcontentPost(content);
         }
     }
     useEffect(() => {
@@ -136,8 +137,6 @@ const Posts = () => {
                 setHideAddComments(true);
             }
         }
-        useEffect(() => {
-        }, [showChangePost]);
 
 
     // UPDATE POST
@@ -240,7 +239,6 @@ const Posts = () => {
             setAddPosts(false);
             setUpdatePosts(false);
             setDeletePosts(false);
-            
         })
         .catch((err) => {
             console.log(err);
@@ -420,7 +418,7 @@ const Posts = () => {
                             <p>
                                 <span>
                                     <label htmlFor={ 'updateImgPost'+data.id }>Image : </label>
-                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setimagePost(e.target.files[0]) } /><span className='info-format-image'>(*.png, *.jpg, *.jpeg, *.gif)</span>
+                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif"  onClick={ () => setcontentPost(data.content) } onChange={ (e) => setimagePost(e.target.files[0]) } /><span className='info-format-image'>(*.png, *.jpg, *.jpeg, *.gif)</span>
                                 </span>
                             </p>
                             <p>
@@ -521,7 +519,7 @@ const Posts = () => {
                         <span>
                             {/* Affiche le boutton de modification si le userid du post correspont à l'userid de l'user connecter ou si le level est >= 2 */}  
                             { ((userId === data.userid) || (datalevel >= 2)) && (
-                                <a role='button' href={'#ancreupdatePost_'+data.id} aria-label="Ancre bouton modification"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
+                                <a role='button' href={'#ancreupdatePost_'+data.id} aria-label="Ancre bouton modification"><button className="btn-link" aria-label="Bouton Modification" onClick={ () => changestatePost(data.id, data.content) }><i className="fas fa-cog" aria-hidden="true" title="Modification"></i></button></a>
                             ) }   
                         </span>
                     </div>
