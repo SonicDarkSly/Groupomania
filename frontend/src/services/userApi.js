@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 export function hasAuthenticated() {
     const token = getItem('storageToken');
     const tokenIsValidn = token ? tokenIsValid(token) : false;
-    if(false === tokenIsValidn) {
+    if(tokenIsValidn === false) {
         removeItem('storageToken');
         removeItem('storageUserInfo');
     }
