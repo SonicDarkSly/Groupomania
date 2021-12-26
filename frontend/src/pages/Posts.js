@@ -418,7 +418,7 @@ const Posts = () => {
                             <p>
                                 <span>
                                     <label htmlFor={ 'updateImgPost'+data.id }>Image : </label>
-                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif"  onClick={ () => setcontentPost(data.content) } onChange={ (e) => setimagePost(e.target.files[0]) } /><span className='info-format-image'>(*.png, *.jpg, *.jpeg, *.gif)</span>
+                                    <input type="file" id={ 'updateImgPost'+data.id } name="updateImgPost" accept=".png, .jpg, .jpeg, .gif" onChange={ (e) => setimagePost(e.target.files[0]) } /><span className='info-format-image'>(*.png, *.jpg, *.jpeg, *.gif)</span>
                                 </span>
                             </p>
                             <p>
