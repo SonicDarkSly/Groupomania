@@ -5,7 +5,6 @@ import Header from '../components/Header';
 import { axiosCreateComment, axiosDeleteComment, axiosUpdateComment } from '../services/commentApi';
 import { axiosOpinionPost } from '../services/opinionApi';
 import { getUserId } from '../services/userApi';
-import { axiosDeletePost } from '../services/postApi';
 import { getItem } from "../services/Localestorage";
 
 const token = getItem('storageToken');
@@ -183,6 +182,31 @@ const Posts = () => {
                 setShowChangePost();
             }
         }
+    }
+
+    // DELETE POST API
+    function axiosDeletePost(credentials) {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/posts/deleteonepost', 
+        {
+            userId: credentials[0],
+            postId: credentials[1],
+            postUserId: credentials[2]
+        }, 
+        config
+        )
+        .then(response => {
+            setcontentPost('');
+            setimagePost('');
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     // Delete d'un post du user connecté
