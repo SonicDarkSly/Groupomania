@@ -61,6 +61,28 @@ const Posts = () => {
     // -------------- Posts --------------
 
 
+    // Requete des posts dans la BDD
+    const getPosts = () => {
+        const token = getItem('storageToken');
+        axios
+        .get('http://localhost:8080/api/posts/viewallpost', {
+            headers: { 
+                Authorization: `Bearer ${token}`, 
+                'Content-Type': 'application/json' 
+            },
+        })
+        .then((datas) => {
+            setPosts(datas.data);
+            setOpinions(false);
+            setAddPosts(false);
+            setUpdatePosts(false);
+            setDeletePosts(false);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    };
+
     // ADD POST
     function axiosCreatePost(credentials) {
 
@@ -200,7 +222,7 @@ const Posts = () => {
         });
     }
 
-    // Delete d'un post
+    // Submit Delete d'un post
     const handleDeletePost = (postId, postUserId) => {
         const credentialsDeletePost = [userId, postId, postUserId];
         axiosDeletePost(credentialsDeletePost);
@@ -208,7 +230,10 @@ const Posts = () => {
         document.getElementById('contentPost').value = '';
     }
   
-    // Like/Dislike d'un post
+
+    // -------------- Like / Dislike --------------
+
+
     function axiosOpinionPost(credentials) {
         let config = {
             headers: {
@@ -231,28 +256,6 @@ const Posts = () => {
         axiosOpinionPost(credentialsOpinion);
         setOpinions(true); 
     }
-
-    // Requete des posts dans la BDD
-    const getPosts = () => {
-        const token = getItem('storageToken');
-        axios
-        .get('http://localhost:8080/api/posts/viewallpost', {
-            headers: { 
-                Authorization: `Bearer ${token}`, 
-                'Content-Type': 'application/json' 
-            },
-        })
-        .then((datas) => {
-            setPosts(datas.data);
-            setOpinions(false);
-            setAddPosts(false);
-            setUpdatePosts(false);
-            setDeletePosts(false);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    };
 
 
     // -------------- Commentaires --------------
@@ -288,8 +291,6 @@ const Posts = () => {
             console.log(err);
         });
     }
-
-
 
     // ADD COMMENTAIRE
     function axiosCreateComment(credentials) {
@@ -360,7 +361,8 @@ const Posts = () => {
         )
         .catch(error => console.log({ error }))
     }
-    // Update du commemtaire
+
+    // Submit Update du commemtaire
     const handleUpdateComment = (commentId, commentUserId) => {
         if (document.getElementById('updateCommentairePost_'+commentId).value === '') {
             setMsgAlertUpdateComment('Veuillez indiquer un texte');
@@ -400,7 +402,8 @@ const Posts = () => {
         )
         .catch(error => console.log({ error }))
     }
-    // Delete du commentaire 
+
+    // Submit Delete du commentaire 
     const handleDeleteComment = (commentId, postId) => {
         const credentialsDeleteComment = [userId, commentId, postId];
         axiosDeleteComment(credentialsDeleteComment);
@@ -418,8 +421,15 @@ const Posts = () => {
             setMsgAlertUpdateComment();
         }
     }
+
     useEffect(() => {
-    }, [showChangeComment, msgAlertUpdatePost, msgAlertComment, msgAlertUpdateComment, addPosts, showChangePost]);
+    }, [showChangeComment, 
+        msgAlertUpdatePost, 
+        msgAlertComment, 
+        msgAlertUpdateComment, 
+        addPosts, 
+        showChangePost
+    ]);
 
     // Prise d'effet lors du chargement de la page
     useEffect(() => {
