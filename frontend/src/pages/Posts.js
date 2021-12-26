@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
-
-import { axiosCreateComment, axiosDeleteComment, axiosUpdateComment } from '../services/commentApi';
-import { axiosOpinionPost } from '../services/opinionApi';
 import { getUserId } from '../services/userApi';
 import { getItem } from "../services/Localestorage";
 
 const token = getItem('storageToken');
 
 const Posts = () => {
-
 
     // State msg info erreur
     const [msgAlertUpdatePost, setMsgAlertUpdatePost] = useState();
@@ -62,8 +58,8 @@ const Posts = () => {
     }
 
 
-
     // -------------- Posts --------------
+
 
     // ADD POST
     function axiosCreatePost(credentials) {
@@ -115,7 +111,6 @@ const Posts = () => {
         } catch ({ response }) {}
     }
 
-
     // Affichage du textarea en cas de modif du post
     const [showChangePost, setShowChangePost] = useState();
     const changestatePost = (id, content) => {
@@ -126,18 +121,15 @@ const Posts = () => {
             setcontentPost(content);
         }
     }
-    useEffect(() => {
-    }, [showChangePost]);
 
-        // Affichage du textarea en cas de modif du post
-        const changestateComment = (id) => {
-            if (hideAddComments === true) {
-                setHideAddComments(false);
-            } else {
-                setHideAddComments(true);
-            }
+    // Affichage du textarea en cas de modif du post
+    const changestateComment = (id) => {
+        if (hideAddComments === true) {
+            setHideAddComments(false);
+        } else {
+            setHideAddComments(true);
         }
-
+    }
 
     // UPDATE POST
     function axiosUpdatePost(credentials) {
@@ -208,7 +200,7 @@ const Posts = () => {
         });
     }
 
-    // Delete d'un post du user connecté
+    // Delete d'un post
     const handleDeletePost = (postId, postUserId) => {
         const credentialsDeletePost = [userId, postId, postUserId];
         axiosDeletePost(credentialsDeletePost);
@@ -217,6 +209,23 @@ const Posts = () => {
     }
   
     // Like/Dislike d'un post
+    function axiosOpinionPost(credentials) {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/opinions/opinionpost', 
+        {
+            opinion: credentials[0],
+            userId: credentials[1],
+            postId: credentials[2]
+        }, 
+        config
+        )
+        .catch(error => console.log({ error }))
+    }
     const handleOpinionPost = (opinion, userId, postId) => {
         const credentialsOpinion = [opinion, userId, postId];
         axiosOpinionPost(credentialsOpinion);
@@ -280,6 +289,45 @@ const Posts = () => {
         });
     }
 
+
+
+    // ADD COMMENTAIRE
+    function axiosCreateComment(credentials) {
+        // formatage de la date
+        let date = new Date();
+        let jour = date.getDate();
+            if (jour < 10){jour = '0'+jour;}
+        let mois = date.getMonth()+1;
+            if (mois < 10){mois = '0'+mois;}
+        let annee = date.getFullYear();
+        let heures = date.getHours();
+            if (heures < 10){heures = '0'+heures;}
+        let minutes = date.getMinutes();
+            if (minutes < 10){minutes = '0'+minutes;}
+        let formatDate = jour+"/"+mois+"/"+annee+" - "+heures+"h"+minutes;
+
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+
+        axios.post('http://localhost:8080/api/comments/addcomment', 
+        {
+            userId: credentials[0],
+            postId: credentials[1],
+            userName: credentials[2],
+            dateComment: formatDate,
+            contentComment: credentials[3]
+        }, 
+        config
+        )
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     // Submit du formulaire pour envois du commentaire
     const handleSubmitCommentaires = (postId) => {
             const credentialsCommentaire = [userId, postId, userName, commentairePost];
@@ -293,6 +341,25 @@ const Posts = () => {
             }
     }
 
+    // UPDATE COMMENTS
+    function axiosUpdateComment(credentials) {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/comments/updatecomment', 
+        {
+            userId: credentials[0],
+            commentId: credentials[1],
+            commentContent: credentials[2],
+            postId: credentials[3]
+        }, 
+        config
+        )
+        .catch(error => console.log({ error }))
+    }
     // Update du commemtaire
     const handleUpdateComment = (commentId, commentUserId) => {
         if (document.getElementById('updateCommentairePost_'+commentId).value === '') {
@@ -315,6 +382,24 @@ const Posts = () => {
         }
     }
 
+    // DELETE COMMENTS
+    function axiosDeleteComment(credentials) {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/comments/deletecomment', 
+        {
+            userId: credentials[0],
+            commentId: credentials[1],
+            postId: credentials[2]
+        }, 
+        config
+        )
+        .catch(error => console.log({ error }))
+    }
     // Delete du commentaire 
     const handleDeleteComment = (commentId, postId) => {
         const credentialsDeleteComment = [userId, commentId, postId];
@@ -333,7 +418,7 @@ const Posts = () => {
         }
     }
     useEffect(() => {
-    }, [showChangeComment, msgAlertUpdatePost, msgAlertComment, msgAlertUpdateComment]);
+    }, [showChangeComment, msgAlertUpdatePost, msgAlertComment, msgAlertUpdateComment, addPosts, showChangePost]);
 
     // Prise d'effet lors du chargement de la page
     useEffect(() => {
@@ -349,9 +434,8 @@ const Posts = () => {
         deletePosts
     ]);
 
-    useEffect(() => {
 
-    }, [addPosts]);
+
     return (
         <div className="posts">
             <Header />
@@ -472,17 +556,14 @@ const Posts = () => {
                                     ))}
                                 </p>
 
-                                {/* afficher les commentaires si >0 */} 
-
+                                {/* Boucle map du state posts */}  
                                 {comments.map(dataComment => 
                                 (dataComment.postid === data.id) && (
-                                
                                 <div className="container-commentaire" key={dataComment.id}>
                                     <div className="entete-commentaire">
                                         Par <span className='com-name'>{dataComment.username}</span> le {dataComment.date} 
                                         {((dataComment.userid === userId) || (datalevel >= 2)) && (<button className='btn-update-com' aria-label="Modifier le commentaire" onClick={() => changestate(dataComment.id) }><i className="far fa-edit" aria-hidden="true" title="Modifier le commentaire"></i></button>)}
                                         {((msgAlertUpdateComment) && (showChangeComment) === dataComment.id && (<p className='msgAlert'>{msgAlertUpdateComment}</p>))}
-                                        
                                     </div>
                                     <div className="corps-commentaire">
                                     {(showChangeComment !== dataComment.id && (<span>{ dataComment.content }</span>))}
@@ -503,6 +584,8 @@ const Posts = () => {
 
                     </div>
                 </div>
+
+                {/* Section footer post */} 
                 <div className="footer-post">
                     <div className="footer-post-d">
                         <span>

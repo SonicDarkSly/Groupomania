@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getItem } from "../services/Localestorage";
 import Header from '../components/Header';
-import { 
-    logout, 
-    axiosupdateUserEmail, 
-    axiosupdateUserDescription,
-    getUserId
-} from '../services/userApi';
+import { logout, getUserId } from '../services/userApi';
 import { checkChangePassword, checkChangeEmail } from '../services/checkform';
 
 const Account = () => {
@@ -187,6 +182,23 @@ const Account = () => {
           console.log(response);
         }
     }
+    function axiosupdateUserEmail(credentials) {
+        const token = getItem('storageToken');
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/user/update/email', 
+        {
+            userId: credentials[0],
+            newEmail: credentials[1]
+        }, 
+        config
+        )
+        .catch(error => console.log({ error }))
+    }
 
     // Fonction update description
     const showDescription = () => {
@@ -206,9 +218,26 @@ const Account = () => {
           console.log(response);
         }
     }
+    
+    function axiosupdateUserDescription(credentials) {
+        const token = getItem('storageToken');
+        let config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer '+token
+            }
+        }
+        axios.post('http://localhost:8080/api/user/update/description', 
+        {
+            userId: credentials[0],
+            newDescription: credentials[1]
+        }, 
+        config
+        )
+        .catch(error => console.log({ error }))
+    }
 
     // Fonctions affichage sections
-
        let divs = ["updateAvatar", "updatePassword", "deleteAccount"];
        let visibleId = null;
 

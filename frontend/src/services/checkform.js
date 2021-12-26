@@ -1,6 +1,7 @@
+// Check du form signup
 export function checksignup() {
+    
     // check regex
-  
     let regexNumber = /[0-9]/;
     let regexEmail = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let regexSymbols = /[§!@#$%^&*().?":{}|<>]/;
@@ -53,7 +54,6 @@ export function checksignup() {
       }
 
     // Test du mot de passe
-
     if (inputPassword.value === "" ) {
         inputPassword.style.backgroundColor = "#FF7878";
         suiviCheckForm = "error";
@@ -80,7 +80,7 @@ export function checksignup() {
     }
 }
 
-
+// Check du form update password
 export function checkChangePassword() {
     let inputPassword = document.getElementById("newPassword");
     let inputPasswordMatch = document.getElementById("newPassword").value;
@@ -102,13 +102,11 @@ export function checkChangePassword() {
     }
 }
 
+// Check du form update email
 export function checkChangeEmail() {
-
     let regexEmail = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let regexBlank = /^[\s]/;
-
     let inputEmail = document.getElementById("newEmail");
-
     if (
         regexEmail.test(inputEmail.value) === false ||
         regexBlank.test(inputEmail.value) === true ||
@@ -123,10 +121,10 @@ export function checkChangeEmail() {
       }
 }
 
+// Check du form update password by admin
 export function checkChangePasswordAdmin() {
     let inputPassword = document.getElementById("updatePassword");
     let inputPasswordMatch = document.getElementById("updatePassword").value;
-
     if (inputPasswordMatch.match( /[0-9]/g) && 
         inputPasswordMatch.match( /[A-Z]/g) && 
         inputPasswordMatch.match(/[a-z]/g) && 

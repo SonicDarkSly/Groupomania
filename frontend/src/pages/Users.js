@@ -10,15 +10,12 @@ const Users = () => {
 
     // Récupère les info du user selon adresse url (id)
     const getUser = () => {
-
         const token = getItem('storageToken');
-
         const urlId = window.location.search;
         const urlSearchId = new URLSearchParams(urlId);
         const userid = urlSearchId.get("userId");
 
-         axios
-        .get('http://localhost:8080/api/user/profile/'+userid, {
+         axios.get('http://localhost:8080/api/user/profile/'+userid, {
             headers: { 
                 Authorization: `Bearer ${token}`, 
                 'Content-Type': 'application/json' 

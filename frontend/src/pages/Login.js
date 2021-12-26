@@ -35,8 +35,8 @@ const Login = ({ history }) => {
     }
   }
   
-function login(credentials) {
-
+  // Function login
+  function login(credentials) {
     return axios
         .post("http://localhost:8080/api/user/login", credentials)
         .then((response) => {
@@ -56,9 +56,7 @@ function login(credentials) {
             setMsgError('Mot de pass incorrect');
           }
         })
-
-}
-
+  }
 
   // Redirection si non connecté
   useEffect(() => {
@@ -67,8 +65,6 @@ function login(credentials) {
     }
   }, [history, isAuthenticated, msgError]);
   
-
-
   return (
     <div className="login">
       <Header />
