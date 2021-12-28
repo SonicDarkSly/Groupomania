@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 require('dotenv').config();
 
+// Connection base de données avec info contenu dans fichier .env
 const sql = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -9,10 +10,13 @@ const sql = mysql.createConnection({
 });
 
 sql.connect(function (err) {
+
+    // si erreur
     if (err) {
         return console.error('error: ' + err.message);
     }
 
+    // si connection ok
     console.log('Connected success !');
 });
 
