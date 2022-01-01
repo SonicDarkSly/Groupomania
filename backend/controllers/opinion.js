@@ -24,13 +24,15 @@ exports.opinionPost = (req, res, next) => {
   }
 
     // Controle si une opinion pour un post de la part d'un user existe dans la BDD
-    db.query(`SELECT COUNT (*) AS opnCount FROM opinions WHERE postid=${postId} AND userid=${userId}`, (err, result, rows) => {
+    const sqlControle = `SELECT COUNT (*) AS opnCount FROM opinions WHERE postid=${postId} AND userid=${userId}`;
+    db.query(sqlControle, (err, result) => {
 
       // Si existe pas
       if (result[0].opnCount === 0) {
 
         // ajout à la BDD
-        db.query(`INSERT INTO opinions VALUES (NULL, '${postId}', "${userId}", '${like}', '${dislike}')`, (err, results, fields) => {
+        const sqlAdd = `INSERT INTO opinions VALUES (NULL, '${postId}', "${userId}", '${like}', '${dislike}')`;
+        db.query(sqlAdd, (err) => {
           
           // Si erreur, retourne 400
           if (err) {
@@ -39,10 +41,12 @@ exports.opinionPost = (req, res, next) => {
           }else{
 
             // Comptage nombre likes 
-            db.query(`SELECT COUNT (likes) AS countLikes FROM opinions WHERE postid=${postId} AND likes='1' AND dislikes='0'`, (err, result, rows) => {
+            const sqlCount = `SELECT COUNT (likes) AS countLikes FROM opinions WHERE postid=${postId} AND likes='1' AND dislikes='0'`;
+            db.query(sqlCount, (err, result) => {
 
               // Mise à jour de la table posts avec le nombre de likes pour le post
-              db.query(`UPDATE posts SET countlike=${result[0].countLikes} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+              const sqlUpdate = `UPDATE posts SET countlike=${result[0].countLikes} WHERE id=${postId}`;
+              db.query(sqlUpdate, (errcount)  => {
                 if (errcount) {
                   console.log(errcount);
                   return res.status(400).json(errcount);
@@ -53,10 +57,12 @@ exports.opinionPost = (req, res, next) => {
             })
 
             // Comptage nombre dislikes 
-            db.query(`SELECT COUNT (dislikes) AS countDislikes FROM opinions WHERE postid=${postId} AND likes='0' AND dislikes='1'`, (err, result, rows) => {
+            const sqlCountDislike = `SELECT COUNT (dislikes) AS countDislikes FROM opinions WHERE postid=${postId} AND likes='0' AND dislikes='1'`;
+            db.query(sqlCountDislike, (err, result) => {
 
               // Mise à jour de la table posts avec le nombre de dislikes pour le post
-              db.query(`UPDATE posts SET countdislike=${result[0].countDislikes} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+              const sqlUpdateCountPost = `UPDATE posts SET countdislike=${result[0].countDislikes} WHERE id=${postId}`;
+              db.query(sqlUpdateCountPost, (errcount)  => {
                 if (errcount) {
                   console.log(errcount);
                   return res.status(400).json(errcount);
@@ -77,7 +83,8 @@ exports.opinionPost = (req, res, next) => {
       // Si existe
       } else {
 
-        db.query(`SELECT * FROM opinions WHERE postid=${postId} AND userid=${userId}`, (errslct, resultslct, rowsslct) => {
+        const sqlOpinions = `SELECT * FROM opinions WHERE postid=${postId} AND userid=${userId}`;
+        db.query(sqlOpinions, (errslct, resultslct) => {
 
           // Si l'opinion est identique à celui deja enregistré, annule et remet à zero
           if ((resultslct[0].likes === 1) && (like === 1)) {
@@ -88,7 +95,8 @@ exports.opinionPost = (req, res, next) => {
           }
 
           // Mise à jour
-          db.query(`UPDATE opinions SET likes="${like}", dislikes='${dislike}' WHERE postid=${postId} AND userid=${userId}`, (err, results, rows)  => {
+          const sqlUpdateOpinion = `UPDATE opinions SET likes="${like}", dislikes='${dislike}' WHERE postid=${postId} AND userid=${userId}`;
+          db.query(sqlUpdateOpinion, (err)  => {
             
             // Si erreur, retourne 400
             if (err) {
@@ -97,10 +105,12 @@ exports.opinionPost = (req, res, next) => {
             }else{
 
               // Comptage nombre likes 
-              db.query(`SELECT COUNT (likes) AS countLikes FROM opinions WHERE postid=${postId} AND likes='1' AND dislikes='0'`, (err, result, rows) => {
+              const sqlCountLike = `SELECT COUNT (likes) AS countLikes FROM opinions WHERE postid=${postId} AND likes='1' AND dislikes='0'`;
+              db.query(sqlCountLike, (err, result) => {
 
                 // Mise à jour de la table posts avec le nombre de likes pour le post
-                db.query(`UPDATE posts SET countlike=${result[0].countLikes} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+                const sqlUpdatePost = `UPDATE posts SET countlike=${result[0].countLikes} WHERE id=${postId}`;
+                db.query(sqlUpdatePost, (errcount)  => {
                   if (errcount) {
                     console.log(errcount);
                     return res.status(400).json(errcount);
@@ -111,10 +121,12 @@ exports.opinionPost = (req, res, next) => {
               })
 
               // Comptage nombre dislikes 
-              db.query(`SELECT COUNT (dislikes) AS countDislikes FROM opinions WHERE postid=${postId} AND likes='0' AND dislikes='1'`, (err, result, rows) => {
+              const sqlCountDislike = `SELECT COUNT (dislikes) AS countDislikes FROM opinions WHERE postid=${postId} AND likes='0' AND dislikes='1'`;
+              db.query(sqlCountDislike, (err, result) => {
 
                 // Mise à jour de la table posts avec le nombre de dislikes pour le post
-                db.query(`UPDATE posts SET countdislike=${result[0].countDislikes} WHERE id=${postId}`, (errcount, resultscount, rowscount)  => {
+                const sqlUpdateCount = `UPDATE posts SET countdislike=${result[0].countDislikes} WHERE id=${postId}`;
+                db.query(sqlUpdateCount, (errcount)  => {
                   if (errcount) {
                     console.log(errcount);
                     return res.status(400).json(errcount);

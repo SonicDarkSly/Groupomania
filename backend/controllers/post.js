@@ -24,7 +24,8 @@ exports.creatPost = (req, res, next) => {
       };
 
     // Ajout à la BDD
-    db.query(`INSERT INTO posts VALUES (NULL, '${newPost.userId}', "${newPost.contentPost.replace(/\"/g, "\"\"")}", '${newPost.imgPost}', '${newPost.date}', '0', '0', '${newPost.userName}', '${newPost.userAvatar}','0')`, (err, results, fields) => {
+    const sql = `INSERT INTO posts VALUES (NULL, '${newPost.userId}', "${newPost.contentPost.replace(/\"/g, "\"\"")}", '${newPost.imgPost}', '${newPost.date}', '0', '0', '${newPost.userName}', '${newPost.userAvatar}','0', NOW())`;
+    db.query(sql, (err) => {
 
         // Si erreur, retourne 400
         if (err) {
@@ -48,7 +49,8 @@ exports.creatPost = (req, res, next) => {
 exports.deleteonePost = (req, res, next) => {
 
   // Recherche l'url de l'image du post
-  db.query(`SELECT * FROM posts WHERE id='${req.body.postId}'`, (err, result, rows) => {
+  const sqlDeleteImage = `SELECT * FROM posts WHERE id='${req.body.postId}'`;
+  db.query(sqlDeleteImage, (err, result) => {
 
     // Si une image existe, on la supprime du dossier
     if (result[0].imageurl != '') {
@@ -67,7 +69,8 @@ exports.deleteonePost = (req, res, next) => {
     }
 
     // Suppression du posts selectionné et correspandant à l'user
-    db.query(`DELETE FROM posts WHERE id='${req.body.postId}' AND userid='${req.body.postUserId}'`, (errPost)  => {
+    const sqlDeletePost = `DELETE FROM posts WHERE id='${req.body.postId}' AND userid='${req.body.postUserId}'`;
+    db.query(sqlDeletePost, (errPost)  => {
 
       // Si erreur retourne 400
       if (errPost) {
@@ -84,7 +87,8 @@ exports.deleteonePost = (req, res, next) => {
     })
 
     // Suppression des likes / dislikes dans la table opinions
-    db.query(`DELETE FROM opinions WHERE postid='${req.body.postId}'`, (errPost)  => {
+    const sqlDeleteOpinion = `DELETE FROM opinions WHERE postid='${req.body.postId}'`;
+    db.query(sqlDeleteOpinion, (errPost)  => {
 
       // Si erreur retourne 400
       if (errPost) {
@@ -99,7 +103,8 @@ exports.deleteonePost = (req, res, next) => {
     })
 
     // Suppression des commentaires dans la table comments
-    db.query(`DELETE FROM comments WHERE postid='${req.body.postId}'`, (errPost)  => {
+    const sqlDeleteComment = `DELETE FROM comments WHERE postid='${req.body.postId}'`;
+    db.query(sqlDeleteComment, (errPost)  => {
 
       // Si erreur retourne 400
       if (errPost) {
@@ -113,25 +118,27 @@ exports.deleteonePost = (req, res, next) => {
       }
     })
   })
-
-  
 }
+
 
 // ---------- READ POST ----------
 
+
 //Affichage des messages postés 
 exports.getMessages = (req, res, next) => {
-    db.query('SELECT * FROM posts  ORDER BY date DESC', (error, result, field) => {
-      if (error) {
-        return res.status(400).json({ error })
-      }
-        res.status(200).json(result)
-    })
+  const sql = 'SELECT * FROM posts ORDER BY createdate DESC';
+  db.query(sql, (error, result) => {
+    if (error) {
+      return res.status(400).json({ error })
+    }
+    res.status(200).json(result)
+  })
 }
 
 //Affichage des derniers messages postés
 exports.getLastPosts= (req, res, next) => {
-  db.query('SELECT * FROM posts ORDER BY date DESC LIMIT 1', (error, result, field) => {
+  const sql = 'SELECT * FROM posts ORDER BY date DESC LIMIT 1';
+  db.query(sql, (error, result) => {
     if (error) {
       return res.status(400).json({ error })
     }
@@ -145,7 +152,8 @@ exports.getLastPosts= (req, res, next) => {
  exports.updatePost = (req, res, next) => {
 
   // Recherche dans la BDD selon postId
-  db.query(`SELECT * FROM posts WHERE id=${req.body.postId}`, (err, result, rows) => {
+  const sqlPost = `SELECT * FROM posts WHERE id=${req.body.postId}`;
+  db.query(sqlPost, (err, result) => {
 
       // Ancien fichier image du post
       const oldimg = result[0].imageurl
@@ -178,7 +186,8 @@ exports.getLastPosts= (req, res, next) => {
       }
 
       // Mise à jour dans la BDD 
-      db.query(`UPDATE posts SET content="${updatePost.contentPost.replace(/\"/g, "\"\"")}", imageurl='${updatePost.imgPost}' WHERE id=${updatePost.postId}`, (err, results, rows)  => {
+      const sqlUpdate = `UPDATE posts SET content="${updatePost.contentPost.replace(/\"/g, "\"\"")}", imageurl='${updatePost.imgPost}' WHERE id=${updatePost.postId}`;
+      db.query(sqlUpdate, (err)  => {
 
           // Si erreur retourne 400
           if (err) {

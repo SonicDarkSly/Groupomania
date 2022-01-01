@@ -21,7 +21,8 @@ exports.getAccessAdmin = (req, res, next) => {
     const adminPass = req.body.adminPass;
 
     // Recherche dans la BDD
-    db.query(`SELECT * FROM users WHERE id=${adminId}`, (err, results, rows) => {
+    const sql = `SELECT * FROM users WHERE id=${adminId}`;
+    db.query(sql, (err, results) => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -63,7 +64,8 @@ exports.getAccessAdmin = (req, res, next) => {
 exports.getUserAdmin = (req, res, next) => {
 
     // Recherche dans la BDD
-    db.query(`SELECT * FROM users`, (err, results, rows) => {
+    const sql = `SELECT * FROM users`;
+    db.query(sql, (err, results) => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -85,14 +87,14 @@ exports.getUserIdAdmin = (req, res, next) => {
     const userid = req.params.userid;
 
     // Recherche dans la BDD
-    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, results, rows) => {
+    const sql = `SELECT * FROM users WHERE id=${userid}`;
+    db.query(sql, (err, results) => {
                         
         // Si erreur retourne 400
         if (err) {
             console.log(err)
             return res.status(400).json(err)
         } else {
-
             // Envoi vers le frontend des info user
             res.status(200).json(results)
         }
@@ -109,7 +111,8 @@ exports.adminUpdateUserLevel = (req, res, next) => {
     const newLevel = req.body.updateLevel;
 
     // Mise à jour dans la BDD 
-    db.query(`UPDATE users SET accesslevel='${newLevel}' WHERE id=${userIdToUpdate}`, (err, results, rows)  => {
+    const sql = `UPDATE users SET accesslevel='${newLevel}' WHERE id=${userIdToUpdate}`;
+    db.query(sql, (err)  => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -143,7 +146,8 @@ exports.adminUpdateUserPassword = (req, res, next) => {
     .then(cryptedNewPassword => {
 
         // Si bon mot de passe, mise à jour dans la BDD 
-        db.query(`UPDATE users SET password='${cryptedNewPassword}' WHERE id=${userIdToUpdate}`, (err, results, rows)  => {
+        const sql = `UPDATE users SET password='${cryptedNewPassword}' WHERE id=${userIdToUpdate}`;
+        db.query(sql, (err)  => {
             
             // Si erreur retourne 400
             if (err) {
@@ -174,7 +178,8 @@ exports.adminUpdateUserEmail = (req, res, next) => {
     const newEmail = req.body.updateEmail;
 
     // Mise à jour dans la BDD 
-    db.query(`UPDATE users SET email='${newEmail}' WHERE id=${userIdToUpdate}`, (err, results, rows)  => {
+    const sql = `UPDATE users SET email='${newEmail}' WHERE id=${userIdToUpdate}`;
+    db.query(sql, (err)  => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -204,7 +209,8 @@ exports.adminUpdateUserLastName = (req, res, next) => {
     const newLastName = req.body.updateLastName;
 
     // Mise à jour dans la BDD 
-    db.query(`UPDATE users SET lastname='${newLastName}' WHERE id=${userIdToUpdate}`, (err, results, rows)  => {
+    const sql = `UPDATE users SET lastname='${newLastName}' WHERE id=${userIdToUpdate}`;
+    db.query(sql, (err)  => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -229,12 +235,13 @@ exports.adminUpdateUserLastName = (req, res, next) => {
 
 exports.adminUpdateUserFirstName = (req, res, next) => {
 
-    // Récupère l'userid et le nouveau lastname de la requete
+    // Récupère l'userid et le nouveau firstname de la requete
     const userIdToUpdate = req.body.userIdToUpdate;
     const newFirstName = req.body.updateFirstName;
 
     // Mise à jour dans la BDD 
-    db.query(`UPDATE users SET firstname='${newFirstName}' WHERE id=${userIdToUpdate}`, (err, results, rows)  => {
+    const sql = `UPDATE users SET firstname='${newFirstName}' WHERE id=${userIdToUpdate}`;
+    db.query(sql, (err)  => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -259,11 +266,11 @@ exports.adminUpdateUserFirstName = (req, res, next) => {
 
 exports.adminDeleteUser = (req, res, next) => {
 
-    // Récupère l'userid et le nouveau lastname de la requete
+    // Récupère l'userid
     const userIdToUpdate = req.body.userIdToUpdate;
 
-
-    db.query(`SELECT * FROM users WHERE id='${userIdToUpdate}'`, (err, resultAvatar, rows) => {
+    const sqlSearchUser = `SELECT * FROM users WHERE id='${userIdToUpdate}'`;
+    db.query(sqlSearchUser, (err, resultAvatar) => {
 
         // Récupération de l'avatar
         const useravatar = resultAvatar[0].avatarurl;
@@ -293,10 +300,9 @@ exports.adminDeleteUser = (req, res, next) => {
             });
         }
 
-
-
         // Recherche des images postées par le user
-        db.query(`SELECT * FROM posts WHERE userid='${userIdToUpdate}'`, (err, resultImgPost, rows) => {
+        const sqlSearchPost = `SELECT * FROM posts WHERE userid='${userIdToUpdate}'`;
+        db.query(sqlSearchPost, (err, resultImgPost) => {
 
             // boucle map
             resultImgPost.map(data => {
@@ -328,7 +334,8 @@ exports.adminDeleteUser = (req, res, next) => {
 
             
             // Suppression des posts de l'user
-            db.query(`DELETE FROM posts WHERE userid='${userIdToUpdate}'`, (err, results, rows)  => {
+            const sqlDeletePost = `DELETE FROM posts WHERE userid='${userIdToUpdate}'`;
+            db.query(sqlDeletePost, (err)  => {
 
                 // Si erreur retourne 400
                 if (err) {
@@ -340,7 +347,8 @@ exports.adminDeleteUser = (req, res, next) => {
                     console.log('Les posts du user '+userIdToUpdate+' ont bien été supprimés')
 
                     // Suppression des likes / dislikes de l'user
-                    db.query(`DELETE FROM opinions WHERE userid='${userIdToUpdate}'`, (err)  => {
+                    const sqlDeleteOpinion = `DELETE FROM opinions WHERE userid='${userIdToUpdate}'`;
+                    db.query(sqlDeleteOpinion, (err)  => {
                         
                         // Si erreur retourne 400
                         if (err) {
@@ -352,7 +360,8 @@ exports.adminDeleteUser = (req, res, next) => {
                             console.log('Les likes / dislikes du user '+userIdToUpdate+' ont bien été supprimés')
                     
                             // Suppression des commentaires de l'user
-                            db.query(`DELETE FROM comments WHERE userid='${userIdToUpdate}'`, (err)  => {
+                            const sqlDeleteComment = `DELETE FROM comments WHERE userid='${userIdToUpdate}'`;
+                            db.query(sqlDeleteComment, (err)  => {
 
                                 // Si erreur retourne 400
                                 if (err) {
@@ -364,7 +373,8 @@ exports.adminDeleteUser = (req, res, next) => {
                                     console.log('Les commentaires '+userIdToUpdate+' ont bien été supprimés')
                                 
                                     // Suppression des commentaires de l'user
-                                    db.query(`DELETE FROM users WHERE id='${userIdToUpdate}'`, (err)  => {
+                                    const sqlDeleteUser = `DELETE FROM users WHERE id='${userIdToUpdate}'`;
+                                    db.query(sqlDeleteUser, (err)  => {
 
                                         // Si erreur retourne 400
                                         if (err) {
