@@ -19,7 +19,8 @@ const path = require('path');
 exports.signup = (req, res, next) => {
 
     // Cherche si un user existe dans la BDD
-    db.query(`SELECT COUNT (*) AS usrCount FROM users`, (err, resultsc, rows) => {
+    const sqlCount = `SELECT COUNT (*) AS usrCount FROM users`;
+    db.query(sqlCount, (err, resultsc, rows) => {
 
         // Si aucun user, on enregistre avec un niveau 4 (super admin)
         if (resultsc[0].usrCount === 0) {
@@ -29,7 +30,8 @@ exports.signup = (req, res, next) => {
             .then(cryptedPassword => {
 
                 // Ajout à la BDD
-                db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', 'Aucune description')`, (err, results, fields) => {
+                const sqlAdd = `INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 4, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', 'Aucune description')`;
+                db.query(sqlAdd, (err, results, fields) => {
 
                 // Si erreur, retourne 400
                 if (err) {
@@ -38,7 +40,8 @@ exports.signup = (req, res, next) => {
                     }else{
                     
                         // Recherche les info du user une fois creer pour la creation des dossiers de stockage images
-                        db.query(`SELECT * FROM users WHERE email='${req.body.email}'`, (err, results, rows) => {
+                        const sqlCreateFolder = `SELECT * FROM users WHERE email='${req.body.email}'`;
+                        db.query(sqlCreateFolder, (err, results, rows) => {
 
                             // Creation du dossier pour les images des posts
                             fs.mkdir(path.join(__dirname, `../images/posts/${results[0].id}`), (err) => {
@@ -69,8 +72,8 @@ exports.signup = (req, res, next) => {
         } else {
 
             // Recherche si l'email existe deja
-            db.query(`SELECT * FROM users WHERE email='${req.body.email}'`,
-            (err, results, rows) => {
+            const sqlControle = `SELECT * FROM users WHERE email='${req.body.email}'`;
+            db.query(sqlControle, (err, results, rows) => {
                 
                 // Si email deja utilisé, erreur 401
                 if (results.length > 0) {
@@ -87,7 +90,8 @@ exports.signup = (req, res, next) => {
 
 
                         // Ajout à la BDD - id, lastname, firstname, password, email, accesslevel, url avatar, description
-                        db.query(`INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', 'Aucune description')`, (err, results, fields) => {
+                        const sqlAddUser = `INSERT INTO users VALUES (NULL, '${req.body.lastname}', '${req.body.firstname}', '${cryptedPassword}', '${req.body.email}', 1, '${req.protocol}://${req.get('host')}/images/avatars/avatar_user_default.jpeg', 'Aucune description')`;
+                        db.query(sqlAddUser, (err, results, fields) => {
 
                             // Si erreur, retourne 400
                             if (err) {
@@ -96,7 +100,8 @@ exports.signup = (req, res, next) => {
                             }else{
 
                                 // Recherche les info du user une fois creer pour la creation des dossiers de stockage images
-                                db.query(`SELECT * FROM users WHERE email='${req.body.email}'`, (err, results, rows) => {
+                                const sqlCreateFolderUser = `SELECT * FROM users WHERE email='${req.body.email}'`;
+                                db.query(sqlCreateFolderUser, (err, results, rows) => {
 
                                     // Creation du dossier pour les images des posts
                                     fs.mkdir(path.join(__dirname, `../images/posts/${results[0].id}`), (err) => {
@@ -136,7 +141,8 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
 
     // Recherche de l'utilisateur dans la BDD
-    db.query(`SELECT * FROM users WHERE email='${req.body.email}'`, (err, results, rows) => {
+    const sql = `SELECT * FROM users WHERE email='${req.body.email}'`;
+    db.query(sql, (err, results, rows) => {
 
             // Si utilisateur trouvé : 
             if (results.length > 0) {
@@ -187,11 +193,11 @@ exports.login = (req, res, next) => {
 // ---------- DELETE PROFILE ----------
 
 
-
 exports.deleteUser = (req, res, next) => {
 
     // Recherche dans la BDD les info du user selon son userid
-    db.query(`SELECT * FROM users WHERE id='${req.body.userId}'`, (err, results, rows) => {
+    const sqlSearch = `SELECT * FROM users WHERE id='${req.body.userId}'`;
+    db.query(sqlSearch, (err, results, rows) => {
 
         // Récupération de l'avatar
         const oldavatar = results[0].avatarurl
@@ -237,7 +243,8 @@ exports.deleteUser = (req, res, next) => {
                 }
 
                 // Recherche des images postées par le user
-                db.query(`SELECT * FROM posts WHERE userid='${req.body.userId}'`, (err, resultImgPost, rows) => {
+                const sqlSearchImage = `SELECT * FROM posts WHERE userid='${req.body.userId}'`;
+                db.query(sqlSearchImage, (err, resultImgPost, rows) => {
 
                     if (err) {
                         console.log(err)
@@ -274,7 +281,8 @@ exports.deleteUser = (req, res, next) => {
                         });
 
                         // Suppression des posts de l'user
-                        db.query(`DELETE FROM posts WHERE userid='${req.body.userId}'`, (errPost, results, rows)  => {
+                        const sqlDeletePosts = `DELETE FROM posts WHERE userid='${req.body.userId}'`;
+                        db.query(sqlDeletePosts, (errPost, results, rows)  => {
 
                             // Si erreur retourne 400
                             if (errPost) {
@@ -284,7 +292,8 @@ exports.deleteUser = (req, res, next) => {
                                 console.log('Les posts ont bien été supprimés')
 
                                 // Suppression des likes / dislikes de l'user
-                                db.query(`DELETE FROM opinions WHERE userid='${req.body.userId}'`, (errOpinion)  => {
+                                const sqlDeleteOpinions = `DELETE FROM opinions WHERE userid='${req.body.userId}'`;
+                                db.query(sqlDeleteOpinions, (errOpinion)  => {
                                     
                                     // Si erreur retourne 400
                                     if (errOpinion) {
@@ -294,7 +303,8 @@ exports.deleteUser = (req, res, next) => {
                                         console.log('Les likes / dislikes ont bien été supprimés')
 
                                         // Suppression des commentaires de l'user
-                                        db.query(`DELETE FROM comments WHERE userid='${req.body.userId}'`, (errComment)  => {
+                                        const sqlDeleteComments = `DELETE FROM comments WHERE userid='${req.body.userId}'`;
+                                        db.query(sqlDeleteComments, (errComment)  => {
 
                                             // Si erreur retourne 400
                                             if (errComment) {
@@ -304,7 +314,8 @@ exports.deleteUser = (req, res, next) => {
                                                 console.log('Les commentaires ont bien été supprimés')
 
                                                 // Suppression du user
-                                                db.query(`DELETE FROM users WHERE id='${req.body.userId}'`, (errUser, results, rows)  => {
+                                                const sqlDeleteUser = `DELETE FROM users WHERE id='${req.body.userId}'`;
+                                                db.query(sqlDeleteUser, (errUser, results, rows)  => {
 
                                                     // Si erreur retourne 400
                                                     if (errUser) {
@@ -342,7 +353,8 @@ exports.deleteUser = (req, res, next) => {
     const urlnewavatar = `${req.protocol}://${req.get('host')}/images/avatars/${userid}/${req.file.filename}`;
 
     // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
+    const sqlSearch = `SELECT * FROM users WHERE id=${userid}`;
+    db.query(sqlSearch, (err, result, rows) => {
 
         // Ancien fichier de l'ancien avatar
         const oldavatar = result[0].avatarurl
@@ -362,8 +374,8 @@ exports.deleteUser = (req, res, next) => {
         }
 
         // Mise à jour dans la BDD 
-        db.query(`UPDATE users SET avatarurl='${urlnewavatar}' WHERE id=${userid}`, 
-        (err, results, rows)  => {
+        const sqlUpdate = `UPDATE users SET avatarurl='${urlnewavatar}' WHERE id=${userid}`;
+        db.query(sqlUpdate, (err, results, rows)  => {
 
             // Si erreur retourne 400
             if (err) {
@@ -372,7 +384,8 @@ exports.deleteUser = (req, res, next) => {
             }else{
 
                 // Si valide, recherche dans la BDD l'url du nouvel avatar
-                db.query(`SELECT avatarurl FROM users WHERE id=${userid}`, (err, results, rows) => {
+                const sqlNewavatar = `SELECT avatarurl FROM users WHERE id=${userid}`;
+                db.query(sqlNewavatar, (err, results, rows) => {
 
                     // Si erreur retourne 400
                     if (err) {
@@ -389,7 +402,8 @@ exports.deleteUser = (req, res, next) => {
         })
 
         // Modification de l'avatar dans les posts de l'user
-        db.query(`UPDATE posts SET useravatar='${urlnewavatar}' WHERE userid=${userid}`, (err, results, rows)  => {
+        const sqlUpdateAvatarPost = `UPDATE posts SET useravatar='${urlnewavatar}' WHERE userid=${userid}`;
+        db.query(sqlUpdateAvatarPost, (err, results, rows)  => {
 
             // Si erreur retourne 400
             if (err) {
@@ -414,7 +428,8 @@ exports.deleteUser = (req, res, next) => {
     const newPassword = req.body.newPassword;
 
     // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
+    const sqlSearch = `SELECT * FROM users WHERE id=${userid}`;
+    db.query(sqlSearch, (err, result, rows) => {
 
         // Controle le mon de passe
         bcrypt.compare(oldPassword, result[0].password)
@@ -434,7 +449,8 @@ exports.deleteUser = (req, res, next) => {
                 .then(cryptedNewPassword => {
 
                     // Si bon mot de passe, mise à jour dans la BDD 
-                    db.query(`UPDATE users SET password='${cryptedNewPassword}' WHERE id=${userid}`, (err, results, rows)  => {
+                    const sqlUpdate = `UPDATE users SET password='${cryptedNewPassword}' WHERE id=${userid}`;
+                    db.query(sqlUpdate, (err, results, rows)  => {
                         
                         // Si erreur retourne 400
                         if (err) {
@@ -470,11 +486,9 @@ exports.updateUserEmail = (req, res, next) => {
     const userid = req.body.userId;
     const newEmail = req.body.newEmail;
 
-    // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
-
         // Mise à jour dans la BDD 
-        db.query(`UPDATE users SET email='${newEmail}' WHERE id=${userid}`, (err, results, rows)  => {
+        const sql = `UPDATE users SET email='${newEmail}' WHERE id=${userid}`;
+        db.query(sql, (err, results, rows)  => {
                         
             // Si erreur retourne 400
             if (err) {
@@ -493,7 +507,6 @@ exports.updateUserEmail = (req, res, next) => {
                 return res.status(201).json({ message: 'Adresse email modifié avec succes' })  
             }
         })
-    })
 }
 
 // ---------- UPDATE DESCRIPTION PROFILE ----------
@@ -509,14 +522,10 @@ exports.updateUserDescription = (req, res, next) => {
     }
 
     const userid = req.body.userId;
-    
-
-
-    // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, result, rows) => {
 
         // Mise à jour dans la BDD 
-        db.query(`UPDATE users SET description='${newDescription}' WHERE id=${userid}`, (err, results, rows)  => {
+        const sql = `UPDATE users SET description='${newDescription}' WHERE id=${userid}`;
+        db.query(sql, (err, results, rows)  => {
                         
             // Si erreur retourne 400
             if (err) {
@@ -535,7 +544,6 @@ exports.updateUserDescription = (req, res, next) => {
                 return res.status(201).json({ message: 'Description modifié avec succes' })
             }
         })
-    })
 }
 
 // ---------- GET PROFILE ONE USER ----------
@@ -546,7 +554,8 @@ exports.getOneUser = (req, res, next) => {
     const userid = req.params.userid;
 
     // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE id=${userid}`, (err, results, rows) => {
+    const sql = `SELECT * FROM users WHERE id=${userid}`;
+    db.query(sql, (err, results, rows) => {
                         
             // Si erreur retourne 400
             if (err) {
@@ -568,7 +577,8 @@ exports.getUserId = (req, res, next) => {
     const userPassCrypted = req.body.userPassCrypted;
 
     // Recherche dans la BDD selon userid
-    db.query(`SELECT * FROM users WHERE password="${userPassCrypted}"`, (err, results, rows) => {
+    const sql = `SELECT * FROM users WHERE password="${userPassCrypted}"`;
+    db.query(sql, (err, results, rows) => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -590,7 +600,8 @@ exports.getLevelUser = (req, res, next) => {
     const userid = req.body.userId;
 
     // Recherche dans la BDD selon userid
-    db.query(`SELECT accesslevel FROM users WHERE id=${userid}`, (err, results, rows) => {
+    const sql = `SELECT accesslevel FROM users WHERE id=${userid}`;
+    db.query(sql, (err, results, rows) => {
                         
         // Si erreur retourne 400
         if (err) {
@@ -607,7 +618,8 @@ exports.getLevelUser = (req, res, next) => {
 // ---------- GET LAST USER ----------
 
 exports.getLastUser= (req, res, next) => {
-    db.query('SELECT * FROM users ORDER BY id DESC LIMIT 1', (error, result, field) => {
+    const sql = 'SELECT * FROM users ORDER BY id DESC LIMIT 1';
+    db.query(sql, (error, result, field) => {
       if (error) {
         return res.status(400).json({ error })
       }
