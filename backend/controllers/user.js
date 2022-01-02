@@ -364,7 +364,7 @@ exports.deleteUser = (req, res, next) => {
         if (oldfilename !== 'avatar_user_default.jpeg') {
             fs.unlink(`images/avatars/${userid}/${oldfilename}`, (err => {
                 if (err) {
-                    console.log(err);
+                    console.log("Ancien avatar introuvable");
                     return false
                 } else {
                   console.log("Ancien avatar supprimer avec succes");
