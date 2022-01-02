@@ -303,7 +303,7 @@ const Account = () => {
                         {(showUpdateMail === true && (
                             <span>
                                 <input type="text" id="newEmail" name="newEmail" aria-label="Modifier l'adresse email" defaultValue={email} onChange={ (e) => setNewEmail(e.target.value) } required />
-                                <button className="btn-valid" aria-label="Valider la nouvelle adresse email" onClick={ handleSubmitChangeEmail }>Modifier</button>
+                                <button className="btn-valid" aria-label="Valider la nouvelle adresse email" onClick={ handleSubmitChangeEmail }>Modifier mon email</button>
                             </span>
                         ))}
                         
@@ -330,8 +330,8 @@ const Account = () => {
                         {(showUpdateDescription === true && (
                             
                             <span>
-                                <textarea className="form-control description" id="newDescription" name="newDescription" rows="4" cols='60' defaultValue={ description } onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
-                                <button className="btn-valid" onClick={ handleSubmitChangeDescription }>Modifier ma description</button>
+                                <textarea className="form-control description" aria-label="Nouvelle description" id="newDescription" name="newDescription" rows="4" cols='60' defaultValue={ description } onChange={ (e) => setnewDescription(e.target.value) } required ></textarea>
+                                <button className="btn-valid" aria-label="Valider la nouvelle description" onClick={ handleSubmitChangeDescription }>Modifier ma description</button>
                             </span>
                             
                         ))}
