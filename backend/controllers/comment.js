@@ -14,7 +14,7 @@ exports.addComment = (req, res, next) => {
   const contentComment = req.body.contentComment;
 
     // Ajout à la BDD
-    const sqlAdd = `INSERT INTO comments VALUES (NULL, '${postId}', '${userId}', '${userName}', '${dateComment}', "${contentComment.replace(/\"/g, "\"\"")}")`;
+    const sqlAdd = `INSERT INTO comments VALUES (NULL, '${postId}', '${userId}', '${userName}', '${dateComment}', "${contentComment.replace(/\"/g, "\"\"")}", NOW())`;
     db.query(sqlAdd, (err) => {
 
         // Si erreur, retourne 400
@@ -52,7 +52,7 @@ exports.addComment = (req, res, next) => {
 
 //Affichage des derniers messages postés
 exports.getComments = (req, res, next) => {
-  const sql = 'SELECT * FROM comments ORDER BY date DESC';
+  const sql = 'SELECT * FROM comments ORDER BY createdate DESC';
   db.query(sql, (error, result) => {
     if (error) {
       return res.status(400).json({ error })

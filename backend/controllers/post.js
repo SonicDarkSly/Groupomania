@@ -175,7 +175,7 @@ exports.getLastPosts= (req, res, next) => {
         if (req.file.filename !== oldfilename) {
           fs.unlink(`images/posts/${req.body.postUserId}/${oldfilename}`, (err => {
             if (err) {
-              console.log(err);
+              console.log("Ancienne image introuvable");
               return false
             } else {
               console.log("Ancienne image supprimer avec succes");
