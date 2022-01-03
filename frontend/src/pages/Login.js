@@ -46,7 +46,8 @@ const Login = ({ history }) => {
             addItem('storageToken', response.data.token);
             addItem('storageUserInfo', JSON.stringify(userInfo)); 
 
-            window.location.reload();
+
+            return true
         })
         .catch(error => {
           if (error.response.status === 404) {

@@ -4,10 +4,10 @@ import Header from '../components/Header';
 import { getUserId } from '../services/userApi';
 import { getItem } from "../services/Localestorage";
 
-const token = getItem('storageToken');
+
 
 const Posts = () => {
-
+    const token = getItem('storageToken');
     // State msg info erreur
     const [msgAlertUpdatePost, setMsgAlertUpdatePost] = useState();
     const [msgAlertComment, setMsgAlertComment] = useState();
