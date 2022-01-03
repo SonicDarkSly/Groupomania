@@ -83,7 +83,7 @@ const Login = ({ history }) => {
          { (msgError &&(<span className='error'>Erreur : { msgError }</span>)) }
        </div>
         <div className="text-center form-group pt-4">
-          <button aria-label="Se connecter" type="submit">Se connecter</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/signup'}>S'enregistrer</button>
+          <button aria-label="Se connecter" type="submit">Se connecter</button> ou <button aria-label="S'enregistrer" onClick={() => window.location.href='/signup'}>S'enregistrer</button>
        </div>
       </form>
       </div>
