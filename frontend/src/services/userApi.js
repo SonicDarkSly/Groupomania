@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 // Action selon validité du token
 export function hasAuthenticated() {
     const token = getItem('storageToken');
-    const tokenIsValidn = token ? tokenIsValid(token) : false;
+    const tokenIsValidn = token ? tokenIsValid(token) : false; // si token => controle sinon false
     if(tokenIsValidn === false) {
         removeItem('storageToken');
         removeItem('storageUserInfo');
@@ -17,8 +17,8 @@ export function hasAuthenticated() {
 // Controle du token
 function tokenIsValid(token) {
     const { REACT_APP_TOKEN } = process.env;
-    const { exp } = jwt.verify(token, REACT_APP_TOKEN); 
-    if (exp * 1000 > new Date().getTime()) {
+    const { exp } = jwt.verify(token, REACT_APP_TOKEN); // destructuration jwt pour recuperer la date d'expiration en milliseconde
+    if (exp * 1000 > new Date().getTime()) { // si date supérieure a la date courante
         return true;
     }
     removeItem(token);   

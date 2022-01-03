@@ -3,7 +3,6 @@ import Header from '../components/Header';
 import Auth from "../context/Auth";
 import axios from 'axios';
 import { addItem } from "../services/Localestorage";
-import { checkEmailLogin } from '../services/checkform';
 
 const Login = ({ history }) => {
 
@@ -29,11 +28,8 @@ const Login = ({ history }) => {
     event.preventDefault();
 
     try {
-      if (checkEmailLogin()) {
         const response = await login(user);
         setisAuthenticated(response);
-      }
-
     } catch ({ response }) {
       console.log(response);
     }
@@ -51,7 +47,6 @@ const Login = ({ history }) => {
             addItem('storageUserInfo', JSON.stringify(userInfo)); 
 
             window.location.reload();
-            return true;
         })
         .catch(error => {
           if (error.response.status === 404) {

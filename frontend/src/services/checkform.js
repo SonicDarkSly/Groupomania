@@ -80,27 +80,6 @@ export function checksignup() {
     }
 }
 
-// Check du form update email
-export function checkEmailLogin() {
-    let regexEmail = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let regexBlank = /^[\s]/;
-    let inputEmail = document.getElementById("email");
-    if (
-        regexEmail.test(inputEmail.value) === false ||
-        regexBlank.test(inputEmail.value) === true ||
-        inputEmail.value === ""  
-        ) {
-          inputEmail.style.backgroundColor = "#FF7878";
-          alert("Controlez le format de l'adresse mail");
-          return false
-      } else {
-        inputEmail.style.backgroundColor = "#FFFFFF";
-        return true
-      }
-}
-
-
-
 // Check du form update password
 export function checkChangePassword() {
     let inputPassword = document.getElementById("newPassword");
