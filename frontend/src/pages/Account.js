@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { getItem } from "../services/Localestorage";
 import Header from '../components/Header';
@@ -261,6 +262,12 @@ const Account = () => {
          }
        } 
 
+       // Redirection si besoin (btn admin)
+       const historyLink = useHistory();
+       const redirect = (url) => { 
+        historyLink.push(url);
+       }
+
        useEffect(() => {
            getUserInfo();
         }, [msgError, showUpdateMail, showUpdateDescription, updateAvatarActu, msgErrorUpdateAvatar, msgErrorDelete]);
@@ -288,7 +295,7 @@ const Account = () => {
                         <span><a role='button' href='#userDescription' aria-label="Ancre modifier la description"><button className="btn-link" aria-label="Modifier la description" onClick={ showDescription }>Modifier description</button></a></span>
                         <span><a role='button' href='#updateEmail' aria-label="Ancre modifier l'email"><button className="btn-link" aria-label="Modifier l'adresse mail" onClick={ showEmail }>Modifier email</button></a></span>
                         <span><a role='button' href='#updateAvatar' aria-label="Ancre modifier l'avatar"><button className="btn-link" aria-label="Modifier l'avatar" onClick={() => showHidden("updateAvatar")}>Modifier avatar</button></a></span>
-                        {(level >= 3 &&(<span><button className="btn-link-admin" aria-label="Acces à l'administration" onClick={() => window.location.href='/administration'}>Acces administration</button></span>))}
+                        {(level >= 3 &&(<span><button className="btn-link-admin" aria-label="Acces à l'administration" onClick={() => redirect('/administration')}>Acces administration</button></span>))}
                     </div>
 
                     <div className='container-infouser'>

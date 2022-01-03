@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import Auth from "../context/Auth";
 import Header from '../components/Header';
 import { checksignup } from '../services/checkform'
@@ -46,6 +47,12 @@ const Signup = ({ history }) => {
           }
       }
 
+      // Redirection si besoin (btn signup)
+      const historyLink = useHistory();
+      const redirect = (url) => { 
+        historyLink.push(url);
+      }
+  
       // Redirection si non connecté
       useEffect(() => {
         if (isAuthenticated === true) {
@@ -92,7 +99,7 @@ const Signup = ({ history }) => {
                     </div>
                     <div className="text-center form-group pt-4">
                     {(msgError &&(<p><span className='msgError'>{ msgError }</span></p>))}
-                        <button onClick={handleSubmit} aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => window.location.href='/login'}>Se connecter</button>
+                        <button onClick={handleSubmit} aria-label="S'enregistrer">S'enregistrer</button> ou <button aria-label="Se connecter" onClick={() => redirect('/login')}>Se connecter</button>
                     </div>
                 
             </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext} from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Auth from "../context/Auth";
 import axios from 'axios';
@@ -59,6 +60,12 @@ const Login = ({ history }) => {
         })
   }
 
+  // Redirection si besoin (btn signup)
+  const historyLink = useHistory();
+  const redirect = (url) => { 
+    historyLink.push(url);
+  }
+
   // Redirection si non connecté
   useEffect(() => {
     if (isAuthenticated === true) {
@@ -71,7 +78,6 @@ const Login = ({ history }) => {
       <Header />
       <h1>Se connecter</h1>
       <div className="container container-login">
-        <form onSubmit={ handleSubmit } encType="multipart/form-data">
         <div className="form-group">
           <label htmlFor="email">Email(*)</label>
           <input type="email" className="form-control" id="email" name="email" placeholder="Email" onChange={ handleChange } required />
@@ -84,9 +90,8 @@ const Login = ({ history }) => {
          { (msgError &&(<span className='error'>Erreur : { msgError }</span>)) }
        </div>
         <div className="text-center form-group pt-4">
-          <button aria-label="Se connecter" type="submit">Se connecter</button> ou <button aria-label="S'enregistrer" onClick={() => window.location.href='/signup'}>S'enregistrer</button>
+          <button aria-label="Se connecter" onClick={handleSubmit}>Se connecter</button> ou <button aria-label="S'enregistrer" onClick={() => redirect('/signup')}>S'enregistrer</button>
        </div>
-      </form>
       </div>
     </div>
   );
